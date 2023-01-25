@@ -42,10 +42,10 @@ fun ProfileScreen(){
     ) {
         item {
             Row(
+                horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
-               horizontalArrangement = Arrangement.Center
+                    .padding(16.dp)
             ) {
                 // Nombre del usuario
                     Text(
@@ -58,7 +58,7 @@ fun ProfileScreen(){
                         fontSize = 32.sp,
                         fontFamily = AbrilFatface,
                     )
-                    // Ajustes
+                    // Botón de Ajustes
                     Button(
                         onClick = { /*TODO*/ }
                     ) {

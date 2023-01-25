@@ -14,9 +14,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
+import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
@@ -85,12 +87,12 @@ fun ProfileScreen(){
                        .fillMaxWidth()
                        .background(MaterialTheme.colors.background)
                        .padding(15.dp),
-                   elevation = 4.dp
+                   elevation = 8.dp
 
                ) {
                    Row(
                        modifier = Modifier
-                           .border(1.dp, MaterialTheme.colors.onBackground)
+
                            .fillMaxWidth()
                            .background(Color.Cyan)
                            .padding(10.dp)
@@ -98,12 +100,14 @@ fun ProfileScreen(){
                    ) {
                        Text(
                            text = "Mis mascotas",
-                           fontSize = 17.sp,
+                           fontSize = 10.sp,
                            fontFamily = abrilFatface,
                            color = MaterialTheme.colors.onBackground
                        )
                        Image(
-                           painter = painterResource(R.drawable.ic_tinpet_logo),
+                           modifier = Modifier
+                               .size(15.dp, 15.dp),
+                           painter = painterResource(R.drawable.pawprint),
                            contentDescription = null,
                            alignment = Alignment.Center
                        )
@@ -127,11 +131,14 @@ fun ProfileScreen(){
                            .clickable {  }
                    ) {
                        Text(
-                           text = "Peticiones de amistad"
+                           text = "Peticiones de amistad",
+                           fontSize = 10.sp,
+                           fontFamily = abrilFatface,
+                           color = MaterialTheme.colors.onBackground
                        )
                        Image(
                            modifier = Modifier
-                               .size(5.dp, 4.dp),
+                               .size(15.dp, 15.dp),
                            painter = painterResource(R.drawable.people),
                            contentDescription = null,
                            alignment = Alignment.Center
@@ -156,13 +163,18 @@ fun ProfileScreen(){
                            .clickable {  }
                    ) {
                        Text(
-                           text = "Notifiaciones"
+                           text = "Notifiaciones",
+                           fontSize = 10.sp,
+                           fontFamily = abrilFatface,
+                           color = MaterialTheme.colors.onBackground
                        )
-                      /* Image(
-                           painter = painterResource(),
+                       Image(
+                           modifier = Modifier
+                               .size(15.dp, 15.dp),
+                           painter = painterResource(R.drawable.notification),
                            contentDescription = null,
                            alignment = Alignment.Center
-                       )*/
+                       )
                    }
                }
                // SOBRE NOSOTROS
@@ -183,13 +195,18 @@ fun ProfileScreen(){
                            .clickable {  }
                    ) {
                        Text(
-                           text = "Sobre nosotros"
+                           text = "Sobre nosotros",
+                           fontSize = 10.sp,
+                           fontFamily = abrilFatface,
+                           color = MaterialTheme.colors.onBackground
                        )
-                      /* Image(
-                           painter = painterResource(),
+                       Image(
+                           modifier = Modifier
+                               .size(15.dp, 15.dp),
+                           painter = painterResource(R.drawable.information_button),
                            contentDescription = null,
                            alignment = Alignment.Center
-                       )*/
+                       )
                    }
                }
                // CERRAR SESIÓN
@@ -210,13 +227,18 @@ fun ProfileScreen(){
                            .clickable {  }
                    ) {
                        Text(
-                           text = "Cerrar sesión"
+                           text = "Cerrar sesión",
+                           fontSize = 10.sp,
+                           fontFamily = abrilFatface,
+                           color = MaterialTheme.colors.onBackground
                        )
-                       /*Image(
-                           painter = painterResource(),
+                       Image(
+                           modifier = Modifier
+                               .size(15.dp, 15.dp),
+                           painter = painterResource(R.drawable.logout),
                            contentDescription = null,
                            alignment = Alignment.Center
-                       )*/
+                       )
                    }
                }
            }
@@ -227,7 +249,7 @@ fun ProfileScreen(){
    }
 
 }
-/*
+
 @Composable
 @Preview
 fun ProfileScreenPreviewLT() {
@@ -235,10 +257,11 @@ fun ProfileScreenPreviewLT() {
         ProfileScreen()
     }
 }
+
 @Composable
 @Preview
 fun ProfileScreenPreviewDT() {
     TinPetTheme(darkTheme = true) {
         ProfileScreen()
     }
-}*/
+}

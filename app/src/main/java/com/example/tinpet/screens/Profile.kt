@@ -4,10 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.typography
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,18 +18,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
+import com.example.tinpet.ui.theme.TinPetTheme
+import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
 fun ProfileScreen(){
-    val AbrilFatface = FontFamily(
-        Font(
-            R.font.abril_fatface_regular
-        )
-    )
-  Box(
+   Box(
        modifier = Modifier
            .fillMaxSize()
-           .background(Color.White),
+           .background(color = MaterialTheme.colors.background),
        contentAlignment = Alignment.Center
    ){
        LazyColumn(
@@ -42,7 +36,7 @@ fun ProfileScreen(){
     ) {
         item {
             Row(
-                horizontalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
@@ -50,19 +44,28 @@ fun ProfileScreen(){
                 // Nombre del usuario
                     Text(
                         modifier = Modifier
-
                             .padding(5.dp),
-                        textAlign = TextAlign.Left,
+                        textAlign = TextAlign.Center,
                         text = (stringResource(R.string.user_name)),
-                        //text = "Test Text"
                         fontSize = 32.sp,
-                        fontFamily = AbrilFatface,
+                        fontFamily = abrilFatface,
+                        color = MaterialTheme.colors.onBackground
                     )
                     // Botón de Ajustes
                     Button(
+                        elevation = ButtonDefaults.elevation(),
                         onClick = { /*TODO*/ }
                     ) {
-                        Text(text = "Ajustes")
+                        Surface(
+                            color = MaterialTheme.colors.secondary,
+                            contentColor = MaterialTheme.colors.secondary
+                        ) {
+
+                        }
+                        Text(
+                            text = "Ajustes",
+                            color = MaterialTheme.colors.secondary
+                        )
 
                     }
             }
@@ -90,6 +93,15 @@ fun ProfileScreen(){
 
 @Composable
 @Preview
-fun ProfileScreenPreview() {
-    ProfileScreen()
+fun ProfileScreenPreviewLT() {
+    TinPetTheme(darkTheme = false) {
+        ProfileScreen()
+    }
+}
+@Composable
+@Preview
+fun ProfileScreenPreviewDT() {
+    TinPetTheme(darkTheme = true) {
+        ProfileScreen()
+    }
 }

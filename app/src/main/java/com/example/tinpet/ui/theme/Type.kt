@@ -8,7 +8,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
 
-val AbrilFatface = FontFamily(
+val abrilFatface = FontFamily(
     Font(
         R.font.abril_fatface_regular
     )
@@ -21,7 +21,7 @@ val Montserrat = FontFamily(
 
 val Typography = Typography(
     h1 = TextStyle(
-        fontFamily = AbrilFatface,
+        fontFamily = abrilFatface,
         fontWeight = FontWeight.Normal,
         fontSize = 30.sp
     ),

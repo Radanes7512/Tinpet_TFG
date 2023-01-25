@@ -13,16 +13,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.tinpet.ui.theme.abrilFatface
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-//@Preview
+@Preview
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
@@ -39,11 +41,13 @@ fun MainScreen() {
 fun TopBar(
     modifier: Modifier = Modifier
 ) {
-    Row(
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = MaterialTheme.colors.primary),
-        verticalAlignment = Alignment.CenterVertically
+            .background(color = MaterialTheme.colors.primaryVariant),
+        contentAlignment = Alignment.Center
+        //horizontalAlignment = Alignment.CenterHorizontally
+
     ) {
         Image(
             modifier = Modifier
@@ -54,13 +58,18 @@ fun TopBar(
         )
         Text(
             text = stringResource(R.string.app_name),
-            style = MaterialTheme.typography.h1
+            fontSize = 32.sp,
+            fontFamily = abrilFatface,
+            color = MaterialTheme.colors.onBackground
         )
     }
 
 }
 @Composable
-fun BottomBar(navController: NavHostController) {
+fun BottomBar(
+    navController: NavHostController,
+
+) {
     val screens = listOf(
         BottomBarScreen.Places,
         BottomBarScreen.Connect,

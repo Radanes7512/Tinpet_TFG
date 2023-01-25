@@ -1,31 +1,44 @@
 package com.example.tinpet.ui.theme
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
+@SuppressLint("ConflictingOnColor")
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    background = GreyBG, // FONDO PANTALLA
+    onBackground = White, // TEXTO SOBRE FONDO
+
+    primaryVariant = GreyNavBar, // BARRA NAVEGACIÓN SUPERIOR
+
+    surface = GreyNavBar, // BARRA NAVEGACIÓN INFERIOR
+    onPrimary = White, // ICONOS NAVEGACIÓN INFERIOR
+
+    primary = Yellow100, // COLOR PRINCIPAL
+    secondary = Green10s, // COLOR SECUNDARIO
+
+    onSurface = Color.Red // NO ESPECIFICADO
 )
 
+@SuppressLint("ConflictingOnColor")
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    background = White, // FONDO PANTALLA
+    onBackground = Black, // TEXTO SOBRE FONDO
 
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
-)
+    primaryVariant = YellowNavBar, // BARRA NAVEGACIÓN SUPERIOR
+
+    surface = YellowNavBar, // BARRA NAVEGACIÓN INFERIOR
+    onPrimary = Black, // ICONOS NAVEGACIÓN INFERIOR
+
+    primary = Yellow10, // COLOR PRINCIPAL
+    secondary = Green10, // COLOR SECUNDARIO
+
+    onSurface = Color.Red // NO ESPECIFICADO
+ )
 
 @Composable
 fun TinPetTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {

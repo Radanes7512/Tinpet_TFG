@@ -11,20 +11,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
+import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
 fun HomeScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(color = MaterialTheme.colors.background),
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "TinPet",
-            fontSize = MaterialTheme.typography.h3.fontSize,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black
+            text = "Home",
+            fontSize = 32.sp,
+            fontFamily = abrilFatface,
+            color = MaterialTheme.colors.onBackground
         )
     }
 }

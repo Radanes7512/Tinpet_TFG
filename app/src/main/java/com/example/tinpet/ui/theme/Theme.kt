@@ -18,8 +18,8 @@ private val DarkColorPalette = darkColors(
     surface = GreyNavBar, // BARRA NAVEGACIÓN INFERIOR
     onPrimary = White, // ICONOS NAVEGACIÓN INFERIOR
 
-    primary = Yellow100, // COLOR PRINCIPAL
-    secondary = Green10s, // COLOR SECUNDARIO
+    primary = GreyNavBar, // COLOR PRINCIPAL
+    secondary = Green10, // COLOR SECUNDARIO
 
     onSurface = Color.Red // NO ESPECIFICADO
 )

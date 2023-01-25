@@ -7,6 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    // STATUS BAR COLORS
+        // DARK THEME
     <color name="greyness">#FF333333</color>
+        // LIGHT THEME
     <color name="yellow">#FFffd500</color>
 </resources>

@@ -2,6 +2,8 @@ package com.example.tinpet.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -11,21 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
-import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
 fun ProfileScreen(){
    Box(
        modifier = Modifier
-           .fillMaxSize()
            .background(color = MaterialTheme.colors.background),
        contentAlignment = Alignment.Center
    ){
@@ -42,55 +39,195 @@ fun ProfileScreen(){
                     .padding(16.dp)
             ) {
                 // Nombre del usuario
+                Text(
+                    modifier = Modifier
+                        .padding(5.dp),
+                    textAlign = TextAlign.Center,
+                    text = (stringResource(R.string.user_name)),
+                    fontSize = 32.sp,
+                    fontFamily = abrilFatface,
+                    color = MaterialTheme.colors.onBackground
+                )
+                // Botón de Ajustes
+                Button(
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary),
+                    elevation = ButtonDefaults.elevation(),
+                    onClick = { /*TODO*/ }
+                ) {
                     Text(
-                        modifier = Modifier
-                            .padding(5.dp),
-                        textAlign = TextAlign.Center,
-                        text = (stringResource(R.string.user_name)),
-                        fontSize = 32.sp,
-                        fontFamily = abrilFatface,
-                        color = MaterialTheme.colors.onBackground
+                        text = "Ajustes",
+                        color = MaterialTheme.colors.onPrimary
                     )
-                    // Botón de Ajustes
-                    Button(
-                        elevation = ButtonDefaults.elevation(),
-                        onClick = { /*TODO*/ }
-                    ) {
-                        Surface(
-                            color = MaterialTheme.colors.secondary,
-                            contentColor = MaterialTheme.colors.secondary
-                        ) {
 
-                        }
-                        Text(
-                            text = "Ajustes",
-                            color = MaterialTheme.colors.secondary
-                        )
-
-                    }
+                }
             }
-            // Imagen de perfil del usuario
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                painter = painterResource(R.drawable.profile_default_image),
-                contentDescription = "Icon profile"
-
-            )
         }
-    }
-       LazyColumn(
-           modifier = Modifier
-               .fillMaxWidth()
-               .background(Color.Red)
-       ) {
+           item {
+               Row(
+                   horizontalArrangement = Arrangement.Center,
+                   modifier = Modifier
+                       .fillMaxWidth()
+                       .padding(16.dp)) {
+                   // Imagen de perfil del usuario
+                   Image(
+                       /* modifier = Modifier
+                    .fillMaxWidth(),*/
+                       painter = painterResource(R.drawable.profile_default_image),
+                       contentDescription = "Icon profile"
 
-       }
+                   )
+               }
+           }
+           item{
+               // MIS MASCOTAS
+               Card(
+                   modifier = Modifier
+                       .fillMaxWidth()
+                       .background(MaterialTheme.colors.background)
+                       .padding(15.dp),
+                   elevation = 4.dp
+
+               ) {
+                   Row(
+                       modifier = Modifier
+                           .border(1.dp, MaterialTheme.colors.onBackground)
+                           .fillMaxWidth()
+                           .background(Color.Cyan)
+                           .padding(10.dp)
+                           .clickable {  }
+                   ) {
+                       Text(
+                           text = "Mis mascotas",
+                           fontSize = 17.sp,
+                           fontFamily = abrilFatface,
+                           color = MaterialTheme.colors.onBackground
+                       )
+                       Image(
+                           painter = painterResource(R.drawable.ic_tinpet_logo),
+                           contentDescription = null,
+                           alignment = Alignment.Center
+                       )
+                   }
+               }
+               // PETICIONES DE AMISTAD
+               Card(
+                   modifier = Modifier
+                       .fillMaxWidth()
+                       .background(MaterialTheme.colors.background)
+                       .padding(15.dp),
+                   elevation = 4.dp
+
+               ) {
+                   Row(
+                       modifier = Modifier
+                           .border(1.dp, MaterialTheme.colors.onBackground)
+                           .fillMaxWidth()
+                           .background(Color.Cyan)
+                           .padding(10.dp)
+                           .clickable {  }
+                   ) {
+                       Text(
+                           text = "Peticiones de amistad"
+                       )
+                       Image(
+                           modifier = Modifier
+                               .size(5.dp, 4.dp),
+                           painter = painterResource(R.drawable.people),
+                           contentDescription = null,
+                           alignment = Alignment.Center
+                       )
+                   }
+               }
+               // NOTIFICACIONES
+               Card(
+                   modifier = Modifier
+                       .fillMaxWidth()
+                       .background(MaterialTheme.colors.background)
+                       .padding(15.dp),
+                   elevation = 4.dp
+
+               ) {
+                   Row(
+                       modifier = Modifier
+                           .border(1.dp, MaterialTheme.colors.onBackground)
+                           .fillMaxWidth()
+                           .background(Color.Cyan)
+                           .padding(10.dp)
+                           .clickable {  }
+                   ) {
+                       Text(
+                           text = "Notifiaciones"
+                       )
+                      /* Image(
+                           painter = painterResource(),
+                           contentDescription = null,
+                           alignment = Alignment.Center
+                       )*/
+                   }
+               }
+               // SOBRE NOSOTROS
+               Card(
+                   modifier = Modifier
+                       .fillMaxWidth()
+                       .background(MaterialTheme.colors.background)
+                       .padding(15.dp),
+                   elevation = 4.dp
+
+               ) {
+                   Row(
+                       modifier = Modifier
+                           .border(1.dp, MaterialTheme.colors.onBackground)
+                           .fillMaxWidth()
+                           .background(Color.Cyan)
+                           .padding(10.dp)
+                           .clickable {  }
+                   ) {
+                       Text(
+                           text = "Sobre nosotros"
+                       )
+                      /* Image(
+                           painter = painterResource(),
+                           contentDescription = null,
+                           alignment = Alignment.Center
+                       )*/
+                   }
+               }
+               // CERRAR SESIÓN
+               Card(
+                   modifier = Modifier
+                       .fillMaxWidth()
+                       .background(MaterialTheme.colors.background)
+                       .padding(15.dp),
+                   elevation = 4.dp
+
+               ) {
+                   Row(
+                       modifier = Modifier
+                           .border(1.dp, MaterialTheme.colors.onBackground)
+                           .fillMaxWidth()
+                           .background(Color.Cyan)
+                           .padding(10.dp)
+                           .clickable {  }
+                   ) {
+                       Text(
+                           text = "Cerrar sesión"
+                       )
+                       /*Image(
+                           painter = painterResource(),
+                           contentDescription = null,
+                           alignment = Alignment.Center
+                       )*/
+                   }
+               }
+           }
+
+    }
+
 
    }
 
 }
-
+/*
 @Composable
 @Preview
 fun ProfileScreenPreviewLT() {
@@ -104,4 +241,4 @@ fun ProfileScreenPreviewDT() {
     TinPetTheme(darkTheme = true) {
         ProfileScreen()
     }
-}
+}*/

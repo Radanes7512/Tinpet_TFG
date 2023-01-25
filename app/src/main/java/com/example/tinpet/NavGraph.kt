@@ -1,6 +1,7 @@
 package com.example.tinpet
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,3 +30,6 @@ fun BottomNavGraph(navController: NavHostController) {
 
     }
 }
+
+
+

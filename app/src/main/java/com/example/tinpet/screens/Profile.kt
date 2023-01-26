@@ -85,28 +85,31 @@ fun ProfileScreen(){
                Card(
                    modifier = Modifier
                        .fillMaxWidth()
-                       .background(MaterialTheme.colors.background)
                        .padding(15.dp),
-                   elevation = 8.dp
+                   elevation = 10.dp
 
                ) {
                    Row(
+                       horizontalArrangement = Arrangement.SpaceBetween,
                        modifier = Modifier
-
-                           .fillMaxWidth()
-                           .background(Color.Cyan)
+                           .fillMaxSize()
+                           .background(MaterialTheme.colors.primary)
                            .padding(10.dp)
                            .clickable {  }
                    ) {
                        Text(
+                           modifier = Modifier
+                               .align(alignment = Alignment.CenterVertically),
                            text = "Mis mascotas",
-                           fontSize = 10.sp,
+                           fontSize = 15.sp,
                            fontFamily = abrilFatface,
-                           color = MaterialTheme.colors.onBackground
+                           color = MaterialTheme.colors.onPrimary
                        )
                        Image(
                            modifier = Modifier
-                               .size(15.dp, 15.dp),
+                               //.align(Alignment(0,0,))
+                               //.fillMaxWidth()
+                               .size(25.dp, 25.dp),
                            painter = painterResource(R.drawable.pawprint),
                            contentDescription = null,
                            alignment = Alignment.Center
@@ -117,28 +120,31 @@ fun ProfileScreen(){
                Card(
                    modifier = Modifier
                        .fillMaxWidth()
-                       .background(MaterialTheme.colors.background)
                        .padding(15.dp),
-                   elevation = 4.dp
+                   elevation = 10.dp
 
                ) {
                    Row(
+                       horizontalArrangement = Arrangement.SpaceBetween,
+
                        modifier = Modifier
-                           .border(1.dp, MaterialTheme.colors.onBackground)
-                           .fillMaxWidth()
-                           .background(Color.Cyan)
-                           .padding(10.dp)
                            .clickable {  }
+                           //.border(1.dp, MaterialTheme.colors.onBackground)
+                           .fillMaxWidth()
+                           .background(MaterialTheme.colors.primary)
+                           .padding(10.dp)
                    ) {
                        Text(
+                           modifier = Modifier
+                               .align(alignment = Alignment.CenterVertically),
                            text = "Peticiones de amistad",
-                           fontSize = 10.sp,
+                           fontSize = 15.sp,
                            fontFamily = abrilFatface,
-                           color = MaterialTheme.colors.onBackground
+                           color = MaterialTheme.colors.onPrimary
                        )
                        Image(
                            modifier = Modifier
-                               .size(15.dp, 15.dp),
+                               .size(25.dp, 25.dp),
                            painter = painterResource(R.drawable.people),
                            contentDescription = null,
                            alignment = Alignment.Center
@@ -149,28 +155,31 @@ fun ProfileScreen(){
                Card(
                    modifier = Modifier
                        .fillMaxWidth()
-                       .background(MaterialTheme.colors.background)
                        .padding(15.dp),
-                   elevation = 4.dp
+                   elevation = 10.dp
 
                ) {
                    Row(
+                       horizontalArrangement = Arrangement.SpaceBetween,
+
                        modifier = Modifier
-                           .border(1.dp, MaterialTheme.colors.onBackground)
-                           .fillMaxWidth()
-                           .background(Color.Cyan)
-                           .padding(10.dp)
                            .clickable {  }
+                           //.border(1.dp, MaterialTheme.colors.onBackground)
+                           .fillMaxWidth()
+                           .background(MaterialTheme.colors.primary)
+                           .padding(10.dp)
                    ) {
                        Text(
+                           modifier = Modifier
+                               .align(alignment = Alignment.CenterVertically),
                            text = "Notifiaciones",
-                           fontSize = 10.sp,
+                           fontSize = 15.sp,
                            fontFamily = abrilFatface,
-                           color = MaterialTheme.colors.onBackground
+                           color = MaterialTheme.colors.onPrimary
                        )
                        Image(
                            modifier = Modifier
-                               .size(15.dp, 15.dp),
+                               .size(25.dp, 25.dp),
                            painter = painterResource(R.drawable.notification),
                            contentDescription = null,
                            alignment = Alignment.Center
@@ -181,28 +190,31 @@ fun ProfileScreen(){
                Card(
                    modifier = Modifier
                        .fillMaxWidth()
-                       .background(MaterialTheme.colors.background)
                        .padding(15.dp),
-                   elevation = 4.dp
+                   elevation = 10.dp
 
                ) {
                    Row(
+                       horizontalArrangement = Arrangement.SpaceBetween,
                        modifier = Modifier
-                           .border(1.dp, MaterialTheme.colors.onBackground)
-                           .fillMaxWidth()
-                           .background(Color.Cyan)
-                           .padding(10.dp)
                            .clickable {  }
+                           //.border(1.dp, MaterialTheme.colors.onBackground)
+                           .fillMaxWidth()
+                           .background(MaterialTheme.colors.primary)
+                           .padding(10.dp)
+
                    ) {
                        Text(
+                           modifier = Modifier
+                               .align(alignment = Alignment.CenterVertically),
                            text = "Sobre nosotros",
-                           fontSize = 10.sp,
+                           fontSize = 15.sp,
                            fontFamily = abrilFatface,
-                           color = MaterialTheme.colors.onBackground
+                           color = MaterialTheme.colors.onPrimary
                        )
                        Image(
                            modifier = Modifier
-                               .size(15.dp, 15.dp),
+                               .size(25.dp, 25.dp),
                            painter = painterResource(R.drawable.information_button),
                            contentDescription = null,
                            alignment = Alignment.Center
@@ -213,28 +225,30 @@ fun ProfileScreen(){
                Card(
                    modifier = Modifier
                        .fillMaxWidth()
-                       .background(MaterialTheme.colors.background)
                        .padding(15.dp),
-                   elevation = 4.dp
+                   elevation = 10.dp
 
                ) {
                    Row(
+                       horizontalArrangement = Arrangement.SpaceBetween,
                        modifier = Modifier
-                           .border(1.dp, MaterialTheme.colors.onBackground)
-                           .fillMaxWidth()
-                           .background(Color.Cyan)
-                           .padding(10.dp)
                            .clickable {  }
+                           //.border(1.dp, MaterialTheme.colors.onBackground)
+                           .fillMaxWidth()
+                           .background(MaterialTheme.colors.primary)
+                           .padding(10.dp)
                    ) {
                        Text(
+                           modifier = Modifier
+                               .align(alignment = Alignment.CenterVertically),
                            text = "Cerrar sesión",
-                           fontSize = 10.sp,
+                           fontSize = 15.sp,
                            fontFamily = abrilFatface,
-                           color = MaterialTheme.colors.onBackground
+                           color = MaterialTheme.colors.onPrimary
                        )
                        Image(
                            modifier = Modifier
-                               .size(15.dp, 15.dp),
+                               .size(25.dp, 25.dp),
                            painter = painterResource(R.drawable.logout),
                            contentDescription = null,
                            alignment = Alignment.Center

@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
-
 }
 
 android {
@@ -60,7 +59,18 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
     implementation 'androidx.core:core-ktx:+'
 
+    // SMOKED IMPLEMENTATION (FUMADON)
+    constraints{
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0"){
+            because("kotlin-stdlib-jdk7 is now  part of kotlin-stdlib")
+        }
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0"){
+            because("kotlin-stdlib-jdk8 is now  part of kotlin-stdlib")
+        }
+    }
+
     // Google Maps
+    // MAPS_API_KEY = AIzaSyAqjsX5K16DdCmP-XIbdpovqsZBkpFMWkY
     implementation "com.google.maps.android:maps-compose:1.0.0"
     implementation "com.google.android.gms:play-services-maps:18.1.0"
 

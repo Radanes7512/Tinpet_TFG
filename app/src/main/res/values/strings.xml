@@ -1,4 +1,10 @@
 <resources>
+    // STANDARD
     <string name="app_name">TinPet</string>
     <string name="user_name">Default name</string>
+
+    // SPANISH
+    <string name="settings_ES">Ajustes</string>
+    <string name="login_ES">Iniciar sesión</string>
+    <string name="register_ES">Registro</string>
 </resources>

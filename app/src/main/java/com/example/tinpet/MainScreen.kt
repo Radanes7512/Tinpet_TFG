@@ -26,17 +26,15 @@ import com.example.tinpet.ui.theme.abrilFatface
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-@Preview
 @Composable
-fun MainScreen() {
-    val navController = rememberNavController()
+fun MainScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
                  TopBar()
         },
         bottomBar = { BottomBar(navController = navController) }
     ) {
-        BottomNavGraph(navController = navController)
+        NavGraph(navController = navController)
     }
 }
 @Composable
@@ -77,11 +75,11 @@ fun BottomBar(
 
 ) {
     val screens = listOf(
-        BottomBarScreen.Places,
-        BottomBarScreen.Connect,
-        BottomBarScreen.Home,
-        BottomBarScreen.Chat,
-        BottomBarScreen.Profile,
+        AppScreens.Places,
+        AppScreens.Connect,
+        AppScreens.Home,
+        AppScreens.Chat,
+        AppScreens.Profile,
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -99,7 +97,7 @@ fun BottomBar(
 
 @Composable
 fun RowScope.AddItem(
-    screen: BottomBarScreen,
+    screen: AppScreens,
     currentDestination: NavDestination?,
     navController: NavHostController
 ) {

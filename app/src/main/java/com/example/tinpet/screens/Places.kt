@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.compose.*
@@ -22,10 +23,16 @@ import com.google.maps.android.compose.*
 fun PlacesScreen(){
     val properties by remember {mutableStateOf(MapProperties(mapType = MapType.SATELLITE))}
     val uiSettings by remember {mutableStateOf(MapUiSettings(zoomControlsEnabled = false))}
+    //val maxZoom by remeber { mutableStateOf(Map)}
+    val spain = LatLng(39.53721928672391, -3.416821204546524)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(spain, 5.5f)
 
+    }
     GoogleMap(
         modifier = Modifier
             .fillMaxSize(),
+        cameraPositionState = cameraPositionState,
         properties = properties,
         uiSettings = uiSettings
         ){

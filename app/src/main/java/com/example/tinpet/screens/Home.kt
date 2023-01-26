@@ -12,10 +12,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -33,6 +36,18 @@ fun HomeScreen() {
 
 @Composable
 @Preview
-fun HomeScreenPreview() {
-    HomeScreen()
+fun HomeScreenPreviewLT() {
+    val navController = rememberNavController()
+    TinPetTheme(darkTheme = false) {
+        HomeScreen(navController)
+    }
+}
+
+@Composable
+@Preview
+fun HomeScreenPreviewDT() {
+    val navController = rememberNavController()
+    TinPetTheme(darkTheme = true) {
+        HomeScreen(navController)
+    }
 }

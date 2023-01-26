@@ -3,12 +3,14 @@ package com.example.tinpet
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,7 +55,11 @@ fun TopBar(
             modifier = Modifier
                 .size(64.dp)
                 .padding(8.dp),
-            painter = painterResource(R.drawable.ic_tinpet_logo),
+            painter = if (isSystemInDarkTheme()) {
+                painterResource(R.drawable.icon_pawprint_black)
+            } else {
+                painterResource(R.drawable.icon_pawprint_white)
+            },
             contentDescription = null
         )
         Text(
@@ -98,13 +104,18 @@ fun RowScope.AddItem(
     navController: NavHostController
 ) {
     BottomNavigationItem(
-        label = {
+        /*label = {
             Text(text = screen.title)
-        },
+        },*/
         icon = {
             Icon(
                 imageVector = screen.icon,
-                contentDescription = "Navigation Icon"
+                contentDescription = "Navigation Icon",
+                tint = if (isSystemInDarkTheme()) {
+                    Color.White
+                } else {
+                    Color.Black
+                }
             )
         },
         selected = currentDestination?.hierarchy?.any {

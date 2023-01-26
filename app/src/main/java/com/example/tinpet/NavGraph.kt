@@ -8,8 +8,12 @@ import androidx.navigation.compose.composable
 import com.example.tinpet.screens.*
 
 @Composable
-fun BottomNavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination =  BottomBarScreen.Home.route
+fun BottomNavGraph(
+    navController: NavHostController
+) {
+    NavHost(
+        navController = navController,
+        startDestination =  BottomBarScreen.Home.route
     ){
         composable(route=BottomBarScreen.Places.route){
             PlacesScreen()

@@ -7,22 +7,28 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import com.example.tinpet.AppScreens
 import com.example.tinpet.R
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
-fun ProfileScreen(){
+fun ProfileScreen(navController: NavController){
    Box(
        modifier = Modifier
            .background(color = MaterialTheme.colors.background),
@@ -52,14 +58,18 @@ fun ProfileScreen(){
                 )
                 // Botón de Ajustes
                 Button(
-                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary),
-                    elevation = ButtonDefaults.elevation(),
-                    onClick = { /*TODO*/ }
+                    onClick = { NavController.navigate(route=AppScreens.Settings) },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
+                    elevation = ButtonDefaults.elevation(0.dp)
                 ) {
-                    Text(
+                    Icon(
+                        Icons.Filled.Menu,
+                        contentDescription = null
+                    )
+                    /*Text(
                         text = "Ajustes",
                         color = MaterialTheme.colors.onPrimary
-                    )
+                    )*/
 
                 }
             }
@@ -95,7 +105,7 @@ fun ProfileScreen(){
                            .fillMaxSize()
                            .background(MaterialTheme.colors.primary)
                            .padding(10.dp)
-                           .clickable {  }
+                           .clickable { }
                    ) {
                        Text(
                            modifier = Modifier
@@ -110,7 +120,7 @@ fun ProfileScreen(){
                                //.align(Alignment(0,0,))
                                //.fillMaxWidth()
                                .size(25.dp, 25.dp),
-                           painter = painterResource(R.drawable.pawprint),
+                           painter = painterResource(R.drawable.icon_pawprint),
                            contentDescription = null,
                            alignment = Alignment.Center
                        )
@@ -128,7 +138,7 @@ fun ProfileScreen(){
                        horizontalArrangement = Arrangement.SpaceBetween,
 
                        modifier = Modifier
-                           .clickable {  }
+                           .clickable { }
                            //.border(1.dp, MaterialTheme.colors.onBackground)
                            .fillMaxWidth()
                            .background(MaterialTheme.colors.primary)
@@ -145,7 +155,7 @@ fun ProfileScreen(){
                        Image(
                            modifier = Modifier
                                .size(25.dp, 25.dp),
-                           painter = painterResource(R.drawable.people),
+                           painter = painterResource(R.drawable.icon_group),
                            contentDescription = null,
                            alignment = Alignment.Center
                        )
@@ -163,7 +173,7 @@ fun ProfileScreen(){
                        horizontalArrangement = Arrangement.SpaceBetween,
 
                        modifier = Modifier
-                           .clickable {  }
+                           .clickable { }
                            //.border(1.dp, MaterialTheme.colors.onBackground)
                            .fillMaxWidth()
                            .background(MaterialTheme.colors.primary)
@@ -180,7 +190,7 @@ fun ProfileScreen(){
                        Image(
                            modifier = Modifier
                                .size(25.dp, 25.dp),
-                           painter = painterResource(R.drawable.notification),
+                           painter = painterResource(R.drawable.icon_notifications),
                            contentDescription = null,
                            alignment = Alignment.Center
                        )
@@ -197,7 +207,7 @@ fun ProfileScreen(){
                    Row(
                        horizontalArrangement = Arrangement.SpaceBetween,
                        modifier = Modifier
-                           .clickable {  }
+                           .clickable { }
                            //.border(1.dp, MaterialTheme.colors.onBackground)
                            .fillMaxWidth()
                            .background(MaterialTheme.colors.primary)
@@ -215,7 +225,7 @@ fun ProfileScreen(){
                        Image(
                            modifier = Modifier
                                .size(25.dp, 25.dp),
-                           painter = painterResource(R.drawable.information_button),
+                           painter = painterResource(R.drawable.icon_aboutus),
                            contentDescription = null,
                            alignment = Alignment.Center
                        )
@@ -232,7 +242,7 @@ fun ProfileScreen(){
                    Row(
                        horizontalArrangement = Arrangement.SpaceBetween,
                        modifier = Modifier
-                           .clickable {  }
+                           .clickable { }
                            //.border(1.dp, MaterialTheme.colors.onBackground)
                            .fillMaxWidth()
                            .background(MaterialTheme.colors.primary)
@@ -249,7 +259,7 @@ fun ProfileScreen(){
                        Image(
                            modifier = Modifier
                                .size(25.dp, 25.dp),
-                           painter = painterResource(R.drawable.logout),
+                           painter = painterResource(R.drawable.icon_logout),
                            contentDescription = null,
                            alignment = Alignment.Center
                        )

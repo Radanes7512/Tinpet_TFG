@@ -1,4 +1,4 @@
- b   # TinPet - Walk Out App 
+# TinPet - Walk Out App 
 ## Aplicación de salidas para mascotas
 ### Copyright Tinpet© 2023 
 

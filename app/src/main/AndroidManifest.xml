@@ -12,6 +12,8 @@
         android:theme="@style/Theme.TinPet"
         tools:targetApi="31">
 
+
+        // GOOGLE MAPS API
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAqjsX5K16DdCmP-XIbdpovqsZBkpFMWkY"

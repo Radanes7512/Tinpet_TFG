@@ -22,11 +22,15 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.tinpet.AppScreens
 import com.example.tinpet.R
+import com.example.tinpet.graphs.Graph
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen(
+    onBackClick: () -> Unit,
+    onCloseClick: () -> Unit
+) {
     Box(
         modifier = Modifier
             .background(color = MaterialTheme.colors.background),
@@ -47,7 +51,7 @@ fun SettingsScreen(navController: NavController) {
 
                     // Botón de atrás
                     Button(
-                        onClick = { navController.popBackStack() },
+                        onClick = { onBackClick() },
                         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
                         elevation = ButtonDefaults.elevation(0.dp)
                     ) {
@@ -154,7 +158,7 @@ fun SettingsScreen(navController: NavController) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
-                            .clickable { navController.navigate(route = AppScreens.Login.route) }
+                            .clickable { onCloseClick() }
                             //.border(1.dp, MaterialTheme.colors.onBackground)
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
@@ -185,7 +189,7 @@ fun SettingsScreen(navController: NavController) {
     }
 
 }
-
+/*
 @Composable
 @Preview
 fun SettingScreenPreviewLT() {
@@ -202,4 +206,4 @@ fun SettingScreenPreviewDT() {
     TinPetTheme(darkTheme = true) {
         SettingsScreen(navController)
     }
-}
+}*/

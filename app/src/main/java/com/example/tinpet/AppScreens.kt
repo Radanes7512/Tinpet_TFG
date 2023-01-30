@@ -34,15 +34,7 @@ sealed class AppScreens(
         //title = "Profile",
         icon = Icons.Filled.Person
     )
-    object Settings : AppScreens(
-        route = "settings",
-        icon = Icons.Filled.Menu
 
-    )
-    object  Login : AppScreens(
-        route = "login",
-        icon = Icons.Filled.Login
-    )
 
 
 }

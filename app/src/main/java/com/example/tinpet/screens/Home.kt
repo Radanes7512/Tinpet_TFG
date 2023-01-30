@@ -20,7 +20,7 @@ import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -28,7 +28,7 @@ fun HomeScreen(navController: NavController) {
         contentAlignment = Alignment.Center
         ){
         Button(
-            onClick = { navController.popBackStack() },
+            onClick = {  },
             colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
             elevation = ButtonDefaults.elevation(0.dp)
         ) {
@@ -46,7 +46,7 @@ fun HomeScreen(navController: NavController) {
 fun HomeScreenPreviewLT() {
     val navController = rememberNavController()
     TinPetTheme(darkTheme = false) {
-        HomeScreen(navController)
+        HomeScreen()
     }
 }
 
@@ -55,6 +55,6 @@ fun HomeScreenPreviewLT() {
 fun HomeScreenPreviewDT() {
     val navController = rememberNavController()
     TinPetTheme(darkTheme = true) {
-        HomeScreen(navController)
+        HomeScreen()
     }
 }

@@ -22,7 +22,7 @@ private val DarkColorPalette = darkColors(
     secondary = Green10, // COLOR SECUNDARIO
     secondaryVariant = Yellow10,
 
-    onSurface = Color.Red // NO ESPECIFICADO
+    onSurface = Color.White // NO ESPECIFICADO
 )
 
 @SuppressLint("ConflictingOnColor")
@@ -39,7 +39,7 @@ private val LightColorPalette = lightColors(
     secondary = Green10, // COLOR SECUNDARIO
     secondaryVariant = Yellow10,
 
-    onSurface = Color.Red // NO ESPECIFICADO
+    onSurface = Color.Black // NO ESPECIFICADO
  )
 
 @Composable

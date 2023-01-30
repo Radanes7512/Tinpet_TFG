@@ -3,6 +3,7 @@ package com.example.tinpet
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -22,27 +23,30 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun MainScreen(navController: NavHostController = rememberNavController()) {
     Scaffold(
         topBar = {
-                 TopBar()
-        },/*
-        bottomBar = { BottomBar(navController = navController) }*/
+            TopBar()
+        },
+        bottomBar = { BottomBar2(navController = navController) }
     ) {
         NavGraph(navController = navController)
     }
 }
+
+// MENÚ SUPERIOR
 @Composable
 fun TopBar(
-    modifier: Modifier = Modifier
-) {
+   ) {
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .background(color = MaterialTheme.colors.primaryVariant),
         contentAlignment = Alignment.Center
@@ -70,28 +74,101 @@ fun TopBar(
 
 }
 
+// MENÚ INFERIOR
+/*
 @Composable
 fun BottomBar(
-    navController: NavHostController,
-
+    screen: AppScreens,
+    currentDestination: NavDestination?,
+    navController: NavHostController
 ) {
+    val iconWidth = 30
+    val iconHeight = 30
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = MaterialTheme.colors.primaryVariant),
+        contentAlignment = Alignment.Center,
+
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp)
+            //.background(color = MaterialTheme.colors.primaryVariant)
+
+        ) {
+            Icon(
+                imageVector = AppScreens.Places.icon,
+                contentDescription = null,
+                Modifier
+                    .clickable { navController.navigate(route = AppScreens.Places.route) }
+                    .size(iconWidth.dp, iconHeight.dp)
+
+
+            )
+            Icon(
+                imageVector = AppScreens.Connect.icon,
+                contentDescription = null,
+                Modifier
+                    .clickable { navController.navigate(route = AppScreens.Connect.route) }
+                    .size(iconWidth.dp, iconHeight.dp)
+
+            )
+            Icon(
+                imageVector = AppScreens.Home.icon,
+                contentDescription = null,
+                Modifier
+                    .clickable { navController.navigate(route = AppScreens.Home.route) }
+                    .size(iconWidth.dp, iconHeight.dp)
+
+            )
+            Icon(
+                imageVector = AppScreens.Chat.icon,
+                contentDescription = null,
+                Modifier
+                    .clickable { navController.navigate(route = AppScreens.Chat.route) }
+                    .size(iconWidth.dp, iconHeight.dp)
+
+            )
+            Icon(
+                imageVector = AppScreens.Profile.icon,
+                contentDescription = null,
+                Modifier
+                    .clickable { navController.navigate(route = AppScreens.Profile.route) }
+                    .size(iconWidth.dp, iconHeight.dp)
+
+            )
+        }
+    }
+}
+*/
+@Composable
+fun BottomBar2(navController: NavHostController) {
     val screens = listOf(
         AppScreens.Places,
         AppScreens.Connect,
         AppScreens.Home,
         AppScreens.Chat,
-        AppScreens.Profile,
+        AppScreens.Profile
     )
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
+    val navBackStackEntry by navController
+        .currentBackStackEntryAsState()
+    val currentDestination =
+    navBackStackEntry?.destination
 
-    BottomNavigation {
-        screens.forEach { screen ->
-            AddItem(
-                screen = screen,
-                currentDestination = currentDestination,
-                navController = navController
-            )
+    val bottomBarDestination = screens.any { it.route == currentDestination?.route }
+    if (bottomBarDestination) {
+        BottomNavigation {
+            screens.forEach { screen ->
+                AddItem(
+                    screen = screen,
+                    currentDestination = currentDestination,
+                    navController = navController
+                )
+            }
         }
     }
 }
@@ -102,7 +179,8 @@ fun RowScope.AddItem(
     currentDestination: NavDestination?,
     navController: NavHostController
 ) {
-    BottomNavigationItem(
+    
+        BottomNavigationItem(
         /*label = {
             Text(text = screen.title)
         },*/
@@ -128,4 +206,22 @@ fun RowScope.AddItem(
             }
         }
     )
+}
+
+@Composable
+@Preview
+fun PreviewMainScreen() {
+    val navController = rememberNavController()
+    TinPetTheme(darkTheme = false) {
+        MainScreen(navController)
+    }
+}
+
+@Composable
+@Preview
+fun PreviewMainScreenDT() {
+    val navController = rememberNavController()
+    TinPetTheme(darkTheme = true) {
+        MainScreen(navController)
+    }
 }

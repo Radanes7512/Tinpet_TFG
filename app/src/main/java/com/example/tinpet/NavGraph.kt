@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.tinpet.graphs.Graph
 import com.example.tinpet.screens.*
 
 @Composable
@@ -12,6 +13,7 @@ fun NavGraph(
 ) {
     NavHost(
         navController = navController,
+        route = Graph.HOME ,
         startDestination =  AppScreens.Home.route
     ){
         composable(route=AppScreens.Places.route){
@@ -21,19 +23,16 @@ fun NavGraph(
             ConnectScreen()
         }
         composable(route=AppScreens.Home.route){
-            HomeScreen(navController)
+            HomeScreen()
         }
         composable(route=AppScreens.Chat.route){
             ChatScreen()
         }
         composable(route=AppScreens.Profile.route){
-            ProfileScreen(navController)
-        }
-        composable(route= AppScreens.Settings.route){
-            SettingsScreen(navController)
-        }
-        composable(route = AppScreens.Login.route){
-            LoginScreen(navController)
+            ProfileScreen(
+                onClick = {
+                navController.navigate(Graph.SETTINGS)
+            })
         }
     }
 }

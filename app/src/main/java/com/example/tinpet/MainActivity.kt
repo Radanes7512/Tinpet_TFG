@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
-import com.example.tinpet.screens.LoginScreen
+import com.example.tinpet.graphs.MainNavigationGraph
 import com.example.tinpet.ui.theme.TinPetTheme
 
 class MainActivity : ComponentActivity() {
@@ -12,13 +12,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TinPetTheme {
-                val navController = rememberNavController()
-                //MainScreen(navController)
-                LoginScreen(navController)
-
-
+                MainNavigationGraph(navController = rememberNavController())
             }
         }
     }
 }
+
 

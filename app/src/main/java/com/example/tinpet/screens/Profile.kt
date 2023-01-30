@@ -18,14 +18,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.tinpet.AppScreens
+import com.example.tinpet.NavGraph
 import com.example.tinpet.R
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(
+    navController: NavHostController = rememberNavController(),
+    onClick: () -> Unit
+) {
+    NavGraph(navController = navController)
     Box(
         modifier = Modifier.background(color = MaterialTheme.colors.background),
         contentAlignment = Alignment.Center
@@ -52,9 +58,7 @@ fun ProfileScreen(navController: NavController) {
                     )
                     // Botón de Ajustes
                     Button(
-                        onClick = {
-                            navController.navigate(route = AppScreens.Settings.route)
-                        },
+                        onClick = {onClick()},
                         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
                         elevation = ButtonDefaults.elevation(0.dp)
                     ) {
@@ -96,7 +100,7 @@ fun ProfileScreen(navController: NavController) {
                 ) {
                     Row(horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
                             .padding(10.dp)
                             .clickable { }) {
@@ -126,7 +130,6 @@ fun ProfileScreen(navController: NavController) {
 
                 ) {
                     Row(horizontalArrangement = Arrangement.SpaceBetween,
-
                         modifier = Modifier
                             .clickable { }
                             //.border(1.dp, MaterialTheme.colors.onBackground)
@@ -182,7 +185,7 @@ fun ProfileScreen(navController: NavController) {
         }
     }
 }
-
+/*
 @Composable
 @Preview
 fun ProfileScreenPreviewLT() {
@@ -199,4 +202,4 @@ fun ProfileScreenPreviewDT() {
     TinPetTheme(darkTheme = true) {
         ProfileScreen(navController)
     }
-}
+}*/

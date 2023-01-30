@@ -13,8 +13,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             TinPetTheme {
                 val navController = rememberNavController()
-                MainScreen(navController)
-                //LoginScreen(navController)
+                //MainScreen(navController)
+                LoginScreen(navController)
 
 
             }

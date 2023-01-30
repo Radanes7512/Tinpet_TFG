@@ -13,7 +13,6 @@ sealed class AppScreens(
         route = "places",
         //title = "Places",
         icon = Icons.Filled.Forest
-        //R.drawable.icon_places_white
     )
     object Connect : AppScreens(
         route = "connect",
@@ -35,17 +34,11 @@ sealed class AppScreens(
         //title = "Profile",
         icon = Icons.Filled.Person
     )
-
-    object Main : AppScreens(
-        route = "main",
-        icon = Icons.Filled.Menu
-    )
     object Settings : AppScreens(
         route = "settings",
         icon = Icons.Filled.Menu
 
     )
-
     object  Login : AppScreens(
         route = "login",
         icon = Icons.Filled.Login

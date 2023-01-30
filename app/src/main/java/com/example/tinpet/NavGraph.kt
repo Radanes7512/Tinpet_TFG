@@ -14,9 +14,6 @@ fun NavGraph(
         navController = navController,
         startDestination =  AppScreens.Home.route
     ){
-        composable(route = AppScreens.Main.route){
-            MainScreen(navController)
-        }
         composable(route=AppScreens.Places.route){
             PlacesScreen()
         }

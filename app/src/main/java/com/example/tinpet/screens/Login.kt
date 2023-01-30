@@ -1,9 +1,11 @@
 package com.example.tinpet.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Password
@@ -11,15 +13,17 @@ import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogWindowProvider
+import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.tinpet.*
 import com.example.tinpet.R
@@ -28,7 +32,6 @@ import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
 fun LoginScreen(navController: NavController) {
-
     Box(
         modifier = Modifier.background(color = MaterialTheme.colors.background),
         contentAlignment = Alignment.Center
@@ -150,7 +153,9 @@ fun LoginScreen(navController: NavController) {
                         .fillMaxWidth()
                 ) {
                     Button(
-                        onClick = { navController.navigate(route = AppScreens.Main.route) }
+                        onClick = {
+                            navController.navigate(route = AppScreens.Home.route)
+                        }
                     ) {
                         Text(
                             text = "Acceder",

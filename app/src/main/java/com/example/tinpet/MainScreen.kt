@@ -31,8 +31,8 @@ fun MainScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
                  TopBar()
-        },
-        bottomBar = { BottomBar(navController = navController) }
+        },/*
+        bottomBar = { BottomBar(navController = navController) }*/
     ) {
         NavGraph(navController = navController)
     }
@@ -69,6 +69,7 @@ fun TopBar(
     }
 
 }
+
 @Composable
 fun BottomBar(
     navController: NavHostController,

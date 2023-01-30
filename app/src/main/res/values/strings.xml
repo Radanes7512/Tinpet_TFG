@@ -7,4 +7,9 @@
     <string name="settings_ES">Ajustes</string>
     <string name="login_ES">Iniciar sesión</string>
     <string name="register_ES">Registro</string>
+
+    <string name="mapstate1_ES">Zona muy transcurrida</string>
+    <string name="mapstate2_ES">Zona transcurrida</string>
+    <string name="mapstate3_ES">Zona poco transcurrida</string>
+    <string name="mapstate4_ES">Zona transcurrida</string>
 </resources>

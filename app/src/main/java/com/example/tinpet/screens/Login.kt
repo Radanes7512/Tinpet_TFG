@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
@@ -17,29 +16,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogWindowProvider
-import androidx.compose.ui.window.PopupProperties
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.tinpet.*
 import com.example.tinpet.R
-import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
 fun LoginScreen(
     onClick: () -> Unit
 ){
+    var name by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     var pwst = true
     Box(
         modifier = Modifier.background(color = MaterialTheme.colors.background),
@@ -112,7 +102,7 @@ fun LoginScreen(
                         .padding(16.dp)
                 ) {
                     // Nombre del usuario
-                    var name by remember { mutableStateOf("") }
+
                     OutlinedTextField(
                         value = name,
                         onValueChange = {
@@ -143,7 +133,6 @@ fun LoginScreen(
                     )
                 }
                 // USER PASSWORD
-                var password by remember { mutableStateOf("") }
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
@@ -215,7 +204,7 @@ fun LoginScreen(
                 ) {
                     Button(
                         onClick = { onClick() },
-                        //enabled = password.length > 9,
+                        enabled = password.length > 9 && name.length == 9,
                         shape = RoundedCornerShape(25),
                         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primaryVariant)
 

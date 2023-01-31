@@ -1,15 +1,17 @@
 package com.example.tinpet.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.R
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,17 +29,32 @@ fun HomeScreen() {
             .background(color = MaterialTheme.colors.background),
         contentAlignment = Alignment.Center
         ){
-        Button(
-            onClick = {  },
-            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
-            elevation = ButtonDefaults.elevation(0.dp)
-        ) {
-            Icon(
-                Icons.Filled.ArrowBack,
-                contentDescription = null
-            )
-
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp, 20.dp, 20.dp, 200.dp)
+        ){
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.onPrimary)
+            ) {
+                Text(text = "Home")
+            }
         }
+       // Spacer(Modifier.size(10.dp))
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp)
+        ) {
+            Text(text = "Home2")
+        }
+
+
     }
 }
 

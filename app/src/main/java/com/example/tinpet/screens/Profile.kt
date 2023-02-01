@@ -5,21 +5,25 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.tinpet.NavGraph
 import com.example.tinpet.R
+import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
@@ -34,7 +38,6 @@ fun ProfileScreen(
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize()
-
         ) {
             item {
                 Row(
@@ -78,9 +81,10 @@ fun ProfileScreen(
                 ) {
                     // Imagen de perfil del usuario
                     Image(
-                        /* modifier = Modifier
-                     .fillMaxWidth(),*/
-                        painter = painterResource(R.drawable.profile_default_image),
+                        modifier = Modifier
+                            .size(100.dp, 100.dp)
+                            .clip(CircleShape),
+                        painter = painterResource(R.drawable.default_pet),
                         contentDescription = "Icon profile"
 
                     )
@@ -95,7 +99,8 @@ fun ProfileScreen(
                     elevation = 10.dp
 
                 ) {
-                    Row(horizontalArrangement = Arrangement.SpaceBetween,
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .clickable { }
                             .fillMaxWidth()
@@ -128,7 +133,8 @@ fun ProfileScreen(
                     elevation = 10.dp
 
                 ) {
-                    Row(horizontalArrangement = Arrangement.SpaceBetween,
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .clickable { }
                             //.border(1.dp, MaterialTheme.colors.onBackground)
@@ -187,13 +193,13 @@ fun ProfileScreen(
         }
     }
 }
-/*
+
 @Composable
 @Preview
 fun ProfileScreenPreviewLT() {
     val navController = rememberNavController()
     TinPetTheme(darkTheme = false) {
-        ProfileScreen(navController)
+        ProfileScreen(navController, onSetClick = {})
     }
 }
 
@@ -202,6 +208,6 @@ fun ProfileScreenPreviewLT() {
 fun ProfileScreenPreviewDT() {
     val navController = rememberNavController()
     TinPetTheme(darkTheme = true) {
-        ProfileScreen(navController)
+        ProfileScreen(navController, onSetClick = {})
     }
-}*/
+}

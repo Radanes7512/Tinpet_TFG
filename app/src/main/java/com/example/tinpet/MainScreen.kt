@@ -43,9 +43,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
     Scaffold(
         topBar = {
             if (showTopBar) {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
-                TopBar(navController = navController)
+                TopBar()
             }
         },
         bottomBar = { BottomBar2(navController = navController) }
@@ -56,16 +54,13 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
 // MENÚ SUPERIOR
 @Composable
-fun TopBar(navController: NavHostController) {
-
-
+fun TopBar() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = MaterialTheme.colors.primaryVariant),
         contentAlignment = Alignment.Center
         //horizontalAlignment = Alignment.CenterHorizontally
-
     ) {
         Image(
             modifier = Modifier
@@ -160,7 +155,7 @@ fun BottomBar(
 }
 */
 @Composable
-public fun BottomBar2(navController: NavHostController) {
+fun BottomBar2(navController: NavHostController) {
     val screens = listOf(
         AppScreens.Places,
         AppScreens.Connect,

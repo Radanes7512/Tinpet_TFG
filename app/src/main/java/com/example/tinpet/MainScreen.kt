@@ -3,7 +3,6 @@ package com.example.tinpet
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -28,6 +27,7 @@ import com.example.tinpet.ui.theme.abrilFatface
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+
 
 @Composable
 fun MainScreen(navController: NavHostController = rememberNavController()) {
@@ -146,7 +146,7 @@ fun BottomBar(
 }
 */
 @Composable
-fun BottomBar2(navController: NavHostController) {
+public fun BottomBar2(navController: NavHostController) {
     val screens = listOf(
         AppScreens.Places,
         AppScreens.Connect,
@@ -154,10 +154,11 @@ fun BottomBar2(navController: NavHostController) {
         AppScreens.Chat,
         AppScreens.Profile
     )
+
     val navBackStackEntry by navController
         .currentBackStackEntryAsState()
     val currentDestination =
-    navBackStackEntry?.destination
+        navBackStackEntry?.destination
 
     val bottomBarDestination = screens.any { it.route == currentDestination?.route }
     if (bottomBarDestination) {
@@ -179,8 +180,7 @@ fun RowScope.AddItem(
     currentDestination: NavDestination?,
     navController: NavHostController
 ) {
-    
-        BottomNavigationItem(
+    BottomNavigationItem(
         /*label = {
             Text(text = screen.title)
         },*/

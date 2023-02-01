@@ -4,8 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import com.example.tinpet.MainScreen
-import com.example.tinpet.screens.ProfileScreen
+
 
 @Composable
 fun MainNavigationGraph(navController: NavHostController) {
@@ -15,23 +16,23 @@ fun MainNavigationGraph(navController: NavHostController) {
         startDestination = Graph.AUTHENTICATION
     ) {
         authNavGraph(navController = navController)
-        settingsNavGraph(navController = navController)
-        composable(route = Graph.HOME) {
+        composable(route = Graph.MAIN) {
             MainScreen()
         }
-        composable(route = Graph.PROFILE) {
-            ProfileScreen(
-                onClick = {
-                navController.navigate(Graph.SETTINGS)
-            })
-        }
+        /*composable(
+            route = Graph.AUTHENTICATION,
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "android-app://androidx.navigation/auth_graph"
+                })
+        ) {
+        }*/
     }
 }
+
 
 object Graph {
     const val ROOT = "root_graph"
     const val AUTHENTICATION = "auth_graph"
-    const val HOME = "home_graph"
-    const val SETTINGS = "settings_graph"
-    const val PROFILE = "profile_graph"
+    const val MAIN = "home_graph"
 }

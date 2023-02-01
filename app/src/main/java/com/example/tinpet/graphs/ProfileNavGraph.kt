@@ -1,5 +1,5 @@
 package com.example.tinpet.graphs
-
+/*
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -32,3 +32,4 @@ fun NavGraphBuilder.settingsNavGraph(navController: NavHostController) {
 sealed class SetScreen(val route: String) {
     object Settings : SetScreen(route = "SETTINGS")
 }
+*/

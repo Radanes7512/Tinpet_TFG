@@ -29,8 +29,14 @@
             tools:ignore="RedundantLabel">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <data android:host="androidx.navigation/auth_graph"
+                    android:scheme="android-app"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.APP_BROWSER"/>
+                <action android:name="android.intent.action.ALL_APPS"/>
             </intent-filter>
         </activity>
     </application>

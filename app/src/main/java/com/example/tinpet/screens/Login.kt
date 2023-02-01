@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -16,8 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -129,6 +132,13 @@ fun LoginScreen(
                                 )
                             }
                         },
+                        visualTransformation =
+                        if (isSystemInDarkTheme()) {
+                            PrefixVisualTransformationDark("+34 ")
+                        }else{
+                            PrefixVisualTransformationLight("+34 ")
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
                     )
                 }
@@ -247,3 +257,34 @@ fun LoginScreenPreviewDT() {
         LoginScreen(navController)
     }
 }*/
+class PrefixVisualTransformationDark(private val prefix: String) : VisualTransformation {
+        override fun filter(text: AnnotatedString): TransformedText {
+            val transformedText = AnnotatedString(
+                prefix,
+                SpanStyle(Color.White)
+            ) + text
+
+            return TransformedText(transformedText, PrefixOffsetMapping(prefix))
+        }
+
+}
+class PrefixVisualTransformationLight(private val prefix: String) : VisualTransformation {
+    override fun filter(text: AnnotatedString): TransformedText {
+        val transformedText = AnnotatedString(
+            prefix,
+            SpanStyle(Color.Black)
+        ) + text
+
+        return TransformedText(transformedText, PrefixOffsetMapping(prefix))
+    }
+
+}
+
+class PrefixOffsetMapping(private val prefix: String) : OffsetMapping {
+    override fun originalToTransformed(offset: Int): Int = offset + prefix.length
+
+    override fun transformedToOriginal(offset: Int): Int {
+        val delta = offset - prefix.length
+        return if (delta < 0) 0 else delta
+    }
+}

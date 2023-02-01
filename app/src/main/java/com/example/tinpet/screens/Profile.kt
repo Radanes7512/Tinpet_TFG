@@ -91,7 +91,7 @@ fun ProfileScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(15.dp), 
+                        .padding(15.dp),
                     elevation = 10.dp
 
                 ) {

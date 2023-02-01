@@ -31,9 +31,22 @@ import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
 fun MainScreen(navController: NavHostController = rememberNavController()) {
+    val screens = listOf(
+        AppScreens.Places,
+        AppScreens.Connect,
+        AppScreens.Home,
+        AppScreens.Chat,
+        AppScreens.Profile,
+        AppScreens.Settings
+    )
+    val showTopBar = navController.currentBackStackEntryAsState().value?.destination?.route in screens.map { it.route }
     Scaffold(
         topBar = {
-            TopBar()
+            if (showTopBar) {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
+                TopBar(navController = navController)
+            }
         },
         bottomBar = { BottomBar2(navController = navController) }
     ) {
@@ -43,8 +56,9 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
 // MENÚ SUPERIOR
 @Composable
-fun TopBar(
-   ) {
+fun TopBar(navController: NavHostController) {
+
+
     Box(
         modifier = Modifier
             .fillMaxWidth()

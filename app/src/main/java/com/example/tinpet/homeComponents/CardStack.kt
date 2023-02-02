@@ -1,6 +1,7 @@
 package com.example.tinpet.homeComponents
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -9,13 +10,15 @@ import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -93,64 +96,86 @@ fun CardStack(
 
 @Composable
 fun Card(
-    modifier: Modifier = Modifier, item: Item, cardStackController: CardStackController
+    modifier: Modifier = Modifier,
+    item: Item,
+    cardStackController: CardStackController
 ) {
-    Column {
-        if (item.painter != null) {
-            AsyncImage(
-                model = item.painter,
-                contentDescription = "",
-                contentScale = ContentScale.Crop,
-                modifier = modifier.fillMaxSize()
-            )
-        }
-        Column(
+    Column(
+        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .padding(10.dp)
+    ) {
+        Box(
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(10.dp)
         ) {
-            Text(
-                text = item.text,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 25.sp
-            )
-            Text(
-                text = item.subText,
-                color = Color.White,
-                fontSize = 20.sp
-            )
-        }
-        // CATEGORIAS
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(15.dp), elevation = 10.dp
-        ) {
+            if (item.painter != null) {
+                AsyncImage(
+                    model = item.painter,
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop,
+                    modifier = modifier
+                        .fillMaxSize()
+                        .size(500.dp, 500.dp)
+                )
+            }
             Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
+                    .align(Alignment.BottomStart)
             ) {
-                Card(elevation = 10.dp) {
-                    Text(modifier = Modifier.padding(5.dp), text = "Categoría 1")
+                Column(
+                    modifier = Modifier
+                        .padding(10.dp)
+                ) {
+                    Text(
+                        style = TextStyle(
+                            shadow = Shadow(
+                                color = Color.DarkGray,
+                                offset = Offset(2.0f, 5.0f),
+                                blurRadius = 2f
+                            )
+                        ),
+                        text = item.text,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 25.sp
+                    )
+                    Text(
+                        style = TextStyle(
+                            shadow = Shadow(
+                                color = Color.DarkGray,
+                                offset = Offset(2.0f, 5.0f),
+                                blurRadius = 2f
+                            )
+                        ),
+                        text = item.subText,
+                        color = Color.White,
+                        fontSize = 20.sp
+                    )
                 }
-                Card(elevation = 10.dp) {
-                    Text(modifier = Modifier.padding(5.dp), text = "Categoría 2")
-                }
-                Card(elevation = 10.dp) {
-                    Text(modifier = Modifier.padding(5.dp), text = "Categoría 3")
-                }
-                Card(modifier = Modifier.size(25.dp), elevation = 10.dp) {
-                    Icon(modifier = Modifier
-                        .clickable { }
-                        .padding(5.dp),
-                        imageVector = Icons.Filled.MoreHoriz,
-                        contentDescription = null)
+                // CATEGORIAS
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Card(elevation = 10.dp) {
+                        Text(modifier = Modifier.padding(5.dp), text = "Categoría 1")
+                    }
+                    Card(elevation = 10.dp) {
+                        Text(modifier = Modifier.padding(5.dp), text = "Categoría 2")
+                    }
+                    Card(modifier = Modifier.size(25.dp), elevation = 10.dp) {
+                        Icon(modifier = Modifier
+                            .clickable { }
+                            .padding(5.dp),
+                            imageVector = Icons.Filled.MoreHoriz,
+                            contentDescription = null)
+                    }
                 }
             }
         }
+
         // ICONOS DISLIKE Y LIKE
         val ic_size = 70.dp
         Row(
@@ -167,7 +192,7 @@ fun Card(
                 painter = painterResource(R.drawable.icon_notlike),
                 contentDescription = null,
             )
-            Spacer(modifier = Modifier.weight(1f))
+            //Spacer(modifier = Modifier.weight(1f))
             Image(
                 modifier = Modifier
                     .clickable { cardStackController.swipeRight() }
@@ -177,10 +202,7 @@ fun Card(
             )
         }
     }
-    }
-
-
-
+}
 
 
 data class Item(

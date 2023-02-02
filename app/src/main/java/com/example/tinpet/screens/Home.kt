@@ -4,6 +4,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +47,8 @@ fun HomeScreen() {
                                 isEmpty.value = true
                             }
                         )
+
+
                     } else {
                         Text(
                             text = "¡Ups! No hay más mascotas cerca por el momento",
@@ -161,9 +164,10 @@ fun HomeScreen() {
 }
 val accounts = mutableListOf<Item>(
     Item(R.drawable.default_pet, "Max", "5 años"),
-    Item(R.drawable.default_pet, "Scooby", "3 años"),
-    Item(R.drawable.default_pet, "Duke", "6 años")
+    Item(R.drawable.default_pet_2, "Scooby", "1 año"),
+    Item(R.drawable.default_pet_3, "Duke", "3 años")
 )
+
 @Composable
 @Preview
 fun HomeScreenPreviewLT() {

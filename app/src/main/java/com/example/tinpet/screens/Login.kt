@@ -22,9 +22,12 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import com.example.tinpet.R
+import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
@@ -239,24 +242,22 @@ fun LoginScreen(
     }
 }
 
-/*
+
 @Composable
 @Preview
 fun LoginScreenPreviewLT() {
-    val navController = rememberNavController()
     TinPetTheme(darkTheme = false) {
-        LoginScreen(navController)
+        LoginScreen(onClick = {})
     }
 }
 
 @Composable
 @Preview
 fun LoginScreenPreviewDT() {
-    val navController = rememberNavController()
     TinPetTheme(darkTheme = true) {
-        LoginScreen(navController)
+        LoginScreen(onClick = {})
     }
-}*/
+}
 class PrefixVisualTransformationDark(private val prefix: String) : VisualTransformation {
         override fun filter(text: AnnotatedString): TransformedText {
             val transformedText = AnnotatedString(

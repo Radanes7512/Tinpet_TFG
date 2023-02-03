@@ -115,6 +115,7 @@ fun Card(
                 .align(Alignment.BottomStart)
                 .padding(25.dp)
         ) {
+            // NOMBRE MASCOTA
             Text(
                 style = TextStyle(
                     shadow = Shadow(
@@ -128,6 +129,7 @@ fun Card(
                 fontWeight = FontWeight.Bold,
                 fontSize = 25.sp
             )
+            // EDAD MASCOTA
             Text(
                 style = TextStyle(
                     shadow = Shadow(
@@ -155,15 +157,17 @@ fun Card(
                 Card(elevation = 10.dp) {
                     Text(modifier = Modifier.padding(5.dp), text = "Categoría 3")
                 }
-                Card(modifier = Modifier.size(25.dp), elevation = 10.dp) {
+                /*Card(modifier = Modifier.size(25.dp), elevation = 10.dp) {
                     Icon(modifier = Modifier
                         .clickable { }
                         .padding(5.dp),
                         imageVector = Icons.Filled.MoreHoriz,
                         contentDescription = null)
-                }
+                }*/
             }
             Row {
+                // BOTÓN DISLIKE
+
                 IconButton(
                     modifier = modifier.padding(50.dp, 0.dp, 0.dp, 0.dp),
                     onClick = { cardStackController.swipeLeft() },
@@ -180,6 +184,7 @@ fun Card(
 
                 Spacer(modifier = Modifier.weight(1f))
 
+                // BOTÓN LIKE
                 IconButton(
                     modifier = modifier.padding(0.dp, 0.dp, 50.dp, 0.dp),
                     onClick = { cardStackController.swipeRight() }
@@ -187,7 +192,7 @@ fun Card(
                     Icon(
                         painterResource(id = R.drawable.icon_like),
                         contentDescription = "",
-                        tint = MaterialTheme.colors.primary,
+                        tint = MaterialTheme.colors.secondaryVariant,
                         modifier = modifier
                             .height(70.dp)
                             .width(70.dp)

@@ -20,7 +20,7 @@ private val DarkColorPalette = darkColors(
 
     primary = GreyNavBar, // COLOR PRINCIPAL
     secondary = Green10, // COLOR SECUNDARIO
-    secondaryVariant = Yellow10,
+    secondaryVariant = YellowNavBar, // VARIANTE SECUNDARIO
 
     onSurface = Color.White // NO ESPECIFICADO
 )
@@ -37,7 +37,7 @@ private val LightColorPalette = lightColors(
 
     primary = Yellow10, // COLOR PRINCIPAL
     secondary = Green10, // COLOR SECUNDARIO
-    secondaryVariant = Yellow10,
+    secondaryVariant = YellowNavBar, // VARIANTE SECUNDARIO
 
     onSurface = Color.Black // NO ESPECIFICADO
  )

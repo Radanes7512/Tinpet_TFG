@@ -50,7 +50,7 @@ fun ProfileScreen(
                     Text(
                         modifier = Modifier.padding(5.dp),
                         textAlign = TextAlign.Center,
-                        text = stringResource(id = R.string.user_name),
+                        text = stringResource(R.string.user_name),
                         fontSize = 32.sp,
                         fontFamily = abrilFatface,
                         color = MaterialTheme.colors.onBackground

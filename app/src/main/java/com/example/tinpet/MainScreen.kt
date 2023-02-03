@@ -3,6 +3,7 @@ package com.example.tinpet
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -43,7 +44,9 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
     Scaffold(
         topBar = {
             if (showTopBar) {
-                TopBar()
+                TopBar(onClick = {
+                    navController.navigate(AppScreens.Home.route)
+                } )
             }
         },
         bottomBar = { BottomBar2(navController = navController) }
@@ -54,7 +57,9 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
 // MENÚ SUPERIOR
 @Composable
-fun TopBar() {
+fun TopBar(
+    onClick: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -74,6 +79,8 @@ fun TopBar() {
             contentDescription = null
         )
         Text(
+            modifier = Modifier
+                .clickable { onClick() },
             text = stringResource(R.string.app_name),
             fontSize = 32.sp,
             fontFamily = abrilFatface,

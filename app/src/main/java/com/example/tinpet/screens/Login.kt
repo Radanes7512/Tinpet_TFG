@@ -34,6 +34,7 @@ fun LoginScreen(
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var pwst = true
+    val maxChar = 9
     Box(
         modifier = Modifier.background(color = MaterialTheme.colors.background),
         contentAlignment = Alignment.Center
@@ -105,11 +106,10 @@ fun LoginScreen(
                         .padding(16.dp)
                 ) {
                     // Nombre del usuario
-
                     OutlinedTextField(
                         value = name,
                         onValueChange = {
-                            name = it
+                            if (it.length <= maxChar) name = it
                         },
                         label = {
                             Text(
@@ -134,9 +134,9 @@ fun LoginScreen(
                         },
                         visualTransformation =
                         if (isSystemInDarkTheme()) {
-                            PrefixVisualTransformationDark("+34 ")
+                            PrefixVisualTransformationDark("+34 | ")
                         }else{
-                            PrefixVisualTransformationLight("+34 ")
+                            PrefixVisualTransformationLight("+34 | ")
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
@@ -214,7 +214,7 @@ fun LoginScreen(
                 ) {
                     Button(
                         onClick = { onClick() },
-                        enabled = password.length > 9 && name.length == 9,
+                        //enabled = password.length > 9 && name.length == 9,
                         shape = RoundedCornerShape(25),
                         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primaryVariant)
 

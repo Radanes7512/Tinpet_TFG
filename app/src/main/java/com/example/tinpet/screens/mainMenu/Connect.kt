@@ -1,23 +1,18 @@
 package com.example.tinpet.screens.mainMenu
 
-<<<<<<< HEAD
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-=======
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
->>>>>>> a58012ce2c8fa5f34846debbedfba37de3f578fc
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-<<<<<<< HEAD
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,32 +28,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
-=======
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
->>>>>>> a58012ce2c8fa5f34846debbedfba37de3f578fc
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
 fun ConnectScreen(){
-<<<<<<< HEAD
     val connectInfo = remember { mutableStateOf(false) }
-=======
->>>>>>> a58012ce2c8fa5f34846debbedfba37de3f578fc
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colors.background),
         contentAlignment = Alignment.Center
     ){
-<<<<<<< HEAD
         Image(
             modifier = Modifier
                 .align(Alignment.Center),
@@ -74,16 +55,10 @@ fun ConnectScreen(){
                 )
             ),
             text = "Próximamente...",
-=======
-        Text(
-            text = "Connect",
->>>>>>> a58012ce2c8fa5f34846debbedfba37de3f578fc
-            fontSize = 32.sp,
-            fontFamily = abrilFatface,
-            color = MaterialTheme.colors.onBackground
         )
+
+
         FloatingActionButton(
-<<<<<<< HEAD
             backgroundColor = MaterialTheme.colors.surface,
             modifier = Modifier
                 .padding(0.dp, 0.dp, 0.dp, 100.dp)
@@ -166,20 +141,8 @@ fun ConnectScreen(){
             }
         )
     }
-=======
-            modifier = Modifier
-                .padding(10.dp)
-                .align(Alignment.BottomCenter),
-            onClick = { /*TODO*/ }
-        ) {
-            Icon(
-                Icons.Filled.Add,
-                contentDescription = null
-            )
-        }
-    }
->>>>>>> a58012ce2c8fa5f34846debbedfba37de3f578fc
 }
+
 
 @Composable
 @Preview

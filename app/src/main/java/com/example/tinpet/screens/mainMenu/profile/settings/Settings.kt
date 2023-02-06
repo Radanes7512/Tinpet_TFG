@@ -1,15 +1,15 @@
-package com.example.tinpet.screens
+package com.example.tinpet.screens.mainMenu.profile.settings
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -18,19 +18,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.tinpet.AppScreens
 import com.example.tinpet.R
-import com.example.tinpet.graphs.Graph
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
 fun SettingsScreen(
     onBackClick: () -> Unit,
-    onCloseClick: () -> Unit
+    onCloseClick: () -> Unit,
+    onNotifyClick: () -> Unit,
+    onAboutClick: () -> Unit
 ) {
+    val logoutConfirm = remember { mutableStateOf(false)}
     Box(
         modifier = Modifier
             .background(color = MaterialTheme.colors.background),
@@ -39,7 +38,6 @@ fun SettingsScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-
         ) {
             item {
                 Row(
@@ -87,9 +85,8 @@ fun SettingsScreen(
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
-
                         modifier = Modifier
-                            .clickable { }
+                            .clickable { onNotifyClick() }
                             //.border(1.dp, MaterialTheme.colors.onBackground)
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
@@ -123,7 +120,7 @@ fun SettingsScreen(
                         Row(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             modifier = Modifier
-                                .clickable { }
+                                .clickable { onAboutClick() }
                                 //.border(1.dp, MaterialTheme.colors.onBackground)
                                 .fillMaxWidth()
                                 .background(MaterialTheme.colors.primary)
@@ -158,7 +155,8 @@ fun SettingsScreen(
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
-                            .clickable { onCloseClick() }
+                            .clickable { logoutConfirm.value = true }
+                            //.clickable { onCloseClick() }
                             //.border(1.dp, MaterialTheme.colors.onBackground)
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
@@ -182,28 +180,103 @@ fun SettingsScreen(
                     }
                 }
             }
-
         }
-
-
     }
+    if (logoutConfirm.value) {
+        AlertDialog(
+            onDismissRequest = {
+                logoutConfirm.value = false
+            },
+            title = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(color = MaterialTheme.colors.primaryVariant),
+                    contentAlignment = Alignment.Center
+                    //horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .size(64.dp)
+                            .padding(8.dp),
+                        painter = if (isSystemInDarkTheme()) {
+                            painterResource(R.drawable.icon_pawprint_black)
+                        } else {
+                            painterResource(R.drawable.icon_pawprint_white)
+                        },
+                        contentDescription = null
+                    )
+                    Text(
+                        text = stringResource(R.string.app_name),
+                        fontSize = 32.sp,
+                        fontFamily = abrilFatface,
+                        color = MaterialTheme.colors.onBackground
+                    )
+                }
+            },
+            text = {
+                Text(
+                    text = "¿Desea cerrar sesión?",
+                    fontSize = 20.sp,
+                    fontFamily = abrilFatface,
+                    color = MaterialTheme.colors.onBackground
+                )
+            },
+            shape = RoundedCornerShape(size = 30.dp),
+            buttons = {
+                Row(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(
+                        modifier = Modifier
+                            .padding(10.dp),
+                        border = BorderStroke(2.dp, MaterialTheme.colors.onBackground),
+                        shape = RoundedCornerShape(size = 30.dp),
+                        onClick = { logoutConfirm.value = false }
+                    ) {
+                        Text(
+                            text = "Atrás",
+                            fontFamily = abrilFatface,
+                            color = MaterialTheme.colors.onBackground
+                        )
+                    }
+                    TextButton(
+                        modifier = Modifier
+                            .padding(10.dp),
+                        border = BorderStroke(2.dp, MaterialTheme.colors.onBackground),
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.error),
+                        shape = RoundedCornerShape(size = 30.dp),
+                        //elevation = 10,
+                        onClick = {  onCloseClick()}
+                    ) {
+                        Text(
+                            text = "Cerrar sesión",
+                            fontFamily = abrilFatface,
+                            color = MaterialTheme.colors.onBackground
+                        )
+                    }
 
+                }
+            }
+        )
+    }
 }
-/*
+
 @Composable
 @Preview
 fun SettingScreenPreviewLT() {
-    val navController = rememberNavController()
     TinPetTheme(darkTheme = false) {
-        SettingsScreen(navController)
+        SettingsScreen(onCloseClick = {}, onBackClick = {}, onAboutClick = {}, onNotifyClick = {})
     }
 }
 
 @Composable
 @Preview
 fun SettingScreenPreviewDT() {
-    val navController = rememberNavController()
     TinPetTheme(darkTheme = true) {
-        SettingsScreen(navController)
+        SettingsScreen(onCloseClick = {}, onBackClick = {}, onAboutClick = {}, onNotifyClick = {})
     }
-}*/
+}

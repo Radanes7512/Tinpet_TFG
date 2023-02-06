@@ -23,6 +23,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import  com.example.tinpet.graphs.NavGraph
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
@@ -38,7 +39,12 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         AppScreens.Home,
         AppScreens.Chat,
         AppScreens.Profile,
-        AppScreens.Settings
+        AppScreens.Settings,
+        AppScreens.Requests,
+        AppScreens.AboutUs,
+        AppScreens.Notifications,
+        AppScreens.Friends,
+        AppScreens.Pets
     )
     val showTopBar = navController.currentBackStackEntryAsState().value?.destination?.route in screens.map { it.route }
     Scaffold(

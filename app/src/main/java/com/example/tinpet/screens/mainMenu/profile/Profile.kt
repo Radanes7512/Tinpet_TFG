@@ -1,4 +1,4 @@
-package com.example.tinpet.screens
+package com.example.tinpet.screens.mainMenu.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.tinpet.NavGraph
+import com.example.tinpet.graphs.NavGraph
 import com.example.tinpet.R
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
@@ -29,7 +29,10 @@ import com.example.tinpet.ui.theme.abrilFatface
 @Composable
 fun ProfileScreen(
     navController: NavHostController = rememberNavController(),
-    onSetClick: () -> Unit
+    onSetClick: () -> Unit,
+    onPetClick: () -> Unit,
+    onFrdClick: () -> Unit,
+    onRqtClick: () -> Unit
 ) {
     NavGraph(navController = navController)
     Box(
@@ -102,7 +105,7 @@ fun ProfileScreen(
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
-                            .clickable { }
+                            .clickable { onPetClick() }
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
                             .padding(10.dp)
@@ -136,7 +139,7 @@ fun ProfileScreen(
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
-                            .clickable { }
+                            .clickable { onRqtClick() }
                             //.border(1.dp, MaterialTheme.colors.onBackground)
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
@@ -165,10 +168,10 @@ fun ProfileScreen(
                     elevation = 10.dp
 
                 ) {
-                    Row(horizontalArrangement = Arrangement.SpaceBetween,
-
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
-                            .clickable { }
+                            .clickable { onFrdClick() }
                             //.border(1.dp, MaterialTheme.colors.onBackground)
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
@@ -199,7 +202,7 @@ fun ProfileScreen(
 fun ProfileScreenPreviewLT() {
     val navController = rememberNavController()
     TinPetTheme(darkTheme = false) {
-        ProfileScreen(navController, onSetClick = {})
+        ProfileScreen(navController, onSetClick = {}, onFrdClick = {}, onPetClick = {}, onRqtClick = {})
     }
 }
 
@@ -208,6 +211,6 @@ fun ProfileScreenPreviewLT() {
 fun ProfileScreenPreviewDT() {
     val navController = rememberNavController()
     TinPetTheme(darkTheme = true) {
-        ProfileScreen(navController, onSetClick = {})
+        ProfileScreen(navController, onSetClick = {}, onFrdClick = {}, onPetClick = {}, onRqtClick = {})
     }
 }

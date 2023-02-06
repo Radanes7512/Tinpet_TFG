@@ -55,6 +55,9 @@ fun ConnectScreen(){
                 )
             ),
             text = "Próximamente...",
+            fontSize = 32.sp,
+            fontFamily = abrilFatface,
+            color = MaterialTheme.colors.onBackground
         )
 
 

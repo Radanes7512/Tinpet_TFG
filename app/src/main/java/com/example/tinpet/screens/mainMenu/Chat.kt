@@ -3,13 +3,12 @@ package com.example.tinpet.screens.mainMenu
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.ui.theme.abrilFatface
@@ -22,6 +21,14 @@ fun ChatScreen(){
             .background(color = MaterialTheme.colors.background),
         contentAlignment = Alignment.Center
     ){
+        LazyColumn(
+            modifier = Modifier
+            .fillMaxSize()
+        ){
+            item {
+
+            }
+        }
         Text(
             text = "Chat",
             fontSize = 32.sp,

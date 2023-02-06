@@ -1,4 +1,4 @@
-package com.example.tinpet.screens
+package com.example.tinpet.screens.mainMenu
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -197,7 +197,6 @@ val accounts = mutableListOf(
     Item(R.drawable.default_pet_3, "Calcetines", "3 años"),
     Item(R.drawable.default_pet_4, "Brutus", "6 años"),
     Item(R.drawable.default_pet_5, "Duke", "4 años")
-
 )
 
 @Composable

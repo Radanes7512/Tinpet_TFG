@@ -1,21 +1,17 @@
-package com.example.tinpet
+package com.example.tinpet.graphs
 
-import android.content.Intent
-import android.net.Uri
-import android.view.View
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
-import androidx.core.net.toUri
 import androidx.navigation.*
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.tinpet.graphs.AuthScreen
-import com.example.tinpet.graphs.Graph
+import com.example.tinpet.AppScreens
 import com.example.tinpet.screens.*
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
+import com.example.tinpet.screens.mainMenu.*
+import com.example.tinpet.screens.mainMenu.profile.*
+import com.example.tinpet.screens.mainMenu.profile.settings.AboutUsScreen
+import com.example.tinpet.screens.mainMenu.profile.settings.NotificationsScreen
+import com.example.tinpet.screens.mainMenu.profile.settings.SettingsScreen
+
 
 @Composable
 fun NavGraph(
@@ -43,9 +39,59 @@ fun NavGraph(
             ProfileScreen(
                 onSetClick = {
                     navController.navigate(AppScreens.Settings.route)
+                },
+                onPetClick = {
+                    navController.navigate(AppScreens.Pets.route)
+                },
+                onFrdClick = {
+                    navController.navigate(AppScreens.Friends.route)
+                },
+                onRqtClick ={
+                    navController.navigate(AppScreens.Requests.route)
                 }
             )
         }
+        composable(route = AppScreens.Pets.route){
+            PetsScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.Profile.route)
+                }
+            )
+        }
+        composable(route = AppScreens.Requests.route){
+            RequestScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.Profile.route)
+                }
+            )
+        }
+        composable(route = AppScreens.Friends.route){
+            FriendsScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.Profile.route)
+                }
+            )
+        }
+        composable(route = AppScreens.Notifications.route){
+            NotificationsScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.Settings.route)
+                }
+            )
+        }
+        composable(route = AppScreens.AboutUs.route){
+            AboutUsScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.Settings.route)
+                }
+            )
+        }
+
         composable(route = AuthScreen.Login.route,
             deepLinks = listOf(
                 navDeepLink {
@@ -62,7 +108,6 @@ fun NavGraph(
             route = AppScreens.Settings.route
         ){
             SettingsScreen(
-
                 onBackClick = {
                     navController.popBackStack()
                     navController.navigate(AppScreens.Profile.route)
@@ -73,6 +118,12 @@ fun NavGraph(
                     //navController.navigate(URLEncoder.encode(Graph.AUTHENTICATION, StandardCharsets.UTF_8.toString()))
                     //navController.navigate(NavDeepLinkRequest(Uri.parse("android-app://androidx.navigation/auth_graph")))
                     //navController.navigate(NavDeepLinkRequest.Builder.fromUri("android-app://androidx.navigation/auth_graph".toUri()).build())
+                },
+                onNotifyClick = {
+                    navController.navigate(AppScreens.Notifications.route)
+                },
+                onAboutClick = {
+                    navController.navigate(AppScreens.AboutUs.route)
                 }
             )
         }

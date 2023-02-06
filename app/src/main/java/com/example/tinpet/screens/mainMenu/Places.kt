@@ -1,4 +1,4 @@
-package com.example.tinpet.screens
+package com.example.tinpet.screens.mainMenu
 
 
 import androidx.compose.foundation.layout.Box

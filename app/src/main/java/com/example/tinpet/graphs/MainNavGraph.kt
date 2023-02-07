@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.example.tinpet.AppScreens
 import com.example.tinpet.MainScreen
+import com.example.tinpet.screens.SplashScreen
 
 
 @Composable
@@ -14,11 +15,14 @@ fun MainNavigationGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
         route = Graph.ROOT,
-        startDestination = Graph.AUTHENTICATION
+        startDestination = AppScreens.Splash.route
     ) {
-        authNavGraph(navController = navController)
-        composable(route = Graph.MAIN) {
+        authNavGraph(navController)
+        composable(Graph.MAIN) {
             MainScreen()
+        }
+        composable(AppScreens.Splash.route){
+            SplashScreen(navController)
         }
         /*composable(
             route = Graph.AUTHENTICATION,

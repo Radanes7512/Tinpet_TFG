@@ -63,6 +63,12 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
     implementation 'androidx.core:core-ktx:+'
 
+    // VIEW MODEL
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation "androidx.compose.runtime:runtime-livedata:1.3.3"
+
+
+
     // MATERIAL
     implementation 'androidx.compose.material:material:1.3.1'
     implementation "androidx.compose.material:material-icons-extended:1.3.1"
@@ -70,6 +76,8 @@ dependencies {
     implementation 'androidx.core:core-ktx:+'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.0.0'
     implementation 'androidx.core:core-ktx:+'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'com.google.android.material:material:1.4.0'
 
     // SMOKED IMPLEMENTATION (FUMADON)
     constraints{

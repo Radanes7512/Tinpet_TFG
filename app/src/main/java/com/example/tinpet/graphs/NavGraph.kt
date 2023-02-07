@@ -101,7 +101,8 @@ fun NavGraph(
                 onClick = {
                     navController.popBackStack()
                     navController.navigate(Graph.MAIN)
-                }
+                },
+                viewModel = LoginViewModel()
                     )
         }
         composable(

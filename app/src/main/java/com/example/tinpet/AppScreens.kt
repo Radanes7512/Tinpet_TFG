@@ -9,6 +9,10 @@ sealed class AppScreens(
     //val title: String,
     val icon: ImageVector
 ){
+    object Splash : AppScreens(
+        route = "splash",
+        icon = Icons.Filled.Splitscreen
+    )
     // MENÚ INFERIOR
 
         // PLACES

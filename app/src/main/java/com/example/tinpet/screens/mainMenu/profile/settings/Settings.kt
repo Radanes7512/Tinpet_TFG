@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -190,27 +191,19 @@ fun SettingsScreen(
             title = {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color = MaterialTheme.colors.primaryVariant),
+                        .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                     //horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
                         modifier = Modifier
-                            .size(64.dp)
-                            .padding(8.dp),
+                            .size(50.dp),
                         painter = if (isSystemInDarkTheme()) {
-                            painterResource(R.drawable.icon_pawprint_black)
+                            painterResource(R.drawable.icon_pawprint)
                         } else {
-                            painterResource(R.drawable.icon_pawprint_white)
+                            painterResource(R.drawable.icon_pawprint)
                         },
                         contentDescription = null
-                    )
-                    Text(
-                        text = stringResource(R.string.app_name),
-                        fontSize = 32.sp,
-                        fontFamily = abrilFatface,
-                        color = MaterialTheme.colors.onBackground
                     )
                 }
             },
@@ -223,6 +216,7 @@ fun SettingsScreen(
                 )
             },
             shape = RoundedCornerShape(size = 30.dp),
+            backgroundColor = MaterialTheme.colors.background,
             buttons = {
                 Row(
                     modifier = Modifier
@@ -255,7 +249,7 @@ fun SettingsScreen(
                         Text(
                             text = "Cerrar sesión",
                             fontFamily = abrilFatface,
-                            color = MaterialTheme.colors.onBackground
+                            color = Color.White
                         )
                     }
 

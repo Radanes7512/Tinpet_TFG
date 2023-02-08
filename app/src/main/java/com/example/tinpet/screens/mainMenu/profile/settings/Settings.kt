@@ -188,7 +188,7 @@ fun SettingsScreen(
             onDismissRequest = {
                 logoutConfirm.value = false
             },
-            title = {
+            /*title = {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -206,7 +206,7 @@ fun SettingsScreen(
                         contentDescription = null
                     )
                 }
-            },
+            },*/
             text = {
                 Text(
                     text = "¿Desea cerrar sesión?",

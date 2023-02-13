@@ -2,18 +2,26 @@ package com.example.tinpet.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LockOpen
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,6 +31,7 @@ import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
 fun SignupScreen(
+    viewModel: LoginViewModel,
     onClick:() -> Unit
 ) {
     Column(
@@ -65,10 +74,10 @@ fun SignupScreen(
                 )
             }
         }
-        // LOGIN COMPONENTS
-        //Signup(Modifier,viewModel)
+        // SIGNUP COMPONENTS
+        Signup(Modifier,viewModel)
 
-        // BOTÓN ACCEDER
+        // BOTÓN CREAR CUENTA
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
@@ -86,7 +95,7 @@ fun SignupScreen(
                 )
             ) {
                 Icon(
-                    imageVector = Icons.Filled.LockOpen,
+                    imageVector = Icons.Filled.ManageAccounts,
                     contentDescription = null,
                     modifier = Modifier.size(ButtonDefaults.IconSize)
                 )
@@ -102,28 +111,28 @@ fun SignupScreen(
 }
 
 
-/*
+
 @Composable
-fun Login(modifier: Modifier, viewModel: LoginViewModel) {
+fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
     val number: String by viewModel.number.observeAsState(initial = "")
     val password: String by viewModel.password.observeAsState(initial = "")
 
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.padding(15.dp))
-        TitleText(Modifier.align(Alignment.CenterHorizontally))
+        STitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        UserField(number) { viewModel.onLoginChanged(it, password) }
+        SUserField(number) { viewModel.onLoginChanged(it, password) }
         Spacer(modifier = Modifier.padding(5.dp))
-        PasswordField(password) { viewModel.onLoginChanged(number, it) }
-        Spacer(modifier = Modifier.padding(10.dp))
-        ForgotPassword(Modifier.align(Alignment.End))
+        SPasswordField(password) { viewModel.onLoginChanged(number, it) }
+        Spacer(modifier = Modifier.padding(5.dp))
+        RepeatPassword(password) { viewModel.onLoginChanged(number, it) }
         Spacer(modifier = Modifier.padding(15.dp))
     }
 }
-*/
-/*
+
+
 @Composable
-fun TitleText(modifier: Modifier) {
+fun STitleText(modifier: Modifier) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -134,35 +143,86 @@ fun TitleText(modifier: Modifier) {
         Text(
             modifier = Modifier.padding(5.dp),
             textAlign = TextAlign.Center,
-            text = (stringResource(R.string.login_ES)),
+            text = (stringResource(R.string.register_ES)),
             fontSize = 32.sp,
             fontFamily = abrilFatface,
             color = MaterialTheme.colors.onBackground
         )
     }
 }
-*/
-/*
+
+
 @Composable
-fun ForgotPassword(modifier: Modifier) {
-    Text(
-        text = "¿Olvidaste la contraseña?",
-        modifier = modifier
-            .clickable { }
-            .padding(10.dp),
-        fontSize = 12.sp,
-        fontWeight = FontWeight.Bold,
-        color = if (isSystemInDarkTheme()) {
-            Color(0xFFFFFFFF)
-        } else {
-            Color(0xFFFB9600)
-        }
-    )
+fun RepeatPassword(password: String, onTextFieldChanged: (String) -> Unit) {
+    var showPassword by remember { mutableStateOf(value = false) }
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        // Contraseña del usuario
+        OutlinedTextField(
+            value = password,
+            onValueChange = { onTextFieldChanged(it) },
+            label = {
+                Text(
+                    text = stringResource(R.string.repeat_password_ES),
+                    color = MaterialTheme.colors.onBackground
+                )
+            },
+            placeholder = {
+                Text(
+                    text = stringResource(R.string.pswd_text_ES),
+                    color = MaterialTheme.colors.onBackground
+                )
+            },
+            trailingIcon = {
+                if (showPassword) {
+                    IconButton(
+                        onClick = { showPassword = false }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.VisibilityOff,
+                            tint = Color.Red,
+                            contentDescription = null,
+                        )
+                    }
+                } else {
+                    IconButton(
+                        onClick = { showPassword = true }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Visibility,
+                            tint = MaterialTheme.colors.onBackground,
+                            contentDescription = null,
+                        )
+
+                    }
+                }
+            },
+            leadingIcon = {
+                IconButton(onClick = { }) {
+                    Icon(
+                        imageVector = Icons.Filled.Password,
+                        tint = MaterialTheme.colors.onBackground,
+                        contentDescription = null,
+                    )
+                }
+            },
+            visualTransformation =
+            if (showPassword) {
+                VisualTransformation.None
+            } else {
+                PasswordVisualTransformation()
+            }
+        )
+    }
 }
-*/
-/*
+
+
 @Composable
-fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
+fun SPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
     var showPassword by remember { mutableStateOf(value = false) }
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -228,10 +288,10 @@ fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
         )
     }
 }
-*/
-/*
+
+
 @Composable
-fun UserField(number: String, onTextFieldChanged: (String) -> Unit) {
+fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -268,22 +328,22 @@ fun UserField(number: String, onTextFieldChanged: (String) -> Unit) {
             },
             visualTransformation =
             if (isSystemInDarkTheme()) {
-                PrefixVisualTransformationDark("+34 | ")
+                SPrefixVisualTransformationDark("+34 | ")
             } else {
-                PrefixVisualTransformationLight("+34 | ")
+                SPrefixVisualTransformationLight("+34 | ")
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }
 }
-*/
+
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun SignupScreenPreviewLT() {
     TinPetTheme(darkTheme = false) {
-        SignupScreen(onClick = {})
+        SignupScreen(viewModel = LoginViewModel(),onClick = {})
     }
 }
 
@@ -291,37 +351,33 @@ fun SignupScreenPreviewLT() {
 @Preview(showBackground = true, showSystemUi = true)
 fun SignupScreenPreviewDT() {
     TinPetTheme(darkTheme = true) {
-        SignupScreen(onClick = {})
+        SignupScreen(viewModel = LoginViewModel(),onClick = {})
     }
 }
-/*
-class PrefixVisualTransformationDark(private val prefix: String) : VisualTransformation {
+
+class SPrefixVisualTransformationDark(private val prefix: String) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val transformedText = AnnotatedString(
             prefix,
             SpanStyle(Color.White)
         ) + text
 
-        return TransformedText(transformedText, PrefixOffsetMapping(prefix))
+        return TransformedText(transformedText, SPrefixOffsetMapping(prefix))
     }
 
 }
-*/
-/*
-class PrefixVisualTransformationLight(private val prefix: String) : VisualTransformation {
+class SPrefixVisualTransformationLight(private val prefix: String) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val transformedText = AnnotatedString(
             prefix,
             SpanStyle(Color.Black)
         ) + text
 
-        return TransformedText(transformedText, PrefixOffsetMapping(prefix))
+        return TransformedText(transformedText, SPrefixOffsetMapping(prefix))
     }
 
 }
-*/
-/*
-class PrefixOffsetMapping(private val prefix: String) : OffsetMapping {
+class SPrefixOffsetMapping(private val prefix: String) : OffsetMapping {
     override fun originalToTransformed(offset: Int): Int = offset + prefix.length
 
     override fun transformedToOriginal(offset: Int): Int {
@@ -329,4 +385,3 @@ class PrefixOffsetMapping(private val prefix: String) : OffsetMapping {
         return if (delta < 0) 0 else delta
     }
 }
-*/

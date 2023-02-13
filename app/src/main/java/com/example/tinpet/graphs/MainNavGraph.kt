@@ -8,6 +8,7 @@ import androidx.navigation.navDeepLink
 import com.example.tinpet.AppScreens
 import com.example.tinpet.MainScreen
 import com.example.tinpet.screens.IndexScreen
+import com.example.tinpet.screens.LoginViewModel
 import com.example.tinpet.screens.SignupScreen
 import com.example.tinpet.screens.SplashScreen
 
@@ -31,7 +32,8 @@ fun MainNavigationGraph(navController: NavHostController) {
                 onClick = {
                     navController.popBackStack()
                     navController.navigate(Graph.AUTHENTICATION)
-                }
+                },
+                viewModel = LoginViewModel()
             )
 
 

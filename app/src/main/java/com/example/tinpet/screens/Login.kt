@@ -30,7 +30,10 @@ import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel,onClick: () -> Unit) {
+fun LoginScreen(
+    viewModel: LoginViewModel,
+    onClick: () -> Unit
+) {
     val loginEnable: Boolean by viewModel.loginEnable.observeAsState(initial = false)
     Column(
         modifier = Modifier
@@ -135,11 +138,11 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel) {
 
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.padding(15.dp))
-        TitleText(Modifier.align(Alignment.CenterHorizontally))
+        LTitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        UserField(number) { viewModel.onLoginChanged(it, password) }
+        LUserField(number) { viewModel.onLoginChanged(it, password) }
         Spacer(modifier = Modifier.padding(5.dp))
-        PasswordField(password) { viewModel.onLoginChanged(number, it) }
+        LPasswordField(password) { viewModel.onLoginChanged(number, it) }
         Spacer(modifier = Modifier.padding(10.dp))
         ForgotPassword(Modifier.align(Alignment.End))
         Spacer(modifier = Modifier.padding(15.dp))
@@ -147,7 +150,7 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel) {
 }
 
 @Composable
-fun TitleText(modifier: Modifier) {
+fun LTitleText(modifier: Modifier) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -184,7 +187,7 @@ fun ForgotPassword(modifier: Modifier) {
 }
 
 @Composable
-fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
+fun LPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
     var showPassword by remember { mutableStateOf(value = false) }
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -252,7 +255,7 @@ fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
 }
 
 @Composable
-fun UserField(number: String, onTextFieldChanged: (String) -> Unit) {
+fun LUserField(number: String, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -289,9 +292,9 @@ fun UserField(number: String, onTextFieldChanged: (String) -> Unit) {
             },
             visualTransformation =
             if (isSystemInDarkTheme()) {
-                PrefixVisualTransformationDark("+34 | ")
+                LPrefixVisualTransformationDark("+34 | ")
             } else {
-                PrefixVisualTransformationLight("+34 | ")
+                LPrefixVisualTransformationLight("+34 | ")
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
@@ -315,31 +318,31 @@ fun LoginScreenPreviewDT() {
     }
 }
 
-class PrefixVisualTransformationDark(private val prefix: String) : VisualTransformation {
+class LPrefixVisualTransformationDark(private val prefix: String) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val transformedText = AnnotatedString(
             prefix,
             SpanStyle(Color.White)
         ) + text
 
-        return TransformedText(transformedText, PrefixOffsetMapping(prefix))
+        return TransformedText(transformedText, LPrefixOffsetMapping(prefix))
     }
 
 }
 
-class PrefixVisualTransformationLight(private val prefix: String) : VisualTransformation {
+class LPrefixVisualTransformationLight(private val prefix: String) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val transformedText = AnnotatedString(
             prefix,
             SpanStyle(Color.Black)
         ) + text
 
-        return TransformedText(transformedText, PrefixOffsetMapping(prefix))
+        return TransformedText(transformedText, LPrefixOffsetMapping(prefix))
     }
 
 }
 
-class PrefixOffsetMapping(private val prefix: String) : OffsetMapping {
+class LPrefixOffsetMapping(private val prefix: String) : OffsetMapping {
     override fun originalToTransformed(offset: Int): Int = offset + prefix.length
 
     override fun transformedToOriginal(offset: Int): Int {

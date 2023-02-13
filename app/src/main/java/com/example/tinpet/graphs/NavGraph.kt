@@ -105,6 +105,14 @@ fun NavGraph(
                 viewModel = LoginViewModel()
                     )
         }
+        composable(AppScreens.Signup.route){
+            SignupScreen (
+                onClick = {
+                    navController.popBackStack()
+                    navController.navigate(Graph.AUTHENTICATION)
+                }
+            )
+        }
         composable(
             route = AppScreens.Settings.route
         ){

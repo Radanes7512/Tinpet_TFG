@@ -13,6 +13,9 @@
     <string name="password_ES">Contraseña</string>
     <string name="pswd_text_ES">Introducir contraseña</string>
     <string name="login_access_ES">Acceder</string>
+    <string name="signup_access_ES">Crear cuenta</string>
+    <string name="go_to_login_ES">Ya tengo cuenta</string>
+    <string name="go_to_register_ES">Crear una cuenta</string>
 
     // MAPS
     <string name="mapstate1_ES">Zona muy transcurrida</string>

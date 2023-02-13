@@ -2,26 +2,18 @@ package com.example.tinpet.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.material.icons.filled.LockOpen
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.*
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,8 +22,9 @@ import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel,onClick: () -> Unit) {
-    val loginEnable: Boolean by viewModel.loginEnable.observeAsState(initial = false)
+fun SignupScreen(
+    onClick:() -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -73,7 +66,7 @@ fun LoginScreen(viewModel: LoginViewModel,onClick: () -> Unit) {
             }
         }
         // LOGIN COMPONENTS
-        Login(Modifier,viewModel)
+        //Signup(Modifier,viewModel)
 
         // BOTÓN ACCEDER
         Row(
@@ -81,53 +74,35 @@ fun LoginScreen(viewModel: LoginViewModel,onClick: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            if (loginEnable) {
-                Button(
-                    onClick = { onClick() },
-                    enabled = true,
-                    shape = RoundedCornerShape(25),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colors.secondaryVariant,
-                        disabledBackgroundColor = MaterialTheme.colors.onSurface,
-                        contentColor = Color.Black,
-                        disabledContentColor = Color.White
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.LockOpen,
-                        contentDescription = null,
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
-                    )
+            Button(
+                onClick = { onClick() },
+                enabled = true,
+                shape = RoundedCornerShape(25),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.secondaryVariant,
+                    disabledBackgroundColor = MaterialTheme.colors.onSurface,
+                    contentColor = Color.Black,
+                    disabledContentColor = Color.White
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.LockOpen,
+                    contentDescription = null,
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
 
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(
-                        text = stringResource(R.string.login_access_ES)
-                    )
-                }
-            } else {
-                Button(
-                    onClick = {},
-                    enabled = false,
-                    shape = RoundedCornerShape(25),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colors.secondaryVariant,
-                        disabledBackgroundColor = MaterialTheme.colors.onSurface,
-                        contentColor = Color.Black,
-                        disabledContentColor = Color.White
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Lock,
-                        contentDescription = null,
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
-                    )
-                }
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text(
+                    text = stringResource(R.string.signup_access_ES)
+                )
             }
+
         }
     }
-
 }
 
+
+/*
 @Composable
 fun Login(modifier: Modifier, viewModel: LoginViewModel) {
     val number: String by viewModel.number.observeAsState(initial = "")
@@ -145,7 +120,8 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel) {
         Spacer(modifier = Modifier.padding(15.dp))
     }
 }
-
+*/
+/*
 @Composable
 fun TitleText(modifier: Modifier) {
     Row(
@@ -165,7 +141,8 @@ fun TitleText(modifier: Modifier) {
         )
     }
 }
-
+*/
+/*
 @Composable
 fun ForgotPassword(modifier: Modifier) {
     Text(
@@ -182,7 +159,8 @@ fun ForgotPassword(modifier: Modifier) {
         }
     )
 }
-
+*/
+/*
 @Composable
 fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
     var showPassword by remember { mutableStateOf(value = false) }
@@ -250,7 +228,8 @@ fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
         )
     }
 }
-
+*/
+/*
 @Composable
 fun UserField(number: String, onTextFieldChanged: (String) -> Unit) {
     Row(
@@ -265,7 +244,7 @@ fun UserField(number: String, onTextFieldChanged: (String) -> Unit) {
             onValueChange = {
                 if (it.length <= 9)
                     onTextFieldChanged(it)
-                            },
+            },
             label = {
                 Text(
                     text = stringResource(R.string.username_ES),
@@ -298,23 +277,24 @@ fun UserField(number: String, onTextFieldChanged: (String) -> Unit) {
         )
     }
 }
+*/
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
-fun LoginScreenPreviewLT() {
+fun SignupScreenPreviewLT() {
     TinPetTheme(darkTheme = false) {
-        LoginScreen(viewModel = LoginViewModel(), onClick = {})
+        SignupScreen(onClick = {})
     }
 }
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
-fun LoginScreenPreviewDT() {
+fun SignupScreenPreviewDT() {
     TinPetTheme(darkTheme = true) {
-        LoginScreen(viewModel = LoginViewModel(), onClick = {})
+        SignupScreen(onClick = {})
     }
 }
-
+/*
 class PrefixVisualTransformationDark(private val prefix: String) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val transformedText = AnnotatedString(
@@ -326,7 +306,8 @@ class PrefixVisualTransformationDark(private val prefix: String) : VisualTransfo
     }
 
 }
-
+*/
+/*
 class PrefixVisualTransformationLight(private val prefix: String) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val transformedText = AnnotatedString(
@@ -338,7 +319,8 @@ class PrefixVisualTransformationLight(private val prefix: String) : VisualTransf
     }
 
 }
-
+*/
+/*
 class PrefixOffsetMapping(private val prefix: String) : OffsetMapping {
     override fun originalToTransformed(offset: Int): Int = offset + prefix.length
 
@@ -347,3 +329,4 @@ class PrefixOffsetMapping(private val prefix: String) : OffsetMapping {
         return if (delta < 0) 0 else delta
     }
 }
+*/

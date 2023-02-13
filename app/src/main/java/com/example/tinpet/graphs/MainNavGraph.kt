@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.example.tinpet.AppScreens
 import com.example.tinpet.MainScreen
+import com.example.tinpet.screens.IndexScreen
+import com.example.tinpet.screens.SignupScreen
 import com.example.tinpet.screens.SplashScreen
 
 
@@ -23,6 +25,28 @@ fun MainNavigationGraph(navController: NavHostController) {
         }
         composable(AppScreens.Splash.route){
             SplashScreen(navController)
+        }
+        composable(AppScreens.Signup.route){
+            SignupScreen(
+                onClick = {
+                    navController.popBackStack()
+                    navController.navigate(Graph.AUTHENTICATION)
+                }
+            )
+
+
+        }
+        composable(AppScreens.Index.route){
+            IndexScreen(
+                onLoginClick = {
+                    navController.popBackStack()
+                    navController.navigate(Graph.AUTHENTICATION)
+                },
+                onSignupClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.Signup.route)
+                }
+            )
         }
         /*composable(
             route = Graph.AUTHENTICATION,

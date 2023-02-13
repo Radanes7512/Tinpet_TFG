@@ -13,6 +13,16 @@ sealed class AppScreens(
         route = "splash",
         icon = Icons.Filled.Splitscreen
     )
+
+    object Index : AppScreens(
+        route = "index",
+        icon = Icons.Filled.Icecream
+    )
+
+    object Signup : AppScreens(
+        route = "signup",
+        icon = Icons.Filled.AppRegistration
+    )
     // MENÚ INFERIOR
 
         // PLACES

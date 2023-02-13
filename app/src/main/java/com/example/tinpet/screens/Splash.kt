@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.tinpet.AppScreens
 import com.example.tinpet.R
 import com.example.tinpet.graphs.Graph
 import com.example.tinpet.ui.theme.abrilFatface
@@ -36,7 +37,7 @@ fun SplashScreen(navController:NavHostController) {
         permissionState.launchPermissionRequest()
         delay(3000)
         navController.popBackStack()
-        navController.navigate(Graph.AUTHENTICATION)
+        navController.navigate(AppScreens.Index.route)
     }
     Splash()
 }

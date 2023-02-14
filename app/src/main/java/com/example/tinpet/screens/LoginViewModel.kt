@@ -36,21 +36,11 @@ class LoginViewModel : ViewModel() {
         _number.value = number
         _password.value = password
         _password2.value = password2
-        _signupEnable.value = isValidNumber(number) && isValidPassword(password) && isEqualPasswords(password, password2)
+        _signupEnable.value = isValidNumber(number) && isValidPassword(password) && password == password2
     }
-
-    private fun isEqualPasswords(password: String, password2: String): Boolean {
-        if(password.toString() == password2.toString()){
-            return true
-        }
-        return false
-    }
-
     private fun isValidPassword(password: String): Boolean = password.length > 9
 
     private fun isValidNumber(number: String): Boolean  = number.length == 9
-
-
 
 
 }

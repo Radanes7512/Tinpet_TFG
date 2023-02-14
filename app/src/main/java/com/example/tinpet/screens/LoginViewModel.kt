@@ -17,13 +17,33 @@ class LoginViewModel : ViewModel() {
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> = _password
 
+    private val _password2 = MutableLiveData<String>()
+    val password2: LiveData<String> = _password2
+
     private val _loginEnable = MutableLiveData<Boolean>()
     val loginEnable: LiveData<Boolean> = _loginEnable
+
+    private val _signupEnable = MutableLiveData<Boolean>()
+    val signupEnable: LiveData<Boolean> = _signupEnable
 
     fun onLoginChanged(number: String, password: String) {
         _number.value = number
         _password.value = password
         _loginEnable.value = isValidNumber(number) && isValidPassword(password)
+    }
+
+    fun onSignupChanged(number: String,password: String, password2:String){
+        _number.value = number
+        _password.value = password
+        _password2.value = password2
+        _signupEnable.value = isValidNumber(number) && isValidPassword(password) && isEqualPasswords(password, password2)
+    }
+
+    private fun isEqualPasswords(password: String, password2: String): Boolean {
+        if(password.toString() == password2.toString()){
+            return true
+        }
+        return false
     }
 
     private fun isValidPassword(password: String): Boolean = password.length > 9

@@ -34,6 +34,7 @@ fun SignupScreen(
     viewModel: LoginViewModel,
     onClick:() -> Unit
 ) {
+    val signupEnable: Boolean by viewModel.signupEnable.observeAsState(initial = false)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -83,27 +84,47 @@ fun SignupScreen(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Button(
-                onClick = { onClick() },
-                enabled = true,
-                shape = RoundedCornerShape(25),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.secondaryVariant,
-                    disabledBackgroundColor = MaterialTheme.colors.onSurface,
-                    contentColor = Color.Black,
-                    disabledContentColor = Color.White
-                )
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.ManageAccounts,
-                    contentDescription = null,
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
-                )
+            if(signupEnable){
+                Button(
+                    onClick = { onClick() },
+                    enabled = true,
+                    shape = RoundedCornerShape(25),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.secondaryVariant,
+                        disabledBackgroundColor = MaterialTheme.colors.onSurface,
+                        contentColor = Color.Black,
+                        disabledContentColor = Color.White
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ManageAccounts,
+                        contentDescription = null,
+                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                    )
 
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text(
-                    text = stringResource(R.string.signup_access_ES)
-                )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(
+                        text = stringResource(R.string.signup_access_ES)
+                    )
+                }
+            }else{
+                Button(
+                    onClick = {},
+                    enabled = false,
+                    shape = RoundedCornerShape(25),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.secondaryVariant,
+                        disabledBackgroundColor = MaterialTheme.colors.onSurface,
+                        contentColor = Color.Black,
+                        disabledContentColor = Color.White
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Lock,
+                        contentDescription = null,
+                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                    )
+                }
             }
 
         }
@@ -116,16 +137,17 @@ fun SignupScreen(
 fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
     val number: String by viewModel.number.observeAsState(initial = "")
     val password: String by viewModel.password.observeAsState(initial = "")
+    val password2: String by viewModel.password2.observeAsState(initial = "")
 
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.padding(15.dp))
         STitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        SUserField(number) { viewModel.onLoginChanged(it, password) }
+        SUserField(number) { viewModel.onSignupChanged(it, password, password2) }
         Spacer(modifier = Modifier.padding(5.dp))
-        SPasswordField(password) { viewModel.onLoginChanged(number, it) }
+        SPasswordField(password) { viewModel.onSignupChanged(number, it, password) }
         Spacer(modifier = Modifier.padding(5.dp))
-        RepeatPassword(password) { viewModel.onLoginChanged(number, it) }
+        RepeatPassword(password2) { viewModel.onSignupChanged(number,password, it) }
         Spacer(modifier = Modifier.padding(15.dp))
     }
 }
@@ -153,7 +175,7 @@ fun STitleText(modifier: Modifier) {
 
 
 @Composable
-fun RepeatPassword(password: String, onTextFieldChanged: (String) -> Unit) {
+fun RepeatPassword(password2: String, onTextFieldChanged: (String) -> Unit) {
     var showPassword by remember { mutableStateOf(value = false) }
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -163,7 +185,7 @@ fun RepeatPassword(password: String, onTextFieldChanged: (String) -> Unit) {
     ) {
         // Contraseña del usuario
         OutlinedTextField(
-            value = password,
+            value = password2,
             onValueChange = { onTextFieldChanged(it) },
             label = {
                 Text(

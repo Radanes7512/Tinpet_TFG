@@ -244,7 +244,7 @@ fun SettingsScreen(
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.error),
                         shape = RoundedCornerShape(size = 30.dp),
                         //elevation = 10,
-                        onClick = {  onCloseClick()}
+                        onClick = {  onCloseClick() }
                     ) {
                         Text(
                             text = "Cerrar sesión",

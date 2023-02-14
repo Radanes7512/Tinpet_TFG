@@ -124,6 +124,7 @@ fun NavGraph(
                 },
                 onCloseClick = {
                     //navController.popBackStack()
+                    navController.popBackStack()
                     navController.navigate(Graph.AUTHENTICATION)
                     //navController.navigate(URLEncoder.encode(Graph.AUTHENTICATION, StandardCharsets.UTF_8.toString()))
                     //navController.navigate(NavDeepLinkRequest(Uri.parse("android-app://androidx.navigation/auth_graph")))

@@ -145,7 +145,7 @@ fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
         Spacer(modifier = Modifier.padding(10.dp))
         SUserField(number) { viewModel.onSignupChanged(it, password, password2) }
         Spacer(modifier = Modifier.padding(5.dp))
-        SPasswordField(password) { viewModel.onSignupChanged(number, it, password) }
+        SPasswordField(password) { viewModel.onSignupChanged(number, it, password2) }
         Spacer(modifier = Modifier.padding(5.dp))
         RepeatPassword(password2) { viewModel.onSignupChanged(number,password, it) }
         Spacer(modifier = Modifier.padding(15.dp))

@@ -24,12 +24,8 @@ import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
-
 @Composable
-fun IndexScreen(
-    onLoginClick:() -> Unit,
-    onSignupClick:() -> Unit
-) {
+fun IndexScreen(onLoginClick:() -> Unit,onSignupClick:() -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -199,15 +195,12 @@ fun IndexScreen(
 
     }
 }
-@Composable
-@Preview()
+@Composable@Preview()
 fun IndexScreenPreviewLT() {
     TinPetTheme(darkTheme = false) {
         IndexScreen(onLoginClick = {}, onSignupClick = {})    }
 }
-
-@Composable
-@Preview()
+@Composable@Preview()
 fun IndexScreenPreviewDT() {
     TinPetTheme(darkTheme = true) {
         IndexScreen(onLoginClick = {}, onSignupClick = {})    }

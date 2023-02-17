@@ -1,13 +1,8 @@
 package com.example.tinpet.screens
 
-import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import com.example.tinpet.AppScreens
-import com.example.tinpet.graphs.Graph
 
 class LoginViewModel : ViewModel() {
 

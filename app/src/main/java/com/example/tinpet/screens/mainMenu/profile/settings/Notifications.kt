@@ -48,7 +48,7 @@ fun NotificationsScreen(
                         )
                     }
                     Text(
-                        text = "Notifications",
+                        text = "Notificaciones",
                         fontSize = 32.sp,
                         fontFamily = abrilFatface,
                         color = MaterialTheme.colors.onBackground

@@ -2,6 +2,7 @@ package com.example.tinpet.graphs
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AppRegistration
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -24,7 +25,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
                     navController.popBackStack()
                     navController.navigate(Graph.MAIN)
                 },
-                viewModel = LoginViewModel()
+                viewModel = LoginViewModel(LocalContext.current)
             )
         }
     }

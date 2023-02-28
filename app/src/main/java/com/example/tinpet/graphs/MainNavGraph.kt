@@ -1,6 +1,7 @@
 package com.example.tinpet.graphs
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,7 +34,7 @@ fun MainNavigationGraph(navController: NavHostController) {
                     navController.popBackStack()
                     navController.navigate(Graph.AUTHENTICATION)
                 },
-                viewModel = LoginViewModel()
+                viewModel = LoginViewModel(LocalContext.current)
             )
 
 

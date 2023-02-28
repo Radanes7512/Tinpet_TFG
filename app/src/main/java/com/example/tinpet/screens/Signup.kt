@@ -1,8 +1,9 @@
 package com.example.tinpet.screens
 
+import android.app.Activity
+import android.renderscript.ScriptGroup.Binding
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,11 +16,11 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +36,7 @@ fun SignupScreen(
     onClick:() -> Unit
 ) {
     val signupEnable: Boolean by viewModel.signupEnable.observeAsState(initial = false)
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -86,7 +88,7 @@ fun SignupScreen(
         ) {
             if(signupEnable){
                 Button(
-                    onClick = { onClick() },
+                    onClick = { viewModel.register(context) },
                     enabled = true,
                     shape = RoundedCornerShape(25),
                     colors = ButtonDefaults.buttonColors(
@@ -324,6 +326,7 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
         OutlinedTextField(
             value = number,
             onValueChange = {
+
                 if (it.length <= 9)
                     onTextFieldChanged(it)
             },
@@ -365,7 +368,7 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
 @Preview(showBackground = true, showSystemUi = true)
 fun SignupScreenPreviewLT() {
     TinPetTheme(darkTheme = false) {
-        SignupScreen(viewModel = LoginViewModel(),onClick = {})
+        SignupScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
     }
 }
 
@@ -373,7 +376,7 @@ fun SignupScreenPreviewLT() {
 @Preview(showBackground = true, showSystemUi = true)
 fun SignupScreenPreviewDT() {
     TinPetTheme(darkTheme = true) {
-        SignupScreen(viewModel = LoginViewModel(),onClick = {})
+        SignupScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
     }
 }
 

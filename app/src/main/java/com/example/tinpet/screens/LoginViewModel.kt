@@ -1,10 +1,19 @@
 package com.example.tinpet.screens
 
+import android.app.Application
+import android.content.Context
+import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class LoginViewModel : ViewModel() {
+
+
+
+class LoginViewModel(context:Context) : ViewModel() {
+
+    private val repository:miSQLiteHelper = miSQLiteHelper(context)
 
     private val _number = MutableLiveData<String>()
     val number: LiveData<String> = _number
@@ -32,6 +41,14 @@ class LoginViewModel : ViewModel() {
         _password.value = password
         _password2.value = password2
         _signupEnable.value = isValidNumber(number) && isValidPassword(password) && password == password2
+    }
+    fun login(){
+
+    }
+    fun register(context:Context){
+        number.value?.let { password.value?.let { it1 -> repository.addUser(it, it1) } }
+        var resultado = number.value?.let { repository.getUser(it) }
+        Toast.makeText(context, "$resultado", Toast.LENGTH_SHORT).show()
     }
     private fun isValidPassword(password: String): Boolean = password.length > 9
 

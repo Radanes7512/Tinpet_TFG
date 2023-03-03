@@ -15,6 +15,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -29,12 +30,14 @@ import com.example.tinpet.R
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
+
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
     onClick: () -> Unit
 ) {
     val loginEnable: Boolean by viewModel.loginEnable.observeAsState(initial = false)
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -86,7 +89,7 @@ fun LoginScreen(
         ) {
             if (loginEnable) {
                 Button(
-                    onClick = { onClick() },
+                    onClick = { viewModel.login() },
                     enabled = true,
                     shape = RoundedCornerShape(25),
                     colors = ButtonDefaults.buttonColors(
@@ -306,7 +309,7 @@ fun LUserField(number: String, onTextFieldChanged: (String) -> Unit) {
 @Preview(showBackground = true, showSystemUi = true)
 fun LoginScreenPreviewLT() {
     TinPetTheme(darkTheme = false) {
-        LoginScreen(viewModel = LoginViewModel(), onClick = {})
+        LoginScreen(viewModel = LoginViewModel(LocalContext.current), onClick = {})
     }
 }
 
@@ -314,7 +317,7 @@ fun LoginScreenPreviewLT() {
 @Preview(showBackground = true, showSystemUi = true)
 fun LoginScreenPreviewDT() {
     TinPetTheme(darkTheme = true) {
-        LoginScreen(viewModel = LoginViewModel(), onClick = {})
+        LoginScreen(viewModel = LoginViewModel(LocalContext.current), onClick = {})
     }
 }
 

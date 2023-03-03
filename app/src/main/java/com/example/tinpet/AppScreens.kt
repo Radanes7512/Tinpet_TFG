@@ -23,6 +23,11 @@ sealed class AppScreens(
         route = "signup",
         icon = Icons.Filled.AppRegistration
     )
+
+    object  Addpet : AppScreens(
+        route = "addpet",
+        icon = Icons.Filled.Pets
+    )
     // MENÚ INFERIOR
 
         // PLACES

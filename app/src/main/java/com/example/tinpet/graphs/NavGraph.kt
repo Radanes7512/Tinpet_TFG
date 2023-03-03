@@ -114,6 +114,17 @@ fun NavGraph(
                 viewModel = LoginViewModel()
             )
         }
+
+        composable(AppScreens.Addpet.route){
+            AddPetScreen(
+                onClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.Addpet.route)
+                },
+                viewModel = LoginViewModel()
+            )
+        }
+
         composable(
             route = AppScreens.Settings.route
         ){

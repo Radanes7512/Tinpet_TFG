@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,7 +66,8 @@ fun ProfileScreen(
                         elevation = ButtonDefaults.elevation(0.dp)
                     ) {
                         Icon(
-                            Icons.Filled.Menu, contentDescription = null
+                            Icons.Filled.Settings,
+                            contentDescription = null
                         )
                         /*Text(
                             text = "Ajustes",

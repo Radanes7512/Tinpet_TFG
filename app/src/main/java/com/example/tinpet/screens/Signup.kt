@@ -103,7 +103,7 @@ fun SignupScreen(
                     )
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.ManageAccounts,
+                        imageVector = Icons.Filled.DoneAll,
                         contentDescription = null,
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
@@ -190,7 +190,7 @@ fun SUserName(name: String, onTextFieldChanged: (String) -> Unit) {
             leadingIcon = {
                 IconButton(onClick = { }) {
                     Icon(
-                        imageVector = Icons.Filled.VerifiedUser,
+                        imageVector = Icons.Filled.Person2,
                         tint = MaterialTheme.colors.onBackground,
                         contentDescription = null
                     )

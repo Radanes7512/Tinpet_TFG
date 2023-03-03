@@ -15,23 +15,35 @@ class LoginViewModel(context:Context) : ViewModel() {
 
     private val repository:miSQLiteHelper = miSQLiteHelper(context)
 
+    // USER INFO
     private val _number = MutableLiveData<String>()
     val number: LiveData<String> = _number
 
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> = _name
-
+   
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> = _password
 
     private val _password2 = MutableLiveData<String>()
     val password2: LiveData<String> = _password2
 
+    // PET INFO
+    private val _petname = MutableLiveData<String>()
+    val petname: LiveData<String> = _petname
+
+    private val _petage = MutableLiveData<String>()
+    val petage: LiveData<String> = _petage
+
+    // VAL FUNCTIONS
     private val _loginEnable = MutableLiveData<Boolean>()
     val loginEnable: LiveData<Boolean> = _loginEnable
 
     private val _signupEnable = MutableLiveData<Boolean>()
     val signupEnable: LiveData<Boolean> = _signupEnable
+
+    private val _addpetEnable = MutableLiveData<Boolean>()
+    val addpetEnable: LiveData<Boolean> = _addpetEnable
 
     fun onLoginChanged(number: String, password: String) {
         _number.value = number
@@ -45,6 +57,12 @@ class LoginViewModel(context:Context) : ViewModel() {
         _password.value = password
         _password2.value = password2
         _signupEnable.value = isValidNumber(number) && isValidName(name) && isValidPassword(password) && password == password2
+    }
+
+    fun onAddpetChanged(petname: String, petage: String){
+        _petname.value = petname
+        _petage.value = petage
+        _addpetEnable.value = isValidPetName(petname) && isValidPetAge(petage)
     }
     fun login(){
 
@@ -62,5 +80,7 @@ class LoginViewModel(context:Context) : ViewModel() {
     //guarripé que siempre es valido, meter condicion base de datos
     private fun isValidName(name: String): Boolean = name.length > 1
 
-
+    //guarripé que siempre es valido, meter condicion base de datos
+    private fun isValidPetName(petname:String): Boolean = petname.length > 1
+    private fun isValidPetAge(petage:String): Boolean = petage.length in 1..2
 }

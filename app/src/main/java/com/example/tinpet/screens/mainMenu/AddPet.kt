@@ -36,7 +36,7 @@ fun AddPetScreen(
     viewModel: LoginViewModel,
     onClick:() -> Unit
 ) {
-    val signupEnable: Boolean by viewModel.signupEnable.observeAsState(initial = false)
+    val addpetEnable: Boolean by viewModel.addpetEnable.observeAsState(initial = false)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -86,7 +86,7 @@ fun AddPetScreen(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            if(signupEnable){
+            if(addpetEnable){
                 Button(
                     onClick = { onClick() },
                     enabled = true,
@@ -99,7 +99,7 @@ fun AddPetScreen(
                     )
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.ManageAccounts,
+                        imageVector = Icons.Filled.Pets,
                         contentDescription = null,
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
@@ -137,24 +137,27 @@ fun AddPetScreen(
 
 @Composable
 fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
-    val number: String by viewModel.number.observeAsState(initial = "")
-    val name: String by viewModel.name.observeAsState(initial = "")
-    val password: String by viewModel.password.observeAsState(initial = "")
-    val password2: String by viewModel.password2.observeAsState(initial = "")
+    val un = viewModel.name
+    val petname: String by viewModel.petname.observeAsState(initial = "")
+    val petage: String by viewModel.petage.observeAsState(initial = "")
 
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.padding(15.dp))
-        STitleText(Modifier.align(Alignment.CenterHorizontally))
+        ApTitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
+        ApPetName(petname) {viewModel.onAddpetChanged(it, petage )}
         Spacer(modifier = Modifier.padding(5.dp))
+        ApPetAge(petage) { viewModel.onAddpetChanged(petname, it )}
         Spacer(modifier = Modifier.padding(5.dp))
         Spacer(modifier = Modifier.padding(15.dp))
     }
 }
 
 
+
+
 @Composable
-fun STitleText(modifier: Modifier) {
+fun ApTitleText(modifier: Modifier) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -173,147 +176,8 @@ fun STitleText(modifier: Modifier) {
     }
 }
 
-
 @Composable
-fun RepeatPassword(password2: String, onTextFieldChanged: (String) -> Unit) {
-    var showPassword by remember { mutableStateOf(value = false) }
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        // Contraseña del usuario
-        OutlinedTextField(
-            value = password2,
-            onValueChange = { onTextFieldChanged(it) },
-            label = {
-                Text(
-                    text = stringResource(R.string.repeat_password_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.pswd_text_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            trailingIcon = {
-                if (showPassword) {
-                    IconButton(
-                        onClick = { showPassword = false }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.VisibilityOff,
-                            tint = Color.Red,
-                            contentDescription = null,
-                        )
-                    }
-                } else {
-                    IconButton(
-                        onClick = { showPassword = true }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Visibility,
-                            tint = MaterialTheme.colors.onBackground,
-                            contentDescription = null,
-                        )
-
-                    }
-                }
-            },
-            leadingIcon = {
-                IconButton(onClick = { }) {
-                    Icon(
-                        imageVector = Icons.Filled.Password,
-                        tint = MaterialTheme.colors.onBackground,
-                        contentDescription = null,
-                    )
-                }
-            },
-            visualTransformation =
-            if (showPassword) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            }
-        )
-    }
-}
-
-
-@Composable
-fun SPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
-    var showPassword by remember { mutableStateOf(value = false) }
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        // Contraseña del usuario
-        OutlinedTextField(
-            value = password,
-            onValueChange = { onTextFieldChanged(it) },
-            label = {
-                Text(
-                    text = stringResource(R.string.password_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.pswd_text_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            trailingIcon = {
-                if (showPassword) {
-                    IconButton(
-                        onClick = { showPassword = false }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.VisibilityOff,
-                            tint = Color.Red,
-                            contentDescription = null,
-                        )
-                    }
-                } else {
-                    IconButton(
-                        onClick = { showPassword = true }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Visibility,
-                            tint = MaterialTheme.colors.onBackground,
-                            contentDescription = null,
-                        )
-
-                    }
-                }
-            },
-            leadingIcon = {
-                IconButton(onClick = { }) {
-                    Icon(
-                        imageVector = Icons.Filled.Password,
-                        tint = MaterialTheme.colors.onBackground,
-                        contentDescription = null,
-                    )
-                }
-            },
-            visualTransformation =
-            if (showPassword) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            }
-        )
-    }
-}
-
-
-@Composable
-fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
+fun ApPetAge(petage: String, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -322,39 +186,71 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
     ) {
         // Nombre del usuario
         OutlinedTextField(
-            value = number,
+            value = petage,
             onValueChange = {
-                if (it.length <= 9)
-                    onTextFieldChanged(it)
+                onTextFieldChanged(it)
             },
             label = {
                 Text(
-                    text = stringResource(R.string.username_ES),
+                    text = stringResource(R.string.petage_ES),
                     color = MaterialTheme.colors.onBackground
                 )
             },
             placeholder = {
                 Text(
-                    text = stringResource(R.string.phone_ES),
+                    text = stringResource(R.string.page_ES),
                     color = MaterialTheme.colors.onBackground
                 )
             },
             leadingIcon = {
                 IconButton(onClick = { }) {
                     Icon(
-                        imageVector = Icons.Filled.PhoneAndroid,
+                        imageVector = Icons.Filled.Cake,
                         tint = MaterialTheme.colors.onBackground,
                         contentDescription = null
                     )
                 }
             },
-            visualTransformation =
-            if (isSystemInDarkTheme()) {
-                SPrefixVisualTransformationDark("+34 | ")
-            } else {
-                SPrefixVisualTransformationLight("+34 | ")
+            colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
+        )
+    }
+}
+
+@Composable
+fun ApPetName(petname: String, onTextFieldChanged: (String) -> Unit) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        // Nombre del usuario
+        OutlinedTextField(
+            value = petname,
+            onValueChange = {
+                    onTextFieldChanged(it)
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = {
+                Text(
+                    text = stringResource(R.string.petname_ES),
+                    color = MaterialTheme.colors.onBackground
+                )
+            },
+            placeholder = {
+                Text(
+                    text = stringResource(R.string.pname_ES),
+                    color = MaterialTheme.colors.onBackground
+                )
+            },
+            leadingIcon = {
+                IconButton(onClick = { }) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        tint = MaterialTheme.colors.onBackground,
+                        contentDescription = null
+                    )
+                }
+            },
             colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }

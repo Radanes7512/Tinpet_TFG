@@ -1,28 +1,37 @@
 <resources>
-    // STANDARD
+    <!-- STANDARD -->
     <string name="app_name">TinPet</string>
     <string name="user_name">Default name</string>
 
-    // SPANISH
-    // LOGIN
+    <!-- SPANISH -->
+    <!-- LOGIN -->
+        <!-- MAIN -->
     <string name="settings_ES">Ajustes</string>
     <string name="login_ES">Iniciar sesión</string>
     <string name="register_ES">Registro</string>
     <string name="addpet_ES">Añadir mascota</string>
-    <string name="username_ES">Usuario</string>
-    <string name="user_number_ES">Teléfono</string>
-    <string name="phone_ES">Número de teléfono</string>
-    <string name="name_ES">Nombre de usuario</string>
-    <string name="password_ES">Contraseña</string>
-    <string name="pswd_text_ES">Introducir contraseña</string>
-    <string name="repeat_password_ES">Repetir contraseña</string>
+            <!-- MAIN FUNCTIONS -->
     <string name="login_access_ES">Acceder</string>
     <string name="signup_access_ES">Crear cuenta</string>
     <string name="addpet_access_ES">Añadir mascota</string>
     <string name="go_to_login_ES">Ya tengo cuenta</string>
     <string name="go_to_register_ES">Crear una cuenta</string>
+        <!-- USER -->
+    <string name="username_ES">Usuario</string>
+    <string name="name_ES">Nombre de usuario</string>
+    <string name="user_number_ES">Teléfono</string>
+    <string name="phone_ES">Número de teléfono</string>
+    <string name="password_ES">Contraseña</string>
+    <string name="pswd_text_ES">Introducir contraseña</string>
+    <string name="repeat_password_ES">Repetir contraseña</string>
+        <!-- PET -->
+    <string name="petname_ES">Nombre</string>
+    <string name="pname_ES">Nombre de la mascota</string>
+    <string name="petage_ES">Edad</string>
+    <string name="page_ES">Edad de la mascota</string>
+    <string name="categories_ES">Categorías</string>
 
-    // MAPS
+    <!-- MAPS -->
     <string name="mapstate1_ES">Zona muy transcurrida</string>
     <string name="mapstate2_ES">Zona transcurrida</string>
     <string name="mapstate3_ES">Zona poco transcurrida</string>

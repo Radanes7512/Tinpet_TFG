@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.tinpet.R
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
@@ -88,7 +89,10 @@ fun SignupScreen(
         ) {
             if(signupEnable){
                 Button(
-                    onClick = { viewModel.register(context) },
+                    onClick = {
+                        viewModel.register(context)
+                        onClick()
+                    },
                     enabled = true,
                     shape = RoundedCornerShape(25),
                     colors = ButtonDefaults.buttonColors(
@@ -138,6 +142,7 @@ fun SignupScreen(
 @Composable
 fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
     val number: String by viewModel.number.observeAsState(initial = "")
+    val name: String by viewModel.name.observeAsState(initial = "")
     val password: String by viewModel.password.observeAsState(initial = "")
     val password2: String by viewModel.password2.observeAsState(initial = "")
 
@@ -145,12 +150,54 @@ fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
         Spacer(modifier = Modifier.padding(15.dp))
         STitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        SUserField(number) { viewModel.onSignupChanged(it, password, password2) }
+        SUserField(number) { viewModel.onSignupChanged(it, name, password, password2) }
         Spacer(modifier = Modifier.padding(5.dp))
-        SPasswordField(password) { viewModel.onSignupChanged(number, it, password2) }
+        SUserName(name){viewModel.onSignupChanged(number, it, password, password2)}
         Spacer(modifier = Modifier.padding(5.dp))
-        RepeatPassword(password2) { viewModel.onSignupChanged(number,password, it) }
+        SPasswordField(password) { viewModel.onSignupChanged(number, name, it, password2) }
+        Spacer(modifier = Modifier.padding(5.dp))
+        RepeatPassword(password2) { viewModel.onSignupChanged(number, name, password, it) }
         Spacer(modifier = Modifier.padding(15.dp))
+    }
+}
+
+@Composable
+fun SUserName(name: String, onTextFieldChanged: (String) -> Unit) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        // Nombre del usuario
+        OutlinedTextField(
+            value = name,
+            onValueChange = {
+                    onTextFieldChanged(it)
+            },
+            label = {
+                Text(
+                    text = stringResource(R.string.username_ES),
+                    color = MaterialTheme.colors.onBackground
+                )
+            },
+            placeholder = {
+                Text(
+                    text = stringResource(R.string.name_ES),
+                    color = MaterialTheme.colors.onBackground
+                )
+            },
+            leadingIcon = {
+                IconButton(onClick = { }) {
+                    Icon(
+                        imageVector = Icons.Filled.VerifiedUser,
+                        tint = MaterialTheme.colors.onBackground,
+                        contentDescription = null
+                    )
+                }
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
+        )
     }
 }
 
@@ -332,7 +379,7 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
             },
             label = {
                 Text(
-                    text = stringResource(R.string.username_ES),
+                    text = stringResource(R.string.user_number_ES),
                     color = MaterialTheme.colors.onBackground
                 )
             },

@@ -7,8 +7,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-
-
+import androidx.navigation.NavController
+import com.example.tinpet.AppScreens
 
 
 class LoginViewModel(context:Context) : ViewModel() {
@@ -17,6 +17,9 @@ class LoginViewModel(context:Context) : ViewModel() {
 
     private val _number = MutableLiveData<String>()
     val number: LiveData<String> = _number
+
+    private val _name = MutableLiveData<String>()
+    val name: LiveData<String> = _name
 
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> = _password
@@ -36,11 +39,12 @@ class LoginViewModel(context:Context) : ViewModel() {
         _loginEnable.value = isValidNumber(number) && isValidPassword(password)
     }
 
-    fun onSignupChanged(number: String,password: String, password2:String){
+    fun onSignupChanged(number: String,name: String,password: String, password2:String){
         _number.value = number
+        _name.value = name
         _password.value = password
         _password2.value = password2
-        _signupEnable.value = isValidNumber(number) && isValidPassword(password) && password == password2
+        _signupEnable.value = isValidNumber(number) && isValidName(name) && isValidPassword(password) && password == password2
     }
     fun login(){
 
@@ -49,10 +53,14 @@ class LoginViewModel(context:Context) : ViewModel() {
         number.value?.let { password.value?.let { it1 -> repository.addUser(it, it1) } }
         var resultado = number.value?.let { repository.getUser(it) }
         Toast.makeText(context, "$resultado", Toast.LENGTH_SHORT).show()
+
     }
     private fun isValidPassword(password: String): Boolean = password.length > 9
 
     private fun isValidNumber(number: String): Boolean  = number.length == 9
+
+    //guarripé que siempre es valido, meter condicion base de datos
+    private fun isValidName(name: String): Boolean = name.length > 1
 
 
 }

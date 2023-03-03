@@ -110,7 +110,7 @@ fun NavGraph(
             SignupScreen (
                 onClick = {
                     navController.popBackStack()
-                    navController.navigate(Graph.AUTHENTICATION)
+                    navController.navigate(AppScreens.Addpet.route)
                 },
                 viewModel = LoginViewModel(LocalContext.current)
             )
@@ -120,9 +120,9 @@ fun NavGraph(
             AddPetScreen(
                 onClick = {
                     navController.popBackStack()
-                    navController.navigate(AppScreens.Addpet.route)
+                    navController.navigate(Graph.MAIN)
                 },
-                viewModel = LoginViewModel()
+                viewModel = LoginViewModel(LocalContext.current)
             )
         }
 

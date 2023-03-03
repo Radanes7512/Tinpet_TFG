@@ -17,6 +17,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -105,7 +106,7 @@ fun AddPetScreen(
 
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text(
-                        text = stringResource(R.string.signup_access_ES)
+                        text = stringResource(R.string.addpet_access_ES)
                     )
                 }
             }else{
@@ -137,6 +138,7 @@ fun AddPetScreen(
 @Composable
 fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
     val number: String by viewModel.number.observeAsState(initial = "")
+    val name: String by viewModel.name.observeAsState(initial = "")
     val password: String by viewModel.password.observeAsState(initial = "")
     val password2: String by viewModel.password2.observeAsState(initial = "")
 
@@ -144,11 +146,8 @@ fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
         Spacer(modifier = Modifier.padding(15.dp))
         STitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        SUserField(number) { viewModel.onSignupChanged(it, password, password2) }
         Spacer(modifier = Modifier.padding(5.dp))
-        SPasswordField(password) { viewModel.onSignupChanged(number, it, password2) }
         Spacer(modifier = Modifier.padding(5.dp))
-        RepeatPassword(password2) { viewModel.onSignupChanged(number,password, it) }
         Spacer(modifier = Modifier.padding(15.dp))
     }
 }
@@ -166,7 +165,7 @@ fun STitleText(modifier: Modifier) {
         Text(
             modifier = Modifier.padding(5.dp),
             textAlign = TextAlign.Center,
-            text = (stringResource(R.string.register_ES)),
+            text = (stringResource(R.string.addpet_ES)),
             fontSize = 32.sp,
             fontFamily = abrilFatface,
             color = MaterialTheme.colors.onBackground
@@ -366,7 +365,7 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
 @Preview(showBackground = true, showSystemUi = true)
 fun AddPetScreenPreviewLT() {
     TinPetTheme(darkTheme = false) {
-        AddPetScreen(viewModel = LoginViewModel(),onClick = {})
+        AddPetScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
     }
 }
 
@@ -374,7 +373,7 @@ fun AddPetScreenPreviewLT() {
 @Preview(showBackground = true, showSystemUi = true)
 fun AddPetScreenPreviewDT() {
     TinPetTheme(darkTheme = true) {
-        AddPetScreen(viewModel = LoginViewModel(),onClick = {})
+        AddPetScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
     }
 }
 

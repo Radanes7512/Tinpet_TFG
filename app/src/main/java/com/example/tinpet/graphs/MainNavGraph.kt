@@ -12,6 +12,7 @@ import com.example.tinpet.screens.IndexScreen
 import com.example.tinpet.screens.LoginViewModel
 import com.example.tinpet.screens.SignupScreen
 import com.example.tinpet.screens.SplashScreen
+import com.example.tinpet.screens.mainMenu.AddPetScreen
 
 
 @Composable
@@ -32,12 +33,19 @@ fun MainNavigationGraph(navController: NavHostController) {
             SignupScreen(
                 onClick = {
                     navController.popBackStack()
-                    navController.navigate(Graph.AUTHENTICATION)
+                    navController.navigate(AppScreens.Addpet.route)
                 },
                 viewModel = LoginViewModel(LocalContext.current)
             )
-
-
+        }
+        composable(AppScreens.Addpet.route){
+            AddPetScreen(
+                onClick = {
+                    navController.popBackStack()
+                    navController.navigate(Graph.MAIN)
+                },
+                viewModel = LoginViewModel(LocalContext.current)
+            )
         }
         composable(AppScreens.Index.route){
             IndexScreen(

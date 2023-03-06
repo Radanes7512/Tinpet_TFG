@@ -28,6 +28,10 @@ class LoginViewModel(context:Context) : ViewModel() {
     private val _password2 = MutableLiveData<String>()
     val password2: LiveData<String> = _password2
 
+    // SMS
+    private val _smscode = MutableLiveData<String>()
+    val smscode: LiveData<String> = _smscode
+
     // PET INFO
     private val _petname = MutableLiveData<String>()
     val petname: LiveData<String> = _petname
@@ -41,6 +45,9 @@ class LoginViewModel(context:Context) : ViewModel() {
 
     private val _signupEnable = MutableLiveData<Boolean>()
     val signupEnable: LiveData<Boolean> = _signupEnable
+
+    private val _smsEnable = MutableLiveData<Boolean>()
+    val smsEnable: LiveData<Boolean> = _smsEnable
 
     private val _addpetEnable = MutableLiveData<Boolean>()
     val addpetEnable: LiveData<Boolean> = _addpetEnable
@@ -59,6 +66,11 @@ class LoginViewModel(context:Context) : ViewModel() {
         _signupEnable.value = isValidNumber(number) && isValidName(name) && isValidPassword(password) && password == password2
     }
 
+    fun onSmsChanged(smscode: String){
+        _smscode.value = smscode
+        _smsEnable.value = isValidCode(smscode)
+    }
+
     fun onAddpetChanged(petname: String, petage: String){
         _petname.value = petname
         _petage.value = petage
@@ -73,6 +85,7 @@ class LoginViewModel(context:Context) : ViewModel() {
         Toast.makeText(context, "$resultado", Toast.LENGTH_SHORT).show()
 
     }
+    private fun  isValidCode(smscode: String): Boolean = smscode.length == 4
     private fun isValidPassword(password: String): Boolean = password.length > 9
 
     private fun isValidNumber(number: String): Boolean  = number.length == 9

@@ -1,14 +1,11 @@
-package com.example.tinpet.screens.mainMenu
+package com.example.tinpet.screens
 
 import com.example.tinpet.screens.LoginViewModel
-
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -20,9 +17,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -77,8 +71,8 @@ fun AddPetScreen(
                 )
             }
         }
-        // SIGNUP COMPONENTS
-        Signup(Modifier,viewModel)
+        // ADDPET COMPONENTS
+        AddPet(Modifier,viewModel)
 
         // BOTÓN CREAR CUENTA
         Row(
@@ -136,7 +130,7 @@ fun AddPetScreen(
 
 
 @Composable
-fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
+fun AddPet(modifier: Modifier, viewModel: LoginViewModel) {
     val un = viewModel.name
     val petname: String by viewModel.petname.observeAsState(initial = "")
     val petage: String by viewModel.petage.observeAsState(initial = "")
@@ -152,9 +146,6 @@ fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
         Spacer(modifier = Modifier.padding(15.dp))
     }
 }
-
-
-
 
 @Composable
 fun ApTitleText(modifier: Modifier) {
@@ -256,7 +247,6 @@ fun ApPetName(petname: String, onTextFieldChanged: (String) -> Unit) {
     }
 }
 
-
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun AddPetScreenPreviewLT() {
@@ -273,33 +263,4 @@ fun AddPetScreenPreviewDT() {
     }
 }
 
-class SPrefixVisualTransformationDark(private val prefix: String) : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        val transformedText = AnnotatedString(
-            prefix,
-            SpanStyle(Color.White)
-        ) + text
 
-        return TransformedText(transformedText, SPrefixOffsetMapping(prefix))
-    }
-
-}
-class SPrefixVisualTransformationLight(private val prefix: String) : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        val transformedText = AnnotatedString(
-            prefix,
-            SpanStyle(Color.Black)
-        ) + text
-
-        return TransformedText(transformedText, SPrefixOffsetMapping(prefix))
-    }
-
-}
-class SPrefixOffsetMapping(private val prefix: String) : OffsetMapping {
-    override fun originalToTransformed(offset: Int): Int = offset + prefix.length
-
-    override fun transformedToOriginal(offset: Int): Int {
-        val delta = offset - prefix.length
-        return if (delta < 0) 0 else delta
-    }
-}

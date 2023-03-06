@@ -9,10 +9,7 @@ import com.example.tinpet.AppScreens
 import com.example.tinpet.screens.*
 import com.example.tinpet.screens.mainMenu.*
 import com.example.tinpet.screens.mainMenu.profile.*
-import com.example.tinpet.screens.mainMenu.profile.settings.AboutUsScreen
-import com.example.tinpet.screens.mainMenu.profile.settings.NotificationsScreen
-import com.example.tinpet.screens.mainMenu.profile.settings.SettingsScreen
-
+import com.example.tinpet.screens.mainMenu.profile.settings.*
 
 @Composable
 fun NavGraph(
@@ -111,12 +108,20 @@ fun NavGraph(
             SignupScreen (
                 onClick = {
                     navController.popBackStack()
+                    navController.navigate(AppScreens.SmsInput.route)
+                },
+                viewModel = LoginViewModel(LocalContext.current)
+            )
+        }
+        composable(AppScreens.SmsInput.route){
+            InputSmsNumScreen(
+                onClick = {
+                    navController.popBackStack()
                     navController.navigate(AppScreens.Addpet.route)
                 },
                 viewModel = LoginViewModel(LocalContext.current)
             )
         }
-
         composable(AppScreens.Addpet.route){
             AddPetScreen(
                 onClick = {
@@ -126,19 +131,26 @@ fun NavGraph(
                 viewModel = LoginViewModel(LocalContext.current)
             )
         }
-
         composable(
             route = AppScreens.Settings.route
         ){
             SettingsScreen(
                 onBackClick = {
-                    navController.popBackStack()
                     navController.navigate(AppScreens.Profile.route)
                 },
                 onCloseClick = {
-                    //navController.popBackStack()
-                    navController.popBackStack()
-                    navController.navigate(Graph.AUTHENTICATION)
+                    /*navController.popBackStack()
+                    navController.navigate(Graph.AUTHENTICATION)*/
+                    navController.navigate(
+                        route = "login",
+                        builder = {
+                            popUpTo(route = "home"){
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    )
+                    //navOptions { popUpTo(Graph.AUTHENTICATION) }
                     //navController.navigate(URLEncoder.encode(Graph.AUTHENTICATION, StandardCharsets.UTF_8.toString()))
                     //navController.navigate(NavDeepLinkRequest(Uri.parse("android-app://androidx.navigation/auth_graph")))
                     //navController.navigate(NavDeepLinkRequest.Builder.fromUri("android-app://androidx.navigation/auth_graph".toUri()).build())

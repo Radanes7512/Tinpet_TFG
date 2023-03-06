@@ -1,9 +1,6 @@
 package com.example.tinpet.screens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -79,17 +76,30 @@ fun LoginScreen(
             }
         }
         // LOGIN COMPONENTS
-        Login(Modifier,viewModel)
+        Login(Modifier, viewModel)
 
         // BOTÓN ACCEDER
-        Row(
-            horizontalArrangement = Arrangement.Center,
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
         ) {
+            Button(
+                modifier = Modifier
+                    .background(Color.Transparent)
+                    .border(BorderStroke(0.dp, Color.Transparent)),
+                onClick = {}
+            ) {
+                Text(
+                    text = "Crear cuenta"
+                )
+            }
             if (loginEnable) {
                 Button(
-                    onClick = { viewModel.login() },
+                    onClick = {
+                        viewModel.login()
+                        onClick()
+                    },
                     enabled = true,
                     shape = RoundedCornerShape(25),
                     colors = ButtonDefaults.buttonColors(
@@ -269,9 +279,8 @@ fun LUserField(number: String, onTextFieldChanged: (String) -> Unit) {
         OutlinedTextField(
             value = number,
             onValueChange = {
-                if (it.length <= 9)
-                    onTextFieldChanged(it)
-                            },
+                onTextFieldChanged(it)
+            },
             label = {
                 Text(
                     text = stringResource(R.string.username_ES),

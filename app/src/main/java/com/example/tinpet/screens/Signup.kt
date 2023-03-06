@@ -374,7 +374,7 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
             value = number,
             onValueChange = {
 
-                if (it.length <= 9)
+                //if (it.length <= 9)
                     onTextFieldChanged(it)
             },
             label = {

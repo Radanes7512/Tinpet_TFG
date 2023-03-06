@@ -12,9 +12,6 @@ import com.example.tinpet.ui.theme.TinPetTheme
 import javax.net.ssl.SSLSessionBindingEvent
 
 class MainActivity : ComponentActivity() {
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

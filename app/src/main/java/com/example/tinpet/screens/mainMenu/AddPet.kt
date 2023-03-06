@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
+import com.example.tinpet.screens.LUserField
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
@@ -88,7 +89,7 @@ fun AddPetScreen(
         ) {
             if(signupEnable){
                 Button(
-                    onClick = { onClick() },
+                    onClick = { viewModel.autenticate() },
                     enabled = true,
                     shape = RoundedCornerShape(25),
                     colors = ButtonDefaults.buttonColors(
@@ -111,8 +112,8 @@ fun AddPetScreen(
                 }
             }else{
                 Button(
-                    onClick = {},
-                    enabled = false,
+                    onClick = {viewModel.autenticate()},
+                    enabled = true,
                     shape = RoundedCornerShape(25),
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colors.secondaryVariant,
@@ -141,11 +142,14 @@ fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
     val name: String by viewModel.name.observeAsState(initial = "")
     val password: String by viewModel.password.observeAsState(initial = "")
     val password2: String by viewModel.password2.observeAsState(initial = "")
+    val verifyNumber: String by viewModel.verifyNumber.observeAsState(initial = "")
+
 
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.padding(15.dp))
         STitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
+        SUserField(verifyNumber) { viewModel.onVerifyNumberChanged(it) }
         Spacer(modifier = Modifier.padding(5.dp))
         Spacer(modifier = Modifier.padding(5.dp))
         Spacer(modifier = Modifier.padding(15.dp))
@@ -175,144 +179,6 @@ fun STitleText(modifier: Modifier) {
 
 
 @Composable
-fun RepeatPassword(password2: String, onTextFieldChanged: (String) -> Unit) {
-    var showPassword by remember { mutableStateOf(value = false) }
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        // Contraseña del usuario
-        OutlinedTextField(
-            value = password2,
-            onValueChange = { onTextFieldChanged(it) },
-            label = {
-                Text(
-                    text = stringResource(R.string.repeat_password_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.pswd_text_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            trailingIcon = {
-                if (showPassword) {
-                    IconButton(
-                        onClick = { showPassword = false }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.VisibilityOff,
-                            tint = Color.Red,
-                            contentDescription = null,
-                        )
-                    }
-                } else {
-                    IconButton(
-                        onClick = { showPassword = true }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Visibility,
-                            tint = MaterialTheme.colors.onBackground,
-                            contentDescription = null,
-                        )
-
-                    }
-                }
-            },
-            leadingIcon = {
-                IconButton(onClick = { }) {
-                    Icon(
-                        imageVector = Icons.Filled.Password,
-                        tint = MaterialTheme.colors.onBackground,
-                        contentDescription = null,
-                    )
-                }
-            },
-            visualTransformation =
-            if (showPassword) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            }
-        )
-    }
-}
-
-
-@Composable
-fun SPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
-    var showPassword by remember { mutableStateOf(value = false) }
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        // Contraseña del usuario
-        OutlinedTextField(
-            value = password,
-            onValueChange = { onTextFieldChanged(it) },
-            label = {
-                Text(
-                    text = stringResource(R.string.password_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.pswd_text_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            trailingIcon = {
-                if (showPassword) {
-                    IconButton(
-                        onClick = { showPassword = false }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.VisibilityOff,
-                            tint = Color.Red,
-                            contentDescription = null,
-                        )
-                    }
-                } else {
-                    IconButton(
-                        onClick = { showPassword = true }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Visibility,
-                            tint = MaterialTheme.colors.onBackground,
-                            contentDescription = null,
-                        )
-
-                    }
-                }
-            },
-            leadingIcon = {
-                IconButton(onClick = { }) {
-                    Icon(
-                        imageVector = Icons.Filled.Password,
-                        tint = MaterialTheme.colors.onBackground,
-                        contentDescription = null,
-                    )
-                }
-            },
-            visualTransformation =
-            if (showPassword) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            }
-        )
-    }
-}
-
-
-@Composable
 fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -324,7 +190,7 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
         OutlinedTextField(
             value = number,
             onValueChange = {
-                if (it.length <= 9)
+                //if (it.length <= 9)
                     onTextFieldChanged(it)
             },
             label = {

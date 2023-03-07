@@ -101,14 +101,22 @@ fun NavGraph(
                     navController.popBackStack()
                     navController.navigate(Graph.MAIN)
                 },
+                onRegClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.Signup.route)
+                },
                 viewModel = LoginViewModel(LocalContext.current)
-                    )
+            )
         }
         composable(AppScreens.Signup.route){
             SignupScreen (
                 onClick = {
                     navController.popBackStack()
                     navController.navigate(AppScreens.SmsInput.route)
+                },
+                onBackClick = {
+                    navController.popBackStack()
+                    navController.navigate(Graph.AUTHENTICATION)
                 },
                 viewModel = LoginViewModel(LocalContext.current)
             )

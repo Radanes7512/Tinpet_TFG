@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -34,7 +35,8 @@ import com.example.tinpet.ui.theme.abrilFatface
 @Composable
 fun SignupScreen(
     viewModel: LoginViewModel,
-    onClick:() -> Unit
+    onClick:() -> Unit,
+    onBackClick:() -> Unit
 ) {
     val signupEnable: Boolean by viewModel.signupEnable.observeAsState(initial = false)
     val context = LocalContext.current
@@ -82,8 +84,8 @@ fun SignupScreen(
         Signup(Modifier,viewModel)
 
         // BOTÓN CREAR CUENTA
-        Row(
-            horizontalArrangement = Arrangement.Center,
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
         ) {
@@ -132,7 +134,11 @@ fun SignupScreen(
                     )
                 }
             }
-
+            Spacer(modifier = Modifier.padding(10.dp))
+            ClickableText(
+                text = AnnotatedString("Volver"),
+                onClick = { onBackClick() }
+            )
         }
     }
 }
@@ -201,7 +207,6 @@ fun SUserName(name: String, onTextFieldChanged: (String) -> Unit) {
     }
 }
 
-
 @Composable
 fun STitleText(modifier: Modifier) {
     Row(
@@ -221,7 +226,6 @@ fun STitleText(modifier: Modifier) {
         )
     }
 }
-
 
 @Composable
 fun RepeatPassword(password2: String, onTextFieldChanged: (String) -> Unit) {
@@ -291,7 +295,6 @@ fun RepeatPassword(password2: String, onTextFieldChanged: (String) -> Unit) {
     }
 }
 
-
 @Composable
 fun SPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
     var showPassword by remember { mutableStateOf(value = false) }
@@ -360,7 +363,6 @@ fun SPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
     }
 }
 
-
 @Composable
 fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
     Row(
@@ -405,23 +407,6 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
-    }
-}
-
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun SignupScreenPreviewLT() {
-    TinPetTheme(darkTheme = false) {
-        SignupScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
-    }
-}
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun SignupScreenPreviewDT() {
-    TinPetTheme(darkTheme = true) {
-        SignupScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
     }
 }
 

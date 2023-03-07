@@ -3,6 +3,7 @@ package com.example.tinpet.screens
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -23,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tinpet.AppScreens
 import com.example.tinpet.R
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
@@ -31,7 +33,8 @@ import com.example.tinpet.ui.theme.abrilFatface
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onRegClick: () -> Unit
 ) {
     val loginEnable: Boolean by viewModel.loginEnable.observeAsState(initial = false)
     val context = LocalContext.current
@@ -76,7 +79,7 @@ fun LoginScreen(
             }
         }
         // LOGIN COMPONENTS
-        Login(Modifier, viewModel)
+        Login(Modifier, viewModel, onRegClick={onRegClick()})
 
         // BOTÓN ACCEDER
         Column(
@@ -84,16 +87,6 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            Button(
-                modifier = Modifier
-                    .background(Color.Transparent)
-                    .border(BorderStroke(0.dp, Color.Transparent)),
-                onClick = {}
-            ) {
-                Text(
-                    text = "Crear cuenta"
-                )
-            }
             if (loginEnable) {
                 Button(
                     onClick = {
@@ -139,13 +132,18 @@ fun LoginScreen(
                     )
                 }
             }
+            Spacer(modifier = Modifier.padding(10.dp))
+            ClickableText(
+                text = AnnotatedString("Crear cuenta"),
+                onClick = {onRegClick() }
+            )
         }
     }
 
 }
 
 @Composable
-fun Login(modifier: Modifier, viewModel: LoginViewModel) {
+fun Login(modifier: Modifier, viewModel: LoginViewModel,onRegClick: () -> Unit) {
     val number: String by viewModel.number.observeAsState(initial = "")
     val password: String by viewModel.password.observeAsState(initial = "")
 
@@ -157,7 +155,7 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel) {
         Spacer(modifier = Modifier.padding(5.dp))
         LPasswordField(password) { viewModel.onLoginChanged(number, it) }
         Spacer(modifier = Modifier.padding(10.dp))
-        ForgotPassword(Modifier.align(Alignment.End))
+        ForgotPassword(Modifier.align(Alignment.End),onRegClick={onRegClick()})
         Spacer(modifier = Modifier.padding(15.dp))
     }
 }
@@ -183,11 +181,11 @@ fun LTitleText(modifier: Modifier) {
 }
 
 @Composable
-fun ForgotPassword(modifier: Modifier) {
+fun ForgotPassword(modifier: Modifier,onRegClick: () -> Unit) {
     Text(
         text = "¿Olvidaste la contraseña?",
         modifier = modifier
-            .clickable { }
+            .clickable { onRegClick() }
             .padding(10.dp),
         fontSize = 12.sp,
         fontWeight = FontWeight.Bold,
@@ -311,22 +309,6 @@ fun LUserField(number: String, onTextFieldChanged: (String) -> Unit) {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
-    }
-}
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun LoginScreenPreviewLT() {
-    TinPetTheme(darkTheme = false) {
-        LoginScreen(viewModel = LoginViewModel(LocalContext.current), onClick = {})
-    }
-}
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun LoginScreenPreviewDT() {
-    TinPetTheme(darkTheme = true) {
-        LoginScreen(viewModel = LoginViewModel(LocalContext.current), onClick = {})
     }
 }
 

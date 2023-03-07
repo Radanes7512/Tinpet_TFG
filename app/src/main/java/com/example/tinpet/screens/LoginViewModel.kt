@@ -48,10 +48,9 @@ class LoginViewModel(context: Context) : ViewModel() {
     private val _number = MutableLiveData<String>()
     val number: LiveData<String> = _number
 
-
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> = _name
-   
+
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> = _password
 
@@ -98,7 +97,6 @@ class LoginViewModel(context: Context) : ViewModel() {
         _password2.value = password2
         _signupEnable.value = isValidNumber(number) && isValidName(name) && isValidPassword(password) && password == password2
     }
-
     fun onSmsChanged(smscode: String){
         _smscode.value = smscode
         _smsEnable.value = isValidCode(smscode)
@@ -114,16 +112,6 @@ class LoginViewModel(context: Context) : ViewModel() {
 
     }
     fun register(context:Context){
-<<<<<<< HEAD
-        number.value?.let { password.value?.let { it1 -> repository.addUser(it, it1) } }
-        var resultado = number.value?.let { repository.getUser(it) }
-        Toast.makeText(context, "$resultado", Toast.LENGTH_SHORT).show()
-    }
-    private fun isValidCode(smscode: String): Boolean = smscode.length == 4
-    private fun isValidPassword(password: String): Boolean = password.length > 9
-
-    private fun isValidNumber(number: String): Boolean  = number.length == 12
-=======
         val options = number.value?.let {
             PhoneAuthOptions.newBuilder(auth)
                 .setPhoneNumber(it)
@@ -197,21 +185,18 @@ class LoginViewModel(context: Context) : ViewModel() {
                 }
             }
     }
+    private fun isValidCode(smscode: String): Boolean = smscode.length == 4
     private fun isValidPassword(password: String): Boolean = true
->>>>>>> 4b16aa425564d8bdb4ae883380888137c7a57a05
 
     private fun isValidNumber(number: String): Boolean  = true
     private fun isValidNumber(number:String,phoneOutput:String,password:String, passwordOutput:String): Boolean  = number.length == 9 && number==phoneOutput
     //guarripé que siempre es valido, meter condicion base de datos
     private fun isValidName(name: String): Boolean = name.length > 1
 
-<<<<<<< HEAD
     //guarripé que siempre es valido, meter condicion base de datos
     private fun isValidPetName(petname:String): Boolean = petname.length > 1
     private fun isValidPetAge(petage:String): Boolean = petage.length in 1..2
-=======
 
 
 
->>>>>>> 4b16aa425564d8bdb4ae883380888137c7a57a05
 }

@@ -24,7 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
-import com.example.tinpet.screens.LUserField
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
@@ -85,7 +84,7 @@ fun AddPetScreen(
         ) {
             if(addpetEnable){
                 Button(
-                    onClick = { viewModel.autenticate() },
+                    onClick = { onClick() },
                     enabled = true,
                     shape = RoundedCornerShape(25),
                     colors = ButtonDefaults.buttonColors(
@@ -108,8 +107,8 @@ fun AddPetScreen(
                 }
             }else{
                 Button(
-                    onClick = {viewModel.autenticate()},
-                    enabled = true,
+                    onClick = {},
+                    enabled = false,
                     shape = RoundedCornerShape(25),
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colors.secondaryVariant,
@@ -133,30 +132,16 @@ fun AddPetScreen(
 
 
 @Composable
-<<<<<<< HEAD:app/src/main/java/com/example/tinpet/screens/AddPet.kt
 fun AddPet(modifier: Modifier, viewModel: LoginViewModel) {
     val un = viewModel.name
     val petname: String by viewModel.petname.observeAsState(initial = "")
     val petage: String by viewModel.petage.observeAsState(initial = "")
-=======
-fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
-    val number: String by viewModel.number.observeAsState(initial = "")
-    val name: String by viewModel.name.observeAsState(initial = "")
-    val password: String by viewModel.password.observeAsState(initial = "")
-    val password2: String by viewModel.password2.observeAsState(initial = "")
-    val verifyNumber: String by viewModel.verifyNumber.observeAsState(initial = "")
-
->>>>>>> 4b16aa425564d8bdb4ae883380888137c7a57a05:app/src/main/java/com/example/tinpet/screens/mainMenu/AddPet.kt
 
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.padding(15.dp))
         ApTitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-<<<<<<< HEAD:app/src/main/java/com/example/tinpet/screens/AddPet.kt
         ApPetName(petname) {viewModel.onAddpetChanged(it, petage )}
-=======
-        SUserField(verifyNumber) { viewModel.onVerifyNumberChanged(it) }
->>>>>>> 4b16aa425564d8bdb4ae883380888137c7a57a05:app/src/main/java/com/example/tinpet/screens/mainMenu/AddPet.kt
         Spacer(modifier = Modifier.padding(5.dp))
         ApPetAge(petage) { viewModel.onAddpetChanged(petname, it )}
         Spacer(modifier = Modifier.padding(5.dp))
@@ -185,11 +170,7 @@ fun ApTitleText(modifier: Modifier) {
 }
 
 @Composable
-<<<<<<< HEAD:app/src/main/java/com/example/tinpet/screens/AddPet.kt
 fun ApPetAge(petage: String, onTextFieldChanged: (String) -> Unit) {
-=======
-fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
->>>>>>> 4b16aa425564d8bdb4ae883380888137c7a57a05:app/src/main/java/com/example/tinpet/screens/mainMenu/AddPet.kt
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -200,12 +181,7 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
         OutlinedTextField(
             value = petage,
             onValueChange = {
-<<<<<<< HEAD:app/src/main/java/com/example/tinpet/screens/AddPet.kt
                 onTextFieldChanged(it)
-=======
-                //if (it.length <= 9)
-                    onTextFieldChanged(it)
->>>>>>> 4b16aa425564d8bdb4ae883380888137c7a57a05:app/src/main/java/com/example/tinpet/screens/mainMenu/AddPet.kt
             },
             label = {
                 Text(
@@ -246,7 +222,7 @@ fun ApPetName(petname: String, onTextFieldChanged: (String) -> Unit) {
         OutlinedTextField(
             value = petname,
             onValueChange = {
-                    onTextFieldChanged(it)
+                onTextFieldChanged(it)
             },
             label = {
                 Text(
@@ -289,5 +265,3 @@ fun AddPetScreenPreviewDT() {
         AddPetScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
     }
 }
-
-

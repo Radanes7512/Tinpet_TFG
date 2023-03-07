@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "473557425851",
+    "project_id": "tinpetbbdd-b61b6",
+    "storage_bucket": "tinpetbbdd-b61b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473557425851:android:0e19b7318efd259422d39e",
+        "android_client_info": {
+          "package_name": "com.example.tinpet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "473557425851-rll6pek87dfqsip0fp7ob5j0s6mb1pal.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCa7uxP7caCjq6S08Ljn9s33AObWrUc1_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "473557425851-rll6pek87dfqsip0fp7ob5j0s6mb1pal.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

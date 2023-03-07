@@ -384,6 +384,11 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
         OutlinedTextField(
             value = number,
             onValueChange = {
+<<<<<<< HEAD
+=======
+
+                //if (it.length <= 9)
+>>>>>>> 4b16aa425564d8bdb4ae883380888137c7a57a05
                     onTextFieldChanged(it)
             },
             label = {

@@ -4,9 +4,11 @@ import android.app.Activity
 import android.renderscript.ScriptGroup.Binding
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -21,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +37,8 @@ import com.example.tinpet.ui.theme.abrilFatface
 @Composable
 fun SignupScreen(
     viewModel: LoginViewModel,
-    onClick:() -> Unit
+    onClick:() -> Unit,
+    onBackClick:() -> Unit
 ) {
     val signupEnable: Boolean by viewModel.signupEnable.observeAsState(initial = false)
     val context = LocalContext.current
@@ -82,8 +86,8 @@ fun SignupScreen(
         Signup(Modifier,viewModel)
 
         // BOTÓN CREAR CUENTA
-        Row(
-            horizontalArrangement = Arrangement.Center,
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
         ) {
@@ -103,7 +107,7 @@ fun SignupScreen(
                     )
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.ManageAccounts,
+                        imageVector = Icons.Filled.DoneAll,
                         contentDescription = null,
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
@@ -132,7 +136,18 @@ fun SignupScreen(
                     )
                 }
             }
-
+            Spacer(modifier = Modifier.padding(10.dp))
+            Text(
+                text = stringResource(R.string.login_ES),
+                modifier = Modifier.clickable { onBackClick() },
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                color = if (isSystemInDarkTheme()) {
+                    Color(0xFFFFFFFF)
+                } else {
+                    Color(0xFFFB9600)
+                }
+            )
         }
     }
 }
@@ -173,7 +188,7 @@ fun SUserName(name: String, onTextFieldChanged: (String) -> Unit) {
         OutlinedTextField(
             value = name,
             onValueChange = {
-                    onTextFieldChanged(it)
+                onTextFieldChanged(it)
             },
             label = {
                 Text(
@@ -190,7 +205,7 @@ fun SUserName(name: String, onTextFieldChanged: (String) -> Unit) {
             leadingIcon = {
                 IconButton(onClick = { }) {
                     Icon(
-                        imageVector = Icons.Filled.VerifiedUser,
+                        imageVector = Icons.Filled.Person2,
                         tint = MaterialTheme.colors.onBackground,
                         contentDescription = null
                     )
@@ -200,7 +215,6 @@ fun SUserName(name: String, onTextFieldChanged: (String) -> Unit) {
         )
     }
 }
-
 
 @Composable
 fun STitleText(modifier: Modifier) {
@@ -221,7 +235,6 @@ fun STitleText(modifier: Modifier) {
         )
     }
 }
-
 
 @Composable
 fun RepeatPassword(password2: String, onTextFieldChanged: (String) -> Unit) {
@@ -291,7 +304,6 @@ fun RepeatPassword(password2: String, onTextFieldChanged: (String) -> Unit) {
     }
 }
 
-
 @Composable
 fun SPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
     var showPassword by remember { mutableStateOf(value = false) }
@@ -360,7 +372,6 @@ fun SPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
     }
 }
 
-
 @Composable
 fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
     Row(
@@ -373,9 +384,7 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
         OutlinedTextField(
             value = number,
             onValueChange = {
-
-                //if (it.length <= 9)
-                    onTextFieldChanged(it)
+                onTextFieldChanged(it)
             },
             label = {
                 Text(
@@ -404,26 +413,9 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
             } else {
                 SPrefixVisualTransformationLight("+34 | ")
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
-    }
-}
-
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun SignupScreenPreviewLT() {
-    TinPetTheme(darkTheme = false) {
-        SignupScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
-    }
-}
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun SignupScreenPreviewDT() {
-    TinPetTheme(darkTheme = true) {
-        SignupScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
     }
 }
 

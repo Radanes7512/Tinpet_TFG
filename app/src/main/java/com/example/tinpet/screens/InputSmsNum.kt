@@ -1,18 +1,15 @@
-package com.example.tinpet.screens.mainMenu
-
-import com.example.tinpet.screens.LoginViewModel
-
+package com.example.tinpet.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,24 +17,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
-import com.example.tinpet.screens.LUserField
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
+
 @Composable
-fun AddPetScreen(
+fun InputSmsNumScreen(
     viewModel: LoginViewModel,
-    onClick:() -> Unit
+    onClick: () -> Unit
 ) {
-    val signupEnable: Boolean by viewModel.signupEnable.observeAsState(initial = false)
+    val smsEnable: Boolean by viewModel.smsEnable.observeAsState(initial = false)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -78,18 +72,18 @@ fun AddPetScreen(
                 )
             }
         }
-        // SIGNUP COMPONENTS
-        Signup(Modifier,viewModel)
+        // INPUTSMSNUM COMPONENTS
+        InputSms(Modifier, viewModel)
 
-        // BOTÓN CREAR CUENTA
+        // BOTÓN VERIFICAR CODIGO
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            if(signupEnable){
+            if (smsEnable) {
                 Button(
-                    onClick = { viewModel.autenticate() },
+                    onClick = { onClick() },
                     enabled = true,
                     shape = RoundedCornerShape(25),
                     colors = ButtonDefaults.buttonColors(
@@ -100,20 +94,20 @@ fun AddPetScreen(
                     )
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.ManageAccounts,
+                        imageVector = Icons.Filled.CheckCircle,
                         contentDescription = null,
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
 
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text(
-                        text = stringResource(R.string.addpet_access_ES)
+                        text = stringResource(R.string.isn_access_ES)
                     )
                 }
-            }else{
+            } else {
                 Button(
-                    onClick = {viewModel.autenticate()},
-                    enabled = true,
+                    onClick = {},
+                    enabled = false,
                     shape = RoundedCornerShape(25),
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = MaterialTheme.colors.secondaryVariant,
@@ -129,36 +123,30 @@ fun AddPetScreen(
                     )
                 }
             }
-
         }
     }
 }
 
-
-
 @Composable
-fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
-    val number: String by viewModel.number.observeAsState(initial = "")
-    val name: String by viewModel.name.observeAsState(initial = "")
-    val password: String by viewModel.password.observeAsState(initial = "")
-    val password2: String by viewModel.password2.observeAsState(initial = "")
-    val verifyNumber: String by viewModel.verifyNumber.observeAsState(initial = "")
-
+fun InputSms(modifier: Modifier, viewModel: LoginViewModel) {
+    val smscode: String by viewModel.smscode.observeAsState(initial = "")
 
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.padding(15.dp))
-        STitleText(Modifier.align(Alignment.CenterHorizontally))
+        ISTitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        SUserField(verifyNumber) { viewModel.onVerifyNumberChanged(it) }
+        ISinput(smscode) {viewModel.onSmsChanged(it)}
+
         Spacer(modifier = Modifier.padding(5.dp))
+
         Spacer(modifier = Modifier.padding(5.dp))
+
         Spacer(modifier = Modifier.padding(15.dp))
     }
 }
 
-
 @Composable
-fun STitleText(modifier: Modifier) {
+fun ISTitleText(modifier: Modifier) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -169,7 +157,7 @@ fun STitleText(modifier: Modifier) {
         Text(
             modifier = Modifier.padding(5.dp),
             textAlign = TextAlign.Center,
-            text = (stringResource(R.string.addpet_ES)),
+            text = (stringResource(R.string.ISN_ES)),
             fontSize = 32.sp,
             fontFamily = abrilFatface,
             color = MaterialTheme.colors.onBackground
@@ -177,9 +165,8 @@ fun STitleText(modifier: Modifier) {
     }
 }
 
-
 @Composable
-fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
+fun ISinput(smscode: String, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -188,39 +175,31 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
     ) {
         // Nombre del usuario
         OutlinedTextField(
-            value = number,
+            value = smscode,
             onValueChange = {
-                //if (it.length <= 9)
-                    onTextFieldChanged(it)
+                onTextFieldChanged(it)
             },
             label = {
                 Text(
-                    text = stringResource(R.string.username_ES),
+                    text = stringResource(R.string.sms_label_ES),
                     color = MaterialTheme.colors.onBackground
                 )
             },
             placeholder = {
                 Text(
-                    text = stringResource(R.string.phone_ES),
+                    text = stringResource(R.string.sms_placeholder_ES),
                     color = MaterialTheme.colors.onBackground
                 )
             },
             leadingIcon = {
                 IconButton(onClick = { }) {
                     Icon(
-                        imageVector = Icons.Filled.PhoneAndroid,
+                        imageVector = Icons.Filled.Sms,
                         tint = MaterialTheme.colors.onBackground,
                         contentDescription = null
                     )
                 }
             },
-            visualTransformation =
-            if (isSystemInDarkTheme()) {
-                SPrefixVisualTransformationDark("+34 | ")
-            } else {
-                SPrefixVisualTransformationLight("+34 | ")
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }
@@ -229,47 +208,15 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
 
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
-fun AddPetScreenPreviewLT() {
+fun ISNScreenPreviewPreviewLT() {
     TinPetTheme(darkTheme = false) {
-        AddPetScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
+        InputSmsNumScreen(viewModel = LoginViewModel(LocalContext.current), onClick = {})
     }
 }
-
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
-fun AddPetScreenPreviewDT() {
+fun ISNScreenPreviewPreviewDT() {
     TinPetTheme(darkTheme = true) {
-        AddPetScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
-    }
-}
-
-class SPrefixVisualTransformationDark(private val prefix: String) : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        val transformedText = AnnotatedString(
-            prefix,
-            SpanStyle(Color.White)
-        ) + text
-
-        return TransformedText(transformedText, SPrefixOffsetMapping(prefix))
-    }
-
-}
-class SPrefixVisualTransformationLight(private val prefix: String) : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        val transformedText = AnnotatedString(
-            prefix,
-            SpanStyle(Color.Black)
-        ) + text
-
-        return TransformedText(transformedText, SPrefixOffsetMapping(prefix))
-    }
-
-}
-class SPrefixOffsetMapping(private val prefix: String) : OffsetMapping {
-    override fun originalToTransformed(offset: Int): Int = offset + prefix.length
-
-    override fun transformedToOriginal(offset: Int): Int {
-        val delta = offset - prefix.length
-        return if (delta < 0) 0 else delta
+        InputSmsNumScreen(viewModel = LoginViewModel(LocalContext.current), onClick = {})
     }
 }

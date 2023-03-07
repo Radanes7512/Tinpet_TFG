@@ -24,6 +24,10 @@ sealed class AppScreens(
         icon = Icons.Filled.AppRegistration
     )
 
+    object SmsInput:AppScreens(
+        route = "smsinput",
+        icon = Icons.Filled.Sms
+    )
     object  Addpet : AppScreens(
         route = "addpet",
         icon = Icons.Filled.Pets

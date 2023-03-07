@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,7 +54,7 @@ fun ProfileScreen(
                     Text(
                         modifier = Modifier.padding(5.dp),
                         textAlign = TextAlign.Center,
-                        text = stringResource(R.string.user_name),
+                        text = stringResource(R.string.user_name).uppercase(),
                         fontSize = 32.sp,
                         fontFamily = abrilFatface,
                         color = MaterialTheme.colors.onBackground
@@ -65,34 +66,13 @@ fun ProfileScreen(
                         elevation = ButtonDefaults.elevation(0.dp)
                     ) {
                         Icon(
-                            Icons.Filled.Menu, contentDescription = null
+                            Icons.Filled.Settings,
+                            contentDescription = null
                         )
-                        /*Text(
-                            text = "Ajustes",
-                            color = MaterialTheme.colors.onPrimary
-                        )*/
-
                     }
                 }
             }
-            item {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    // Imagen de perfil del usuario
-                    Image(
-                        modifier = Modifier
-                            .size(100.dp, 100.dp)
-                            .clip(CircleShape),
-                        painter = painterResource(R.drawable.default_pet),
-                        contentDescription = "Icon profile"
 
-                    )
-                }
-            }
             item {
                 // MIS MASCOTAS
                 Card(

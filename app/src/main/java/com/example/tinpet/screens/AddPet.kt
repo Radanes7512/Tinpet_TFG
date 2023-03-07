@@ -1,9 +1,11 @@
 package com.example.tinpet.screens
 
-import androidx.compose.foundation.*
+import com.example.tinpet.screens.LoginViewModel
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -16,28 +18,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.*
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.tinpet.AppScreens
 import com.example.tinpet.R
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
-
 @Composable
-fun LoginScreen(
+fun AddPetScreen(
     viewModel: LoginViewModel,
-    onClick: () -> Unit,
-    onRegClick: () -> Unit
+    onClick:() -> Unit
 ) {
-    val loginEnable: Boolean by viewModel.loginEnable.observeAsState(initial = false)
-    val context = LocalContext.current
+    val addpetEnable: Boolean by viewModel.addpetEnable.observeAsState(initial = false)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -78,21 +73,18 @@ fun LoginScreen(
                 )
             }
         }
-        // LOGIN COMPONENTS
-        Login(Modifier, viewModel, onRegClick={onRegClick()})
+        // ADDPET COMPONENTS
+        AddPet(Modifier,viewModel)
 
-        // BOTÓN ACCEDER
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+        // BOTÓN CREAR CUENTA
+        Row(
+            horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            if (loginEnable) {
+            if(addpetEnable){
                 Button(
-                    onClick = {
-                        viewModel.login()
-                        onClick()
-                    },
+                    onClick = { onClick() },
                     enabled = true,
                     shape = RoundedCornerShape(25),
                     colors = ButtonDefaults.buttonColors(
@@ -103,17 +95,17 @@ fun LoginScreen(
                     )
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.LockOpen,
+                        imageVector = Icons.Filled.Pets,
                         contentDescription = null,
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
 
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text(
-                        text = stringResource(R.string.login_access_ES)
+                        text = stringResource(R.string.addpet_access_ES)
                     )
                 }
-            } else {
+            }else{
                 Button(
                     onClick = {},
                     enabled = false,
@@ -132,43 +124,33 @@ fun LoginScreen(
                     )
                 }
             }
-            Spacer(modifier = Modifier.padding(10.dp))
-            Text(
-                text = stringResource(R.string.signup_access_ES),
-                modifier = Modifier.clickable { onRegClick() },
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-                color = if (isSystemInDarkTheme()) {
-                    Color(0xFFFFFFFF)
-                } else {
-                    Color(0xFFFB9600)
-                }
-            )
+
         }
     }
-
 }
 
+
+
 @Composable
-fun Login(modifier: Modifier, viewModel: LoginViewModel,onRegClick: () -> Unit) {
-    val number: String by viewModel.number.observeAsState(initial = "")
-    val password: String by viewModel.password.observeAsState(initial = "")
+fun AddPet(modifier: Modifier, viewModel: LoginViewModel) {
+    val un = viewModel.name
+    val petname: String by viewModel.petname.observeAsState(initial = "")
+    val petage: String by viewModel.petage.observeAsState(initial = "")
 
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.padding(15.dp))
-        LTitleText(Modifier.align(Alignment.CenterHorizontally))
+        ApTitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        LUserField(number) { viewModel.onLoginChanged(it, password) }
+        ApPetName(petname) {viewModel.onAddpetChanged(it, petage )}
         Spacer(modifier = Modifier.padding(5.dp))
-        LPasswordField(password) { viewModel.onLoginChanged(number, it) }
-        Spacer(modifier = Modifier.padding(10.dp))
-        ForgotPassword(Modifier.align(Alignment.End),onRegClick={onRegClick()})
+        ApPetAge(petage) { viewModel.onAddpetChanged(petname, it )}
+        Spacer(modifier = Modifier.padding(5.dp))
         Spacer(modifier = Modifier.padding(15.dp))
     }
 }
 
 @Composable
-fun LTitleText(modifier: Modifier) {
+fun ApTitleText(modifier: Modifier) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -179,7 +161,7 @@ fun LTitleText(modifier: Modifier) {
         Text(
             modifier = Modifier.padding(5.dp),
             textAlign = TextAlign.Center,
-            text = (stringResource(R.string.login_ES)),
+            text = (stringResource(R.string.addpet_ES)),
             fontSize = 32.sp,
             fontFamily = abrilFatface,
             color = MaterialTheme.colors.onBackground
@@ -188,92 +170,7 @@ fun LTitleText(modifier: Modifier) {
 }
 
 @Composable
-fun ForgotPassword(modifier: Modifier,onRegClick: () -> Unit) {
-    Text(
-        text = "¿Olvidaste la contraseña?",
-        modifier = modifier
-            .clickable { onRegClick() }
-            .padding(10.dp),
-        fontSize = 12.sp,
-        fontWeight = FontWeight.Bold,
-        color = if (isSystemInDarkTheme()) {
-            Color(0xFFFFFFFF)
-        } else {
-            Color(0xFFFB9600)
-        }
-    )
-}
-
-@Composable
-fun LPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
-    var showPassword by remember { mutableStateOf(value = false) }
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        // Contraseña del usuario
-        OutlinedTextField(
-            value = password,
-            onValueChange = { onTextFieldChanged(it) },
-            label = {
-                Text(
-                    text = stringResource(R.string.password_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.pswd_text_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            trailingIcon = {
-                if (showPassword) {
-                    IconButton(
-                        onClick = { showPassword = false }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.VisibilityOff,
-                            tint = Color.Red,
-                            contentDescription = null,
-                        )
-                    }
-                } else {
-                    IconButton(
-                        onClick = { showPassword = true }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Visibility,
-                            tint = MaterialTheme.colors.onBackground,
-                            contentDescription = null,
-                        )
-
-                    }
-                }
-            },
-            leadingIcon = {
-                IconButton(onClick = { }) {
-                    Icon(
-                        imageVector = Icons.Filled.Password,
-                        tint = MaterialTheme.colors.onBackground,
-                        contentDescription = null,
-                    )
-                }
-            },
-            visualTransformation =
-            if (showPassword) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            }
-        )
-    }
-}
-
-@Composable
-fun LUserField(number: String, onTextFieldChanged: (String) -> Unit) {
+fun ApPetAge(petage: String, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -282,36 +179,30 @@ fun LUserField(number: String, onTextFieldChanged: (String) -> Unit) {
     ) {
         // Nombre del usuario
         OutlinedTextField(
-            value = number,
+            value = petage,
             onValueChange = {
                 onTextFieldChanged(it)
             },
             label = {
                 Text(
-                    text = stringResource(R.string.username_ES),
+                    text = stringResource(R.string.petage_ES),
                     color = MaterialTheme.colors.onBackground
                 )
             },
             placeholder = {
                 Text(
-                    text = stringResource(R.string.phone_ES),
+                    text = stringResource(R.string.page_ES),
                     color = MaterialTheme.colors.onBackground
                 )
             },
             leadingIcon = {
                 IconButton(onClick = { }) {
                     Icon(
-                        imageVector = Icons.Filled.PhoneAndroid,
+                        imageVector = Icons.Filled.Cake,
                         tint = MaterialTheme.colors.onBackground,
                         contentDescription = null
                     )
                 }
-            },
-            visualTransformation =
-            if (isSystemInDarkTheme()) {
-                LPrefixVisualTransformationDark("+34 | ")
-            } else {
-                LPrefixVisualTransformationLight("+34 | ")
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
@@ -319,35 +210,58 @@ fun LUserField(number: String, onTextFieldChanged: (String) -> Unit) {
     }
 }
 
-class LPrefixVisualTransformationDark(private val prefix: String) : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        val transformedText = AnnotatedString(
-            prefix,
-            SpanStyle(Color.White)
-        ) + text
-
-        return TransformedText(transformedText, LPrefixOffsetMapping(prefix))
+@Composable
+fun ApPetName(petname: String, onTextFieldChanged: (String) -> Unit) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        // Nombre del usuario
+        OutlinedTextField(
+            value = petname,
+            onValueChange = {
+                onTextFieldChanged(it)
+            },
+            label = {
+                Text(
+                    text = stringResource(R.string.petname_ES),
+                    color = MaterialTheme.colors.onBackground
+                )
+            },
+            placeholder = {
+                Text(
+                    text = stringResource(R.string.pname_ES),
+                    color = MaterialTheme.colors.onBackground
+                )
+            },
+            leadingIcon = {
+                IconButton(onClick = { }) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        tint = MaterialTheme.colors.onBackground,
+                        contentDescription = null
+                    )
+                }
+            },
+            colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
+        )
     }
-
 }
 
-class LPrefixVisualTransformationLight(private val prefix: String) : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        val transformedText = AnnotatedString(
-            prefix,
-            SpanStyle(Color.Black)
-        ) + text
-
-        return TransformedText(transformedText, LPrefixOffsetMapping(prefix))
+@Composable
+@Preview(showBackground = true, showSystemUi = true)
+fun AddPetScreenPreviewLT() {
+    TinPetTheme(darkTheme = false) {
+        AddPetScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
     }
-
 }
 
-class LPrefixOffsetMapping(private val prefix: String) : OffsetMapping {
-    override fun originalToTransformed(offset: Int): Int = offset + prefix.length
-
-    override fun transformedToOriginal(offset: Int): Int {
-        val delta = offset - prefix.length
-        return if (delta < 0) 0 else delta
+@Composable
+@Preview(showBackground = true, showSystemUi = true)
+fun AddPetScreenPreviewDT() {
+    TinPetTheme(darkTheme = true) {
+        AddPetScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
     }
 }

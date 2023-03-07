@@ -84,7 +84,8 @@ fun AddPetScreen(
         ) {
             if(addpetEnable){
                 Button(
-                    onClick = { onClick() },
+                    onClick = { viewModel.autenticate()
+                        onClick() },
                     enabled = true,
                     shape = RoundedCornerShape(25),
                     colors = ButtonDefaults.buttonColors(

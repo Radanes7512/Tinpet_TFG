@@ -91,7 +91,7 @@ fun LoginScreen(
                 Button(
                     onClick = {
                         viewModel.login()
-                        onClick()
+                       // onClick()
                     },
                     enabled = true,
                     shape = RoundedCornerShape(25),

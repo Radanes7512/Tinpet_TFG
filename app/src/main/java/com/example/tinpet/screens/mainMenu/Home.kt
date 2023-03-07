@@ -104,7 +104,7 @@ fun HomeScreen() {
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
 
-                    .background(Color(0x80000000))
+                  //  .background(Color(0x80000000))
             ) {
                 Text(
                     modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 5.dp),

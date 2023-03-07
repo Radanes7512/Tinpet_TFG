@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit
 
 class LoginViewModel(context: Context) : ViewModel() {
 
+    //Context parameter
     private val applicationContext = context.applicationContext
 
     private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
@@ -42,7 +43,6 @@ class LoginViewModel(context: Context) : ViewModel() {
 
     private val auth = Firebase.auth
 
-    //private val repository:miSQLiteHelper = miSQLiteHelper(context)
 
     // USER INFO
     private val _number = MutableLiveData<String>()
@@ -112,6 +112,7 @@ class LoginViewModel(context: Context) : ViewModel() {
 
     }
     fun register(context:Context){
+        //Firebase phone auth
         val options = number.value?.let {
             PhoneAuthOptions.newBuilder(auth)
                 .setPhoneNumber(it)
@@ -157,6 +158,7 @@ class LoginViewModel(context: Context) : ViewModel() {
         }
 
     }
+    //Console sms sender output
     fun autenticate(){
         Log.d(TAG, "Credenciales 1: "+ this.verifyNumber.value)
         val credential: PhoneAuthCredential? =
@@ -167,6 +169,7 @@ class LoginViewModel(context: Context) : ViewModel() {
             } }
         Log.d(TAG, "Credenciales 2 : "+ credential)
     }
+    //Log autentication
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(applicationContext as Activity) { task ->
@@ -185,15 +188,12 @@ class LoginViewModel(context: Context) : ViewModel() {
                 }
             }
     }
-    private fun isValidCode(smscode: String): Boolean = smscode.length == 4
+    private fun isValidCode(smscode: String): Boolean = smscode.length > 4
     private fun isValidPassword(password: String): Boolean = true
 
     private fun isValidNumber(number: String): Boolean  = true
-    private fun isValidNumber(number:String,phoneOutput:String,password:String, passwordOutput:String): Boolean  = number.length == 9 && number==phoneOutput
-    //guarripé que siempre es valido, meter condicion base de datos
     private fun isValidName(name: String): Boolean = name.length > 1
 
-    //guarripé que siempre es valido, meter condicion base de datos
     private fun isValidPetName(petname:String): Boolean = petname.length > 1
     private fun isValidPetAge(petage:String): Boolean = petage.length in 1..2
 

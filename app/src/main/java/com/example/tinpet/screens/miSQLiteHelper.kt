@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-
+//Incoming delete
 class miSQLiteHelper(context: Context) :SQLiteOpenHelper(
 
     context, "Tinpet.db", null, 1) {

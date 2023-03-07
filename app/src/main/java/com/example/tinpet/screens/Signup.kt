@@ -4,6 +4,7 @@ import android.app.Activity
 import android.renderscript.ScriptGroup.Binding
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -135,9 +137,16 @@ fun SignupScreen(
                 }
             }
             Spacer(modifier = Modifier.padding(10.dp))
-            ClickableText(
-                text = AnnotatedString("Volver"),
-                onClick = { onBackClick() }
+            Text(
+                text = stringResource(R.string.login_ES),
+                modifier = Modifier.clickable { onBackClick() },
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                color = if (isSystemInDarkTheme()) {
+                    Color(0xFFFFFFFF)
+                } else {
+                    Color(0xFFFB9600)
+                }
             )
         }
     }
@@ -404,7 +413,7 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
             } else {
                 SPrefixVisualTransformationLight("+34 | ")
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }

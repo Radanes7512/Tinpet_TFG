@@ -83,12 +83,11 @@ class LoginViewModel(context:Context) : ViewModel() {
         number.value?.let { password.value?.let { it1 -> repository.addUser(it, it1) } }
         var resultado = number.value?.let { repository.getUser(it) }
         Toast.makeText(context, "$resultado", Toast.LENGTH_SHORT).show()
-
     }
-    private fun  isValidCode(smscode: String): Boolean = smscode.length == 4
+    private fun isValidCode(smscode: String): Boolean = smscode.length == 4
     private fun isValidPassword(password: String): Boolean = password.length > 9
 
-    private fun isValidNumber(number: String): Boolean  = number.length == 9
+    private fun isValidNumber(number: String): Boolean  = number.length == 12
 
     //guarripé que siempre es valido, meter condicion base de datos
     private fun isValidName(name: String): Boolean = name.length > 1

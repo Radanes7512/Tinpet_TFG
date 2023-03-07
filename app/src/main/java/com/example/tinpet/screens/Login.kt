@@ -133,9 +133,16 @@ fun LoginScreen(
                 }
             }
             Spacer(modifier = Modifier.padding(10.dp))
-            ClickableText(
-                text = AnnotatedString("Crear cuenta"),
-                onClick = {onRegClick() }
+            Text(
+                text = stringResource(R.string.signup_access_ES),
+                modifier = Modifier.clickable { onRegClick() },
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                color = if (isSystemInDarkTheme()) {
+                    Color(0xFFFFFFFF)
+                } else {
+                    Color(0xFFFB9600)
+                }
             )
         }
     }

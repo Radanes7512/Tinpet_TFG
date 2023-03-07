@@ -162,7 +162,7 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel,onRegClick: () -> Unit) 
         Spacer(modifier = Modifier.padding(5.dp))
         LPasswordField(password) { viewModel.onLoginChanged(number, it) }
         Spacer(modifier = Modifier.padding(10.dp))
-        ForgotPassword(Modifier.align(Alignment.End),onRegClick={onRegClick()})
+        //ForgotPassword(Modifier.align(Alignment.End),onRegClick={onRegClick()})
         Spacer(modifier = Modifier.padding(15.dp))
     }
 }

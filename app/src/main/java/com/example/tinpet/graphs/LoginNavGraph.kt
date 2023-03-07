@@ -25,6 +25,10 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
                     navController.popBackStack()
                     navController.navigate(Graph.MAIN)
                 },
+                onRegClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.Signup.route)
+                },
                 viewModel = LoginViewModel(LocalContext.current)
             )
         }

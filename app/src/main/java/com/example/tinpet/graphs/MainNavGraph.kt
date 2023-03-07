@@ -32,6 +32,10 @@ fun MainNavigationGraph(navController: NavHostController) {
                     navController.popBackStack()
                     navController.navigate(AppScreens.SmsInput.route)
                 },
+                onBackClick = {
+                    navController.popBackStack()
+                    navController.navigate(Graph.AUTHENTICATION)
+                },
                 viewModel = LoginViewModel(LocalContext.current)
             )
         }

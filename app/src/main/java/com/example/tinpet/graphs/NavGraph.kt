@@ -55,6 +55,10 @@ fun NavGraph(
                 onBackClick = {
                     navController.popBackStack()
                     navController.navigate(AppScreens.Profile.route)
+                },
+                onAddClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.Addpet.route)
                 }
             )
         }

@@ -24,7 +24,8 @@ import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
 fun PetsScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onAddClick:()->Unit
 ){
     Box(
         modifier = Modifier
@@ -98,22 +99,11 @@ fun PetsScreen(
                     }
                 }
             }
+            item{
+                FloatingActionButton(onClick = {onAddClick()}){}
+            }
         }
     }
 }
 
-@Composable
-@Preview
-fun PetsPreviewDT() {
-    TinPetTheme(darkTheme = false) {
-        PetsScreen(onBackClick = {})
-    }
-}
-@Composable
-@Preview
-fun PetsPreviewLT() {
-    TinPetTheme(darkTheme = true) {
-        PetsScreen(onBackClick = {})
-    }
-}
 

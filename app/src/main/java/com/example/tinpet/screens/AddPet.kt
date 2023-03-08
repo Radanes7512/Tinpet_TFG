@@ -1,6 +1,9 @@
 package com.example.tinpet.screens
 
-import com.example.tinpet.screens.LoginViewModel
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -12,26 +15,31 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.tinpet.R
-import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
 fun AddPetScreen(
     viewModel: LoginViewModel,
-    onClick:() -> Unit
+    onClick: () -> Unit
 ) {
+    // Agregar un estado composable para almacenar la imagen seleccionada
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+
     val addpetEnable: Boolean by viewModel.addpetEnable.observeAsState(initial = false)
     Column(
         modifier = Modifier
@@ -74,7 +82,10 @@ fun AddPetScreen(
             }
         }
         // ADDPET COMPONENTS
-        AddPet(Modifier,viewModel)
+        // Pasar selectedImageUri como una variable a AddPet
+        AddPet(Modifier, viewModel, selectedImageUri) {
+            selectedImageUri = it
+        }
 
         // BOTÓN CREAR CUENTA
         Row(
@@ -82,10 +93,12 @@ fun AddPetScreen(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            if(addpetEnable){
+            if (addpetEnable) {
                 Button(
-                    onClick = { viewModel.autenticate()
-                        onClick() },
+                    onClick = {
+                        viewModel.autenticate()
+                        onClick()
+                    },
                     enabled = true,
                     shape = RoundedCornerShape(25),
                     colors = ButtonDefaults.buttonColors(
@@ -100,13 +113,12 @@ fun AddPetScreen(
                         contentDescription = null,
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
-
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text(
                         text = stringResource(R.string.addpet_access_ES)
                     )
                 }
-            }else{
+            } else {
                 Button(
                     onClick = {},
                     enabled = false,
@@ -131,23 +143,28 @@ fun AddPetScreen(
 }
 
 
-
 @Composable
-fun AddPet(modifier: Modifier, viewModel: LoginViewModel) {
-    val un = viewModel.name
+fun AddPet(
+    modifier: Modifier,
+    viewModel: LoginViewModel,
+    selectedImageUri: Uri?,
+    onImageSelected: (Uri) -> Unit
+) {
     val petname: String by viewModel.petname.observeAsState(initial = "")
     val petage: String by viewModel.petage.observeAsState(initial = "")
-
+    
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.padding(15.dp))
         ApTitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        ApPetName(petname) {viewModel.onAddpetChanged(it, petage )}
+        ApPetName(petname) { viewModel.onAddpetChanged(it, petage) }
         Spacer(modifier = Modifier.padding(5.dp))
-        ApPetAge(petage) { viewModel.onAddpetChanged(petname, it )}
+        ApPetAge(petage) { viewModel.onAddpetChanged(petname, it) }
         Spacer(modifier = Modifier.padding(5.dp))
+        ApAddPhotos(modifier = Modifier,onImageSelected = { uri -> onImageSelected(uri) })
         Spacer(modifier = Modifier.padding(15.dp))
     }
+
 }
 
 @Composable
@@ -252,17 +269,126 @@ fun ApPetName(petname: String, onTextFieldChanged: (String) -> Unit) {
 }
 
 @Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun AddPetScreenPreviewLT() {
-    TinPetTheme(darkTheme = false) {
-        AddPetScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
-    }
-}
+fun ApAddPhotos(
+    modifier: Modifier = Modifier,
+    onImageSelected: (Uri) -> Unit,
+) {
+    // Agregar un estado composable para almacenar la imagen seleccionada
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    val deletePhotoConfirm = remember { mutableStateOf(false) }
 
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun AddPetScreenPreviewDT() {
-    TinPetTheme(darkTheme = true) {
-        AddPetScreen(viewModel = LoginViewModel(LocalContext.current),onClick = {})
+    // Llamar a rememberLauncherForActivityResult para obtener el resultado de la selección de la imagen
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            selectedImageUri = it
+            onImageSelected(it)
+        }
     }
-}
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Button(
+            onClick = { launcher.launch("image/*") },
+            modifier = Modifier
+                .padding(vertical = 16.dp),
+            shape = RoundedCornerShape(25),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.secondaryVariant,
+                disabledBackgroundColor = MaterialTheme.colors.onSurface,
+                contentColor = Color.Black,
+                disabledContentColor = Color.White
+            )
+        ) {
+            Text("Añadir foto")
+        }
+        if (selectedImageUri != null) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp)
+            ) {
+                Box(
+                    modifier = Modifier,
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = rememberAsyncImagePainter(selectedImageUri),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .height(200.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .alpha(0.8f) // Agregar transparencia
+                    )
+                    IconButton(
+                        onClick = { deletePhotoConfirm.value = true },
+                        modifier = Modifier.padding(4.dp)
+                    ) {
+                        Icon(Icons.Filled.Delete, contentDescription = null, tint = Color.Red)
+                    }
+                }
+
+            }
+        }
+    }
+    if (deletePhotoConfirm.value) {
+        AlertDialog(
+            onDismissRequest = {
+                deletePhotoConfirm.value = false
+            },
+            text = {
+                Text(
+                    text = "¿Desea borrar la foto?",
+                    fontSize = 20.sp,
+                    fontFamily = abrilFatface,
+                    color = MaterialTheme.colors.onBackground
+                )
+            },
+            shape = RoundedCornerShape(size = 30.dp),
+            backgroundColor = MaterialTheme.colors.background,
+            buttons = {
+                Row(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(
+                        modifier = Modifier
+                            .padding(10.dp),
+                        border = BorderStroke(2.dp, MaterialTheme.colors.onBackground),
+                        shape = RoundedCornerShape(size = 30.dp),
+                        onClick = { deletePhotoConfirm.value = false }
+                    ) {
+                        Text(
+                            text = "No",
+                            fontFamily = abrilFatface,
+                            color = MaterialTheme.colors.onBackground
+                        )
+                    }
+                    TextButton(
+                        modifier = Modifier
+                            .padding(10.dp),
+                        border = BorderStroke(2.dp, MaterialTheme.colors.onBackground),
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colors.error),
+                        shape = RoundedCornerShape(size = 30.dp),
+                        //elevation = 10,
+                        onClick = { selectedImageUri = null }
+                    ) {
+                        Text(
+                            text = "Eliminar",
+                            fontFamily = abrilFatface,
+                            color = Color.White
+                        )
+                    }
+                }
+            })
+            }
+    }
+
+
+

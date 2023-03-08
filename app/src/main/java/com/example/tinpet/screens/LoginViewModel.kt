@@ -1,31 +1,21 @@
 package com.example.tinpet.screens
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Application
 import android.content.Context
+import android.net.Uri
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
-import com.example.tinpet.AppScreens
-import com.example.tinpet.MainActivity
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
 import java.util.concurrent.TimeUnit
-
-
 class LoginViewModel(context: Context) : ViewModel() {
 
     //Context parameter
@@ -67,6 +57,9 @@ class LoginViewModel(context: Context) : ViewModel() {
 
     private val _petage = MutableLiveData<String>()
     val petage: LiveData<String> = _petage
+
+    private val _petImageUri = MutableLiveData<Uri>()
+    val petImageUri: LiveData<Uri> = _petImageUri
 
     // VAL FUNCTIONS
     private val _loginEnable = MutableLiveData<Boolean>()

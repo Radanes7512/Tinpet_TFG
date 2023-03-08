@@ -193,7 +193,6 @@ class LoginViewModel(context: Context) : ViewModel() {
 
     private fun isValidNumber(number: String): Boolean  = true
     private fun isValidName(name: String): Boolean = name.length > 1
-
     private fun isValidPetName(petname:String): Boolean = petname.length > 1
     private fun isValidPetAge(petage:String): Boolean = petage.length in 1..2
 

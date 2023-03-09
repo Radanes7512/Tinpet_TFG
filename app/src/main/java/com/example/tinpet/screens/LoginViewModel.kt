@@ -6,6 +6,9 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -48,6 +51,9 @@ class LoginViewModel(context: Context) : ViewModel() {
     private val _number = MutableLiveData<String>()
     val number: LiveData<String> = _number
 
+    private val _email = MutableLiveData<String>()
+    val email: LiveData<String> = _email
+
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> = _name
 
@@ -81,8 +87,11 @@ class LoginViewModel(context: Context) : ViewModel() {
     private val _addpetEnable = MutableLiveData<Boolean>()
     val addpetEnable: LiveData<Boolean> = _addpetEnable
 
+    var uiState = mutableStateOf<UiState>(UiState.SignedOut)
+
     fun onLoginChanged(number: String, password: String) {
         _number.value = number
+        _email.value= number
         _password.value = password
         _loginEnable.value = isValidNumber(number) && isValidPassword(password)
     }
@@ -93,6 +102,7 @@ class LoginViewModel(context: Context) : ViewModel() {
     fun onSignupChanged(number: String,name: String,password: String, password2:String){
         _number.value = number
         _name.value = name
+        _email.value= number
         _password.value = password
         _password2.value = password2
         _signupEnable.value = isValidNumber(number) && isValidName(name) && isValidPassword(password) && password == password2
@@ -107,57 +117,52 @@ class LoginViewModel(context: Context) : ViewModel() {
         _petage.value = petage
         _addpetEnable.value = isValidPetName(petname) && isValidPetAge(petage)
     }
-    fun login(){
-
-
-    }
-    fun register(context:Context){
-        //Firebase phone auth
-        val options = number.value?.let {
-            PhoneAuthOptions.newBuilder(auth)
-                .setPhoneNumber(it)
-                .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(context as Activity)
-                .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
-                    override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-
-                        Log.d(TAG, "onVerificationCompleted:$credential")
-                        signInWithPhoneAuthCredential(credential)
-                    }
-
-                    override fun onVerificationFailed(e: FirebaseException) {
-
-                        Log.w(TAG, "onVerificationFailed", e)
-
-                        if (e is FirebaseAuthInvalidCredentialsException) {
-
-                        } else if (e is FirebaseTooManyRequestsException) {
+    fun login(context: Context){
+        Log.d(TAG, "email: "+email.value)
+        Log.d(TAG, "email: "+password.value)
+        email.value?.let {
+            password.value?.let { it1 ->
+                auth.signInWithEmailAndPassword(it, it1)
+                    .addOnCompleteListener(context as Activity) { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success")
+                            val user = auth.currentUser
+                            uiState.value = UiState.SignIn
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.exception)
+                            Toast.makeText(context, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show()
 
                         }
                     }
-
-                    override fun onCodeSent(
-                        verificationId: String,
-                        token: PhoneAuthProvider.ForceResendingToken
-                    ) {
-                        super.onCodeSent(verificationId,token)
-
-                        Log.d(TAG, "onCodeSent:$verificationId")
-
-
-                        storedVerificationId = verificationId
-                        resendToken = token
-                    }
-                }
-                )
-                .build()
-        }
-        if (options != null) {
-            PhoneAuthProvider.verifyPhoneNumber(options)
+            }
         }
 
     }
+    fun register(context:Context){
+        email.value?.let {
+            password.value?.let { it1 ->
+                auth.createUserWithEmailAndPassword(it, it1)
+                    .addOnCompleteListener(context as Activity) { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success")
+                            val user = auth.currentUser
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                            Toast.makeText(context, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show()
+                        }
+                    }
+            }
+        }
+
+    }
+
     //Console sms sender output
     fun autenticate(){
         Log.d(TAG, "Credenciales 1: "+ this.verifyNumber.value)

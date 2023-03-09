@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
-import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 @Composable
@@ -256,21 +255,5 @@ fun SettingsScreen(
                 }
             }
         )
-    }
-}
-
-@Composable
-@Preview
-fun SettingScreenPreviewLT() {
-    TinPetTheme(darkTheme = false) {
-        SettingsScreen(onCloseClick = {}, onBackClick = {}, onAboutClick = {}, onNotifyClick = {})
-    }
-}
-
-@Composable
-@Preview
-fun SettingScreenPreviewDT() {
-    TinPetTheme(darkTheme = true) {
-        SettingsScreen(onCloseClick = {}, onBackClick = {}, onAboutClick = {}, onNotifyClick = {})
     }
 }

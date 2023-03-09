@@ -4,21 +4,15 @@ import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.FirebaseException
-import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.PhoneAuthOptions
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
-import java.util.concurrent.TimeUnit
+import com.google.firebase.ktx.Firebase
 class LoginViewModel(context: Context) : ViewModel() {
 
     //Context parameter
@@ -120,8 +114,7 @@ class LoginViewModel(context: Context) : ViewModel() {
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success")
-                            val user = auth.currentUser
-                            uiState.value = UiState.SignIn
+                            checkIfEmailVerified()
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.exception)
@@ -143,6 +136,7 @@ class LoginViewModel(context: Context) : ViewModel() {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success")
                             val user = auth.currentUser
+                            sendVerificationEmail()
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -155,7 +149,26 @@ class LoginViewModel(context: Context) : ViewModel() {
         }
 
     }
+    private fun sendVerificationEmail() {
+        val user = auth.currentUser
+        user!!.sendEmailVerification()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "Email sent.")
+                }
+            }
+    }
+    private fun checkIfEmailVerified() {
+        val user = auth.currentUser
+        if (user!!.isEmailVerified()) {
+            uiState.value = UiState.SignIn
 
+        } else {
+
+            FirebaseAuth.getInstance().signOut()
+
+        }
+    }
     //Console sms sender output
     fun autenticate(){
         Log.d(TAG, "Credenciales 1: "+ this.verifyNumber.value)

@@ -95,7 +95,7 @@ fun SignupScreen(
                 Button(
                     onClick = {
                         viewModel.register(context)
-                        onClick()
+                       //onClick()
                     },
                     enabled = true,
                     shape = RoundedCornerShape(25),

@@ -38,6 +38,11 @@ fun LoginScreen(
 ) {
     val loginEnable: Boolean by viewModel.loginEnable.observeAsState(initial = false)
     val context = LocalContext.current
+    when(viewModel.uiState.value){
+
+        is UiState.SignIn -> onClick()
+        else -> {}
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -90,8 +95,8 @@ fun LoginScreen(
             if (loginEnable) {
                 Button(
                     onClick = {
-                        viewModel.login()
-                       // onClick()
+                        viewModel.login(context)
+
                     },
                     enabled = true,
                     shape = RoundedCornerShape(25),

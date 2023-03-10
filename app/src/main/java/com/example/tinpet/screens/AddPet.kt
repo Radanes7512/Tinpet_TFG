@@ -96,7 +96,6 @@ fun AddPetScreen(
             if (addpetEnable) {
                 Button(
                     onClick = {
-                        viewModel.autenticate()
                         onClick()
                     },
                     enabled = true,
@@ -377,7 +376,10 @@ fun ApAddPhotos(
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.error),
                         shape = RoundedCornerShape(size = 30.dp),
                         //elevation = 10,
-                        onClick = { selectedImageUri = null }
+                        onClick = {
+                            selectedImageUri = null
+                            deletePhotoConfirm.value = false
+                        }
                     ) {
                         Text(
                             text = "Eliminar",

@@ -20,10 +20,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.tinpet.graphs.NavGraph
 import com.example.tinpet.R
+import com.example.tinpet.screens.LoginViewModel
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
@@ -33,8 +35,10 @@ fun ProfileScreen(
     onSetClick: () -> Unit,
     onPetClick: () -> Unit,
     onFrdClick: () -> Unit,
-    onRqtClick: () -> Unit
+    onRqtClick: () -> Unit,
+    viewModel: LoginViewModel
 ) {
+
     NavGraph(navController = navController)
     Box(
         modifier = Modifier.background(color = MaterialTheme.colors.background),
@@ -54,8 +58,8 @@ fun ProfileScreen(
                     Text(
                         modifier = Modifier.padding(5.dp),
                         textAlign = TextAlign.Center,
-                        text = stringResource(R.string.user_name).uppercase(),
-                        fontSize = 32.sp,
+                        text = viewModel.username //stringResource(R.string.user_name).uppercase(),
+                        ,fontSize = 32.sp,
                         fontFamily = abrilFatface,
                         color = MaterialTheme.colors.onBackground
                     )
@@ -174,23 +178,5 @@ fun ProfileScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-@Preview
-fun ProfileScreenPreviewLT() {
-    val navController = rememberNavController()
-    TinPetTheme(darkTheme = false) {
-        ProfileScreen(navController, onSetClick = {}, onFrdClick = {}, onPetClick = {}, onRqtClick = {})
-    }
-}
-
-@Composable
-@Preview
-fun ProfileScreenPreviewDT() {
-    val navController = rememberNavController()
-    TinPetTheme(darkTheme = true) {
-        ProfileScreen(navController, onSetClick = {}, onFrdClick = {}, onPetClick = {}, onRqtClick = {})
     }
 }

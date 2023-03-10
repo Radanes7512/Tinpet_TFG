@@ -1,5 +1,6 @@
 package com.example.tinpet.graphs
 
+import ChatScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.*
@@ -31,7 +32,9 @@ fun NavGraph(
             HomeScreen()
         }
         composable(route=AppScreens.Chat.route){
-            ChatScreen()
+            ChatScreen(
+                viewModel= ChatViewModel()
+            )
         }
         composable(route = AppScreens.Profile.route){
             ProfileScreen(
@@ -46,7 +49,8 @@ fun NavGraph(
                 },
                 onRqtClick ={
                     navController.navigate(AppScreens.Requests.route)
-                }
+                },
+                viewModel = LoginViewModel(LocalContext.current)
 
             )
         }

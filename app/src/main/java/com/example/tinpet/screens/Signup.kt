@@ -156,7 +156,7 @@ fun SignupScreen(
 
 @Composable
 fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
-    val number: String by viewModel.number.observeAsState(initial = "")
+    val email: String by viewModel.email.observeAsState(initial = "")
     val name: String by viewModel.name.observeAsState(initial = "")
     val password: String by viewModel.password.observeAsState(initial = "")
     val password2: String by viewModel.password2.observeAsState(initial = "")
@@ -165,13 +165,13 @@ fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
         Spacer(modifier = Modifier.padding(15.dp))
         STitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        SUserField(number) { viewModel.onSignupChanged(it, name, password, password2) }
+        SUserField(email) { viewModel.onSignupChanged(it, name, password, password2) }
         Spacer(modifier = Modifier.padding(5.dp))
-        SUserName(name){viewModel.onSignupChanged(number, it, password, password2)}
+        SUserName(name){viewModel.onSignupChanged(email, it, password, password2)}
         Spacer(modifier = Modifier.padding(5.dp))
-        SPasswordField(password) { viewModel.onSignupChanged(number, name, it, password2) }
+        SPasswordField(password) { viewModel.onSignupChanged(email, name, it, password2) }
         Spacer(modifier = Modifier.padding(5.dp))
-        RepeatPassword(password2) { viewModel.onSignupChanged(number, name, password, it) }
+        RepeatPassword(password2) { viewModel.onSignupChanged(email, name, password, it) }
         Spacer(modifier = Modifier.padding(15.dp))
     }
 }
@@ -373,7 +373,7 @@ fun SPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
 }
 
 @Composable
-fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
+fun SUserField(email: String, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -382,7 +382,7 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
     ) {
         // Nombre del usuario
         OutlinedTextField(
-            value = number,
+            value = email,
             onValueChange = {
                 onTextFieldChanged(it)
             },

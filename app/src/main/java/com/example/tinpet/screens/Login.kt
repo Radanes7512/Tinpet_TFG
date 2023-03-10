@@ -156,16 +156,16 @@ fun LoginScreen(
 
 @Composable
 fun Login(modifier: Modifier, viewModel: LoginViewModel,onRegClick: () -> Unit) {
-    val number: String by viewModel.number.observeAsState(initial = "")
+    val email: String by viewModel.email.observeAsState(initial = "")
     val password: String by viewModel.password.observeAsState(initial = "")
 
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.padding(15.dp))
         LTitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        LUserField(number) { viewModel.onLoginChanged(it, password) }
+        LUserField(email) { viewModel.onLoginChanged(it, password) }
         Spacer(modifier = Modifier.padding(5.dp))
-        LPasswordField(password) { viewModel.onLoginChanged(number, it) }
+        LPasswordField(password) { viewModel.onLoginChanged(email, it) }
         Spacer(modifier = Modifier.padding(10.dp))
         //ForgotPassword(Modifier.align(Alignment.End),onRegClick={onRegClick()})
         Spacer(modifier = Modifier.padding(15.dp))
@@ -278,7 +278,7 @@ fun LPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
 }
 
 @Composable
-fun LUserField(number: String, onTextFieldChanged: (String) -> Unit) {
+fun LUserField(email: String, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -287,7 +287,7 @@ fun LUserField(number: String, onTextFieldChanged: (String) -> Unit) {
     ) {
         // Nombre del usuario
         OutlinedTextField(
-            value = number,
+            value = email,
             onValueChange = {
                 onTextFieldChanged(it)
             },

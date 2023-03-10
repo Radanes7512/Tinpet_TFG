@@ -135,7 +135,7 @@ fun InputSms(modifier: Modifier, viewModel: LoginViewModel) {
         Spacer(modifier = Modifier.padding(15.dp))
         ISTitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        ISinput(smscode) {viewModel.onSmsChanged(it)}
+
 
         Spacer(modifier = Modifier.padding(5.dp))
 

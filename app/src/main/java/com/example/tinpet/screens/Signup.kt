@@ -388,37 +388,32 @@ fun SUserField(number: String, onTextFieldChanged: (String) -> Unit) {
             },
             label = {
                 Text(
-                    text = stringResource(R.string.user_number_ES),
+                    text = stringResource(R.string.user_mail_ES),
                     color = MaterialTheme.colors.onBackground
                 )
             },
             placeholder = {
                 Text(
-                    text = stringResource(R.string.phone_ES),
+                    text = stringResource(R.string.mail_ES),
                     color = MaterialTheme.colors.onBackground
                 )
             },
             leadingIcon = {
                 IconButton(onClick = { }) {
                     Icon(
-                        imageVector = Icons.Filled.PhoneAndroid,
+                        imageVector = Icons.Filled.Email,
                         tint = MaterialTheme.colors.onBackground,
                         contentDescription = null
                     )
                 }
             },
-            visualTransformation =
-            if (isSystemInDarkTheme()) {
-                SPrefixVisualTransformationDark("+34 | ")
-            } else {
-                SPrefixVisualTransformationLight("+34 | ")
-            },
-            //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }
 }
 
+//region FUNCIONES PREFIJO
 class SPrefixVisualTransformationDark(private val prefix: String) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val transformedText = AnnotatedString(
@@ -430,9 +425,11 @@ class SPrefixVisualTransformationDark(private val prefix: String) : VisualTransf
     }
 
 }
+
+
 class SPrefixVisualTransformationLight(private val prefix: String) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
-        val transformedText = AnnotatedString(
+        val transformedText = text+ AnnotatedString(
             prefix,
             SpanStyle(Color.Black)
         ) + text
@@ -449,3 +446,4 @@ class SPrefixOffsetMapping(private val prefix: String) : OffsetMapping {
         return if (delta < 0) 0 else delta
     }
 }
+//endregion

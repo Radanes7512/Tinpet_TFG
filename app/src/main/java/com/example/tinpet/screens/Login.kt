@@ -299,31 +299,26 @@ fun LUserField(number: String, onTextFieldChanged: (String) -> Unit) {
             },
             placeholder = {
                 Text(
-                    text = stringResource(R.string.phone_ES),
+                    text = stringResource(R.string.mail_ES),
                     color = MaterialTheme.colors.onBackground
                 )
             },
             leadingIcon = {
                 IconButton(onClick = { }) {
                     Icon(
-                        imageVector = Icons.Filled.PhoneAndroid,
+                        imageVector = Icons.Filled.Email,
                         tint = MaterialTheme.colors.onBackground,
                         contentDescription = null
                     )
                 }
             },
-            visualTransformation =
-            if (isSystemInDarkTheme()) {
-                LPrefixVisualTransformationDark("+34 | ")
-            } else {
-                LPrefixVisualTransformationLight("+34 | ")
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }
 }
 
+/*
 class LPrefixVisualTransformationDark(private val prefix: String) : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         val transformedText = AnnotatedString(
@@ -355,4 +350,4 @@ class LPrefixOffsetMapping(private val prefix: String) : OffsetMapping {
         val delta = offset - prefix.length
         return if (delta < 0) 0 else delta
     }
-}
+}*/

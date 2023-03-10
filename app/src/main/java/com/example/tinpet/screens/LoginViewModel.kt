@@ -1,6 +1,7 @@
 package com.example.tinpet.screens
 
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.net.Uri
 import android.util.Log
@@ -20,22 +21,10 @@ class LoginViewModel(context: Context) : ViewModel() {
     //Context parameter
     private val applicationContext = context.applicationContext
 
-    private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
-
-    private val _verifyNumber = MutableLiveData<String>()
-    val verifyNumber: LiveData<String> = _verifyNumber
-
-    private var storedVerificationId: String? = ""
-
-    val TAG = "login"
-
-
     private val auth = Firebase.auth
 
 
     // USER INFO
-    private val _number = MutableLiveData<String>()
-    val number: LiveData<String> = _number
 
     private val _email = MutableLiveData<String>()
     val email: LiveData<String> = _email
@@ -79,27 +68,20 @@ class LoginViewModel(context: Context) : ViewModel() {
     var uiState = mutableStateOf<UiState>(UiState.SignedOut)
 
     fun onLoginChanged(number: String, password: String) {
-        _number.value = number
         _email.value= number
         _password.value = password
         _loginEnable.value = isValidNumber(number) && isValidPassword(password)
     }
-    fun onVerifyNumberChanged(verifyNumber:String){
-        _verifyNumber.value = verifyNumber
-    }
 
-    fun onSignupChanged(number: String,name: String,password: String, password2:String){
-        _number.value = number
+    fun onSignupChanged(email: String,name: String,password: String, password2:String){
+
         _name.value = name
-        _email.value= number
+        _email.value= email
         _password.value = password
         _password2.value = password2
-        _signupEnable.value = isValidNumber(number) && isValidName(name) && isValidPassword(password) && password == password2
+        _signupEnable.value = isValidNumber(email) && isValidName(name) && isValidPassword(password) && password == password2
     }
-    fun onSmsChanged(smscode: String){
-        _smscode.value = smscode
-        _smsEnable.value = isValidCode(smscode)
-    }
+
 
     fun onAddpetChanged(petname: String, petage: String){
         _petname.value = petname
@@ -171,37 +153,7 @@ class LoginViewModel(context: Context) : ViewModel() {
 
         }
     }
-    //Console sms sender output
-    fun autenticate(){
-        Log.d(TAG, "Credenciales 1: "+ this.verifyNumber.value)
-        val credential: PhoneAuthCredential? =
-            storedVerificationId?.let { verifyNumber.value?.let { it1 ->
-                PhoneAuthProvider.getCredential(it,
-                    it1
-                )
-            } }
-        Log.d(TAG, "Credenciales 2 : "+ credential)
-    }
-    //Log autentication
-    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(applicationContext as Activity) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success")
 
-                    val user = task.result?.user
-                } else {
-                    // Sign in failed, display a message and update the UI
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                        // The verification code entered was invalid
-                    }
-                    // Update UI
-                }
-            }
-    }
-    private fun isValidCode(smscode: String): Boolean = smscode.length > 4
     private fun isValidPassword(password: String): Boolean = true
 
     private fun isValidNumber(number: String): Boolean  = true

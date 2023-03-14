@@ -1,3 +1,5 @@
+package com.example.tinpet.screens.mainMenu
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,7 +17,7 @@ import com.example.tinpet.screens.mainMenu.ChatViewModel
 @Composable
 fun ChatScreen(viewModel: ChatViewModel) {
     BoxWithConstraints(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().padding(16.dp, 16.dp, 16.dp, 50.dp)
     ) {
         // Lista de mensajes
         val messages = viewModel.messages
@@ -61,4 +63,3 @@ fun ChatScreen(viewModel: ChatViewModel) {
 fun MessageItem(message: String) {
     Text(text = message)
 }
-

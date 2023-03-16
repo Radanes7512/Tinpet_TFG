@@ -18,6 +18,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 class LoginViewModel(context: Context) : ViewModel() {
 
@@ -25,7 +26,6 @@ class LoginViewModel(context: Context) : ViewModel() {
     private val applicationContext = context.applicationContext
 
 
-    
     private val auth = Firebase.auth
 
     private val rtdb = Firebase.database.reference
@@ -76,6 +76,10 @@ class LoginViewModel(context: Context) : ViewModel() {
 
     var uiState = mutableStateOf<UiState>(UiState.SignedOut)
 
+    init {
+
+    }
+
     fun onLoginChanged(number: String, password: String) {
         _email.value= number
         _password.value = password
@@ -98,9 +102,6 @@ class LoginViewModel(context: Context) : ViewModel() {
         _addpetEnable.value = isValidPetName(petname) && isValidPetAge(petage)
     }
     fun login(context: Context){
-        var xid: String = "0"
-        var xnombre: String = "andres"
-        var xemail: String = "andres.gonzalez.perezagp@gmail.com"
         Log.d(TAG, "email: "+email.value)
         Log.d(TAG, "email: "+password.value)
         email.value?.let {
@@ -109,7 +110,6 @@ class LoginViewModel(context: Context) : ViewModel() {
                     .addOnCompleteListener(context as Activity) { task ->
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
-                            writeNewUser(xid,xnombre,xemail)
                             Log.d(TAG, "signInWithEmail:success")
                             checkIfEmailVerified()
                         } else {
@@ -134,6 +134,7 @@ class LoginViewModel(context: Context) : ViewModel() {
                             Log.d(TAG, "createUserWithEmail:success")
                             val user = auth.currentUser
                             sendVerificationEmail()
+                            name.value?.let { it2 -> writeNewUser(email.value!!, it2) }
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -167,10 +168,9 @@ class LoginViewModel(context: Context) : ViewModel() {
         }
     }
 
-    fun writeNewUser(userId: String, name: String, email: String) {
-        val user = User(_name.value, _email.value)
-    //users can update their profiles
-        rtdb.child("users").child(userId).child("username").setValue(name)
+    fun writeNewUser(name: String, email: String) {
+        val user = User(name, email)
+        rtdb.child("users").setValue(user)
 
     }
 

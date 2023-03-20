@@ -1,5 +1,6 @@
 package com.example.tinpet.screens
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -38,6 +39,8 @@ class LoginViewModel(context: Context) : ViewModel() {
 
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> = _name
+
+    var username = ""
 
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> = _password

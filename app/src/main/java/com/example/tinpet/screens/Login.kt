@@ -272,7 +272,8 @@ fun LPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
                 VisualTransformation.None
             } else {
                 PasswordVisualTransformation()
-            }
+            },
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Send)
         )
     }
 }
@@ -317,37 +318,3 @@ fun LUserField(email: String, onTextFieldChanged: (String) -> Unit) {
         )
     }
 }
-
-/*
-class LPrefixVisualTransformationDark(private val prefix: String) : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        val transformedText = AnnotatedString(
-            prefix,
-            SpanStyle(Color.White)
-        ) + text
-
-        return TransformedText(transformedText, LPrefixOffsetMapping(prefix))
-    }
-
-}
-
-class LPrefixVisualTransformationLight(private val prefix: String) : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        val transformedText = AnnotatedString(
-            prefix,
-            SpanStyle(Color.Black)
-        ) + text
-
-        return TransformedText(transformedText, LPrefixOffsetMapping(prefix))
-    }
-
-}
-
-class LPrefixOffsetMapping(private val prefix: String) : OffsetMapping {
-    override fun originalToTransformed(offset: Int): Int = offset + prefix.length
-
-    override fun transformedToOriginal(offset: Int): Int {
-        val delta = offset - prefix.length
-        return if (delta < 0) 0 else delta
-    }
-}*/

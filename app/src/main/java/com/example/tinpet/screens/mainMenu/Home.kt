@@ -22,7 +22,6 @@ import com.example.tinpet.R
 import com.example.tinpet.ui.theme.abrilFatface
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen() {
     // LISTA DE FOTOS DE PERROS ( DE MOMENTO LAS ALMACENAMOS ASÍ)

@@ -37,7 +37,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         AppScreens.Places,
         AppScreens.Connect,
         AppScreens.Home,
-        AppScreens.Chat,
+        AppScreens.ChatUsers,
         AppScreens.Profile,
         AppScreens.Settings,
         AppScreens.Requests,
@@ -61,7 +61,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
     }
 }
 
-// MENÚ SUPERIOR
+//region MENÚ SUPERIOR
 @Composable
 fun TopBar(
     onClick: () -> Unit
@@ -95,85 +95,16 @@ fun TopBar(
     }
 
 }
+//endregion
 
-// MENÚ INFERIOR
-/*
-@Composable
-fun BottomBar(
-    screen: AppScreens,
-    currentDestination: NavDestination?,
-    navController: NavHostController
-) {
-    val iconWidth = 30
-    val iconHeight = 30
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = MaterialTheme.colors.primaryVariant),
-        contentAlignment = Alignment.Center,
-
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(15.dp)
-            //.background(color = MaterialTheme.colors.primaryVariant)
-
-        ) {
-            Icon(
-                imageVector = AppScreens.Places.icon,
-                contentDescription = null,
-                Modifier
-                    .clickable { navController.navigate(route = AppScreens.Places.route) }
-                    .size(iconWidth.dp, iconHeight.dp)
-
-
-            )
-            Icon(
-                imageVector = AppScreens.Connect.icon,
-                contentDescription = null,
-                Modifier
-                    .clickable { navController.navigate(route = AppScreens.Connect.route) }
-                    .size(iconWidth.dp, iconHeight.dp)
-
-            )
-            Icon(
-                imageVector = AppScreens.Home.icon,
-                contentDescription = null,
-                Modifier
-                    .clickable { navController.navigate(route = AppScreens.Home.route) }
-                    .size(iconWidth.dp, iconHeight.dp)
-
-            )
-            Icon(
-                imageVector = AppScreens.Chat.icon,
-                contentDescription = null,
-                Modifier
-                    .clickable { navController.navigate(route = AppScreens.Chat.route) }
-                    .size(iconWidth.dp, iconHeight.dp)
-
-            )
-            Icon(
-                imageVector = AppScreens.Profile.icon,
-                contentDescription = null,
-                Modifier
-                    .clickable { navController.navigate(route = AppScreens.Profile.route) }
-                    .size(iconWidth.dp, iconHeight.dp)
-
-            )
-        }
-    }
-}
-*/
+//region MENÚ INFERIOR
 @Composable
 fun BottomBar2(navController: NavHostController) {
     val screens = listOf(
         AppScreens.Places,
         AppScreens.Connect,
         AppScreens.Home,
-        AppScreens.Chat,
+        AppScreens.ChatUsers,
         AppScreens.Profile
     )
 
@@ -195,7 +126,9 @@ fun BottomBar2(navController: NavHostController) {
         }
     }
 }
+//endregion
 
+//region AÑADIR ITEM
 @Composable
 fun RowScope.AddItem(
     screen: AppScreens,
@@ -229,21 +162,4 @@ fun RowScope.AddItem(
         }
     )
 }
-
-@Composable
-@Preview
-fun PreviewMainScreen() {
-    val navController = rememberNavController()
-    TinPetTheme(darkTheme = false) {
-        MainScreen(navController)
-    }
-}
-
-@Composable
-@Preview
-fun PreviewMainScreenDT() {
-    val navController = rememberNavController()
-    TinPetTheme(darkTheme = true) {
-        MainScreen(navController)
-    }
-}
+//endregion

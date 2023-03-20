@@ -30,8 +30,25 @@ fun NavGraph(
             route=AppScreens.Home.route){
             HomeScreen()
         }
+        composable(route=AppScreens.ChatUsers.route){
+            ChatUsersScreen(
+                onClick = {
+                    navController.navigate(AppScreens.Chat.route)
+                },
+                onBackClick =  {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.ChatUsers.route)
+                }
+            )
+        }
         composable(route=AppScreens.Chat.route){
-            ChatScreen()
+            ChatScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.ChatUsers.route)
+                },
+                viewModel= ChatViewModel()
+            )
         }
         composable(route = AppScreens.Profile.route){
             ProfileScreen(
@@ -46,7 +63,8 @@ fun NavGraph(
                 },
                 onRqtClick ={
                     navController.navigate(AppScreens.Requests.route)
-                }
+                },
+                viewModel = LoginViewModel(LocalContext.current)
 
             )
         }

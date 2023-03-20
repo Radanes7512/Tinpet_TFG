@@ -58,6 +58,11 @@ sealed class AppScreens(
         //title = "Chat",
         icon = Icons.Filled.ChatBubble
     )
+    object ChatUsers : AppScreens(
+        route = "chatusers",
+        //title = "Chat",
+        icon = Icons.Filled.ChatBubble
+    )
         // PERFIL
     object Profile : AppScreens(
         route = "profile",

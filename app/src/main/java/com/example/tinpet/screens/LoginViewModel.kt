@@ -11,15 +11,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import kotlin.random.Random
+
+
 class LoginViewModel(context: Context) : ViewModel() {
 
     //Context parameter
@@ -76,9 +74,6 @@ class LoginViewModel(context: Context) : ViewModel() {
 
     var uiState = mutableStateOf<UiState>(UiState.SignedOut)
 
-    init {
-
-    }
 
     fun onLoginChanged(number: String, password: String) {
         _email.value= number
@@ -125,6 +120,7 @@ class LoginViewModel(context: Context) : ViewModel() {
 
     }
     fun register(context:Context){
+        var inc =  Random.nextInt(0, 10001)
         email.value?.let {
             password.value?.let { it1 ->
                 auth.createUserWithEmailAndPassword(it, it1)
@@ -134,12 +130,14 @@ class LoginViewModel(context: Context) : ViewModel() {
                             Log.d(TAG, "createUserWithEmail:success")
                             val user = auth.currentUser
                             sendVerificationEmail()
-                            name.value?.let { it2 -> writeNewUser(email.value!!, it2) }
-
+                            name.value?.let { it2 -> writeNewUser(inc, it2, email.value!!) }
+                            readUser()
+                            Toast.makeText(context, "Se ha creado su cuenta correctamente",
+                                Toast.LENGTH_SHORT).show()
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                            Toast.makeText(context, "Authentication failed.",
+                            Toast.makeText(context, "Ha ocurrido un error, en el registro",
                                 Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -168,11 +166,28 @@ class LoginViewModel(context: Context) : ViewModel() {
         }
     }
 
-    fun writeNewUser(name: String, email: String) {
+    fun writeNewUser(userId : Int ,name: String, email: String) {
         val user = User(name, email)
-        rtdb.child("users").setValue(user)
+        rtdb.child("users").child(userId.toString()).setValue(user)
 
     }
+
+    fun readUser() {
+
+        rtdb.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                val value = dataSnapshot.value as Map<String, Any>?
+                Log.d(TAG, "Value is: $value")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+                Log.w(TAG, "Failed to read value.", error.toException())
+            }
+        })
+    }
+
 
 
     private fun isValidPassword(password: String): Boolean = true

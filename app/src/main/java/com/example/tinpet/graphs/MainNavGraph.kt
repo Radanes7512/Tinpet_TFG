@@ -71,14 +71,6 @@ fun MainNavigationGraph(navController: NavHostController) {
                 }
             )
         }
-        /*composable(
-            route = Graph.AUTHENTICATION,
-            deepLinks = listOf(
-                navDeepLink {
-                    uriPattern = "android-app://androidx.navigation/auth_graph"
-                })
-        ) {
-        }*/
     }
 }
 

@@ -7,10 +7,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -23,7 +26,9 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.tinpet.graphs.Graph
 import  com.example.tinpet.graphs.NavGraph
+import com.example.tinpet.screens.mainMenu.profile.ProfileScreen
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
@@ -38,7 +43,6 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         AppScreens.Connect,
         AppScreens.Home,
         AppScreens.ChatUsers,
-        AppScreens.Profile,
         AppScreens.Settings,
         AppScreens.Requests,
         AppScreens.AboutUs,
@@ -46,6 +50,8 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         AppScreens.Friends,
         AppScreens.Pets
     )
+    val profileScreens = listOf(AppScreens.Profile)
+    val profileTopBar = navController.currentBackStackEntryAsState().value?.destination?.route in profileScreens.map { it.route }
     val showTopBar = navController.currentBackStackEntryAsState().value?.destination?.route in screens.map { it.route }
     Scaffold(
         topBar = {
@@ -53,6 +59,15 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                 TopBar(onClick = {
                     navController.navigate(AppScreens.Home.route)
                 } )
+            }else if(profileTopBar){
+                ProfileTopBar(
+                    onClick = {
+                        navController.navigate(AppScreens.Home.route)
+                    },
+                    onSetClick = {
+                        navController.navigate(AppScreens.Settings.route)
+                    }
+                )
             }
         },
         bottomBar = { BottomBar2(navController = navController) }
@@ -60,6 +75,56 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         NavGraph(navController = navController)
     }
 }
+
+//region MENÚ SUPERIOR PERFIL
+@Composable
+fun ProfileTopBar(
+    onClick: () -> Unit,
+    onSetClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = MaterialTheme.colors.primaryVariant)
+    ) {
+        Image(
+            modifier = Modifier
+                .size(64.dp)
+                .padding(8.dp)
+                .align(Alignment.Center),
+            painter = if (isSystemInDarkTheme()) {
+                painterResource(R.drawable.icon_pawprint_black)
+            } else {
+                painterResource(R.drawable.icon_pawprint_white)
+            },
+            contentDescription = null
+        )
+        Text(
+            modifier = Modifier
+                .clickable { onClick() }
+                .align(Alignment.Center),
+            text = stringResource(R.string.app_name),
+            fontSize = 32.sp,
+            fontFamily = abrilFatface,
+            color = MaterialTheme.colors.onBackground
+        )
+        // Botón de Ajustes
+        Button(
+            modifier = Modifier
+                .align(Alignment.CenterEnd),
+            onClick = { onSetClick() },
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primaryVariant),
+            elevation = ButtonDefaults.elevation(0.dp)
+        ) {
+            Icon(
+                Icons.Filled.Settings,
+                tint = MaterialTheme.colors.onBackground,
+                contentDescription = null
+            )
+        }
+    }
+}
+//endregion
 
 //region MENÚ SUPERIOR
 @Composable
@@ -69,13 +134,12 @@ fun TopBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = MaterialTheme.colors.primaryVariant),
-        contentAlignment = Alignment.Center
-        //horizontalAlignment = Alignment.CenterHorizontally
+            .background(color = MaterialTheme.colors.primaryVariant)
     ) {
         Image(
             modifier = Modifier
                 .size(64.dp)
+                .align(Alignment.Center)
                 .padding(8.dp),
             painter = if (isSystemInDarkTheme()) {
                 painterResource(R.drawable.icon_pawprint_black)
@@ -86,6 +150,7 @@ fun TopBar(
         )
         Text(
             modifier = Modifier
+                .align(Alignment.Center)
                 .clickable { onClick() },
             text = stringResource(R.string.app_name),
             fontSize = 32.sp,

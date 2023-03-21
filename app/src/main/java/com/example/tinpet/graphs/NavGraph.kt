@@ -35,10 +35,7 @@ fun NavGraph(
                 onClick = {
                     navController.navigate(AppScreens.Chat.route)
                 },
-                onBackClick =  {
-                    navController.popBackStack()
-                    navController.navigate(AppScreens.ChatUsers.route)
-                }
+                viewModel= ChatViewModel()
             )
         }
         composable(route=AppScreens.Chat.route){
@@ -65,7 +62,6 @@ fun NavGraph(
                     navController.navigate(AppScreens.Requests.route)
                 },
                 viewModel = LoginViewModel(LocalContext.current)
-
             )
         }
         composable(route = AppScreens.Pets.route){

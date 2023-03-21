@@ -21,9 +21,10 @@ import com.example.tinpet.ui.theme.abrilFatface
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ChatUsersScreen(
-    onClick: () -> Unit, onBackClick: () -> Unit
+    viewModel: ChatViewModel,
+    userNames: List<String>,
+    onClick: (String) -> Unit,
 ) {
-
     // LISTA DE FOTOS DE PERROS ( DE MOMENTO LAS ALMACENAMOS ASÍ)
     val images = listOf(
         R.drawable.default_pet,
@@ -48,20 +49,21 @@ fun ChatUsersScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             item {
-                names.shuffled().take(5).forEach { names ->
+                names.forEach { name ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(15.dp),
                         elevation = 10.dp
                     ) {
-                        Row(horizontalArrangement = Arrangement.SpaceBetween,
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                .clickable { onClick() }
+                                .clickable { onClick(name) }
                                 .fillMaxWidth()
                                 .background(MaterialTheme.colors.primary)
-                                .padding(10.dp))
-                        {
+                                .padding(10.dp)
+                        ) {
                             Image(
                                 modifier = Modifier
                                     .clip(CircleShape)
@@ -69,16 +71,18 @@ fun ChatUsersScreen(
                                 painter = painterResource(firstImage),
                                 contentDescription = "profilePhoto"
                             )
+                            Text(
+                                modifier = Modifier.padding(8.dp),
+                                text = name,
+                                fontSize = 16.sp,
+                                fontFamily = abrilFatface
+                            )
                         }
-                        Text(
-                            modifier = Modifier.padding(8.dp),
-                            text = names,
-                            fontSize = 16.sp,
-                            fontFamily = abrilFatface
-                        )
+
                     }
                 }
             }
         }
     }
 }
+

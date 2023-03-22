@@ -22,10 +22,9 @@ import com.example.tinpet.ui.theme.abrilFatface
 @Composable
 fun ChatUsersScreen(
     viewModel: ChatViewModel,
-    userNames: List<String>,
-    onClick: (String) -> Unit,
+     onClick: (String) -> Unit,
 ) {
-    // LISTA DE FOTOS DE PERROS ( DE MOMENTO LAS ALMACENAMOS ASÍ)
+    //region LISTA DE FOTOS DE PERROS ( DE MOMENTO LAS ALMACENAMOS ASÍ)
     val images = listOf(
         R.drawable.default_pet,
         R.drawable.default_pet_2,
@@ -34,11 +33,13 @@ fun ChatUsersScreen(
         R.drawable.default_pet_5
     )
     val firstImage: Int = images.toIntArray()[0]
-
-    // LISTA DE NOMBRE  ( DE MOMENTO ASÍ)
+//endregion
+    //region LISTA DE NOMBRE  ( DE MOMENTO ASÍ)
     val names = listOf(
         "Max", "Scooby", "Calcetines", "Brutus", "Duke"
     )
+    //endregion
+    //region CUERPO DE LA PANTALLA
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -49,6 +50,7 @@ fun ChatUsersScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             item {
+                //region FUNCION PARA CREAR ENTRADAS AL CHAT DEPENDIENDO DEL NUMERO DE PERROS
                 names.forEach { name ->
                     Card(
                         modifier = Modifier
@@ -81,8 +83,10 @@ fun ChatUsersScreen(
 
                     }
                 }
+                //endregion
             }
         }
     }
+    //endregion
 }
 

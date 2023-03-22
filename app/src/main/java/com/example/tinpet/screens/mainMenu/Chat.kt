@@ -28,6 +28,7 @@ fun ChatScreen(
     val userName = viewModel.selectedUserName ?: ""
 
     Scaffold(
+        //region BARRA SUPERIOR CON NOMBRE DE MASCOTA Y FELCHA PARA IR ATRÁS
         topBar = {
             TopAppBar(
                 title = {
@@ -46,6 +47,8 @@ fun ChatScreen(
                 }
             )
         },
+        //endregion
+        // region CUERPO DEL CHAT DONDE SE VAN AÑADIENDO LOS MENSAJES ENVIADOS
         content = {
             Column(
                 modifier = Modifier
@@ -75,6 +78,7 @@ fun ChatScreen(
                         )
                     }
                 }
+                //region TEXT FIELD PARA ESCRIBIR Y BOTON PARA ENVIAR EL MENSAJE
                 Row(
                     modifier = Modifier
                         .padding(16.dp)
@@ -105,7 +109,9 @@ fun ChatScreen(
                         )
                     }
                 }
+                //endregion
             }
         }
+    //endregion
     )
 }

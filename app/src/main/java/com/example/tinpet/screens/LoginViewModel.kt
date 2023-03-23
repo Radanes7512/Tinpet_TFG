@@ -1,6 +1,5 @@
 package com.example.tinpet.screens
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -13,8 +12,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlin.random.Random
 
@@ -28,6 +30,7 @@ class LoginViewModel(context: Context) : ViewModel() {
     private val auth = Firebase.auth
 
     private val rtdb = Firebase.database.reference
+
 
 
 
@@ -78,6 +81,8 @@ class LoginViewModel(context: Context) : ViewModel() {
     var uiState = mutableStateOf<UiState>(UiState.SignedOut)
 
 
+
+
     fun onLoginChanged(number: String, password: String) {
         _email.value= number
         _password.value = password
@@ -100,8 +105,6 @@ class LoginViewModel(context: Context) : ViewModel() {
         _addpetEnable.value = isValidPetName(petname) && isValidPetAge(petage)
     }
     fun login(context: Context){
-        Log.d(TAG, "email: "+email.value)
-        Log.d(TAG, "email: "+password.value)
         email.value?.let {
             password.value?.let { it1 ->
                 auth.signInWithEmailAndPassword(it, it1)
@@ -190,6 +193,12 @@ class LoginViewModel(context: Context) : ViewModel() {
             }
         })
     }
+
+
+
+
+
+
 
 
 

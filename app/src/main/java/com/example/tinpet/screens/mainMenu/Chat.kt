@@ -11,12 +11,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.tinpet.screens.LoginViewModel
 import com.example.tinpet.ui.theme.abrilFatface
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -26,6 +29,11 @@ fun ChatScreen(
     onBackClick: () -> Unit
 ) {
     val userName = viewModel.selectedUserName ?: ""
+
+    val message: String by viewModel.message.observeAsState(initial = "")
+    //Mensajes actualizados a mostrar
+    val messages: List<Map<String, Any>> by viewModel.messages.observeAsState(
+        initial = emptyList<Map<String, Any>>().toMutableList())
 
     Scaffold(
         //region BARRA SUPERIOR CON NOMBRE DE MASCOTA Y FELCHA PARA IR ATRÁS
@@ -63,7 +71,7 @@ fun ChatScreen(
                     horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.Bottom
                 ) {
-                    itemsIndexed(viewModel.messages.value) { index, message ->
+                    itemsIndexed(viewModel.testMessage.value) { index, message ->
                         Card(
                             modifier = Modifier
                                 .padding(50.dp, 5.dp, 5.dp, 0.dp),
@@ -85,18 +93,16 @@ fun ChatScreen(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    val textState = remember { mutableStateOf("") }
                     TextField(
                         modifier = Modifier.weight(1f),
-                        value = textState.value,
-                        onValueChange = { textState.value = it },
+                        value = message,
+                        onValueChange = {viewModel.updateMessage(it)},
                         label = { Text("Escribir mensaje...") }
                     )
                     Button(
                         onClick = {
-                            if (textState.value.isNotBlank()) {
-                                viewModel.sendMessage(textState.value)
-                                textState.value = ""
+                            if (message.isNotBlank()) {
+                                viewModel.addMessage()
                             }
                         },
                         modifier = Modifier

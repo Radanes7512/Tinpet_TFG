@@ -127,6 +127,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-database-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.4.4'
     implementation 'com.google.firebase:firebase-database-ktx:20.0.0'
 
 

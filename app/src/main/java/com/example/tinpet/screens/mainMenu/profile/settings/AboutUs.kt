@@ -1,5 +1,6 @@
 package com.example.tinpet.screens.mainMenu.profile.settings
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,61 +16,43 @@ import androidx.compose.ui.unit.sp
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AboutUsScreen(onBackClick: () -> Unit
 ){
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colors.background),
-        contentAlignment = Alignment.Center
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            item {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    // Botón de atrás
-                    Button(
-                        onClick = { onBackClick() },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
-                        elevation = ButtonDefaults.elevation(0.dp)
-                    ) {
+    Scaffold(
+        //region BARRA SUPERIOR CON NOMBRE Y FLECHA PARA IR ATRÁS
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Sobre nosotros",
+                        fontFamily = abrilFatface
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { onBackClick() }) {
                         Icon(
                             Icons.Filled.ArrowBack,
                             contentDescription = null
                         )
                     }
-                    Text(
-                        text = "Sobre nosotros",
-                        fontSize = 32.sp,
-                        fontFamily = abrilFatface,
-                        color = MaterialTheme.colors.onBackground
-                    )
                 }
+            )
+        }
+    )
+    //endregion
+    // region CUERPO
+    {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            item {
+
 
             }
         }
     }
-}
-
-@Composable
-@Preview
-fun AboutUsScreenPreviewDT() {
-    TinPetTheme(darkTheme = false) {
-        AboutUsScreen(onBackClick = {})
-    }
-}
-@Composable
-@Preview
-fun AboutUsScreenPreviewLT() {
-    TinPetTheme(darkTheme = true) {
-        AboutUsScreen(onBackClick = {})
-    }
+    //endregion
 }

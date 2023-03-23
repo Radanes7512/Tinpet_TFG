@@ -1,5 +1,6 @@
 package com.example.tinpet.screens.mainMenu.profile
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,47 +23,60 @@ import com.example.tinpet.R
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun PetsScreen(
     onBackClick: () -> Unit,
     onAddClick:()->Unit
 ){
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colors.background),
-        contentAlignment = Alignment.Center
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            item {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    // Botón de atrás
-                    Button(
-                        onClick = { onBackClick() },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
-                        elevation = ButtonDefaults.elevation(0.dp)
-                    ) {
+    Scaffold(
+        //region BARRA SUPERIOR CON NOMBRE Y FLECHA PARA IR ATRÁS
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Mis mascotas",
+                        fontFamily = abrilFatface
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { onBackClick() }) {
                         Icon(
                             Icons.Filled.ArrowBack,
                             contentDescription = null
                         )
                     }
-                    Text(
-                        text = "Mis mascotas",
-                        fontSize = 32.sp,
-                        fontFamily = abrilFatface,
-                        color = MaterialTheme.colors.onBackground
-                    )
                 }
-            }
+            )
+        },
+        floatingActionButton = {
+           ExtendedFloatingActionButton(
+                text={
+                     Text(
+                         text = "Añadir mascota",
+                         fontFamily = abrilFatface
+                     )
+                },
+               icon = {
+                   Icon(
+                       imageVector = Icons.Default.Add,
+                       contentDescription = "Añadir"
+                   )
+               },
+                onClick = {
+                    onAddClick()
+                }
+            )
+        },
+        floatingActionButtonPosition = FabPosition.End
+    )
+    //endregion
+    // region CUERPO
+    {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
             item {
                 Card(
                     modifier = Modifier
@@ -99,11 +113,6 @@ fun PetsScreen(
                     }
                 }
             }
-            item{
-                FloatingActionButton(onClick = {onAddClick()}){}
-            }
         }
     }
 }
-
-

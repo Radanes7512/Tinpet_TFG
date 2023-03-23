@@ -1,5 +1,6 @@
 package com.example.tinpet.screens.mainMenu.profile
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,54 +22,45 @@ import com.example.tinpet.R
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun FriendsScreen(
     onBackClick: () -> Unit
 ){
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colors.background),
-        contentAlignment = Alignment.Center
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            item {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    // Botón de atrás
-                    Button(
-                        onClick = { onBackClick() },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.background),
-                        elevation = ButtonDefaults.elevation(0.dp)
-                    ) {
+    Scaffold(
+        //region BARRA SUPERIOR CON NOMBRE Y FLECHA PARA IR ATRÁS
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Amistades",
+                        fontFamily = abrilFatface
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { onBackClick() }) {
                         Icon(
                             Icons.Filled.ArrowBack,
                             contentDescription = null
                         )
                     }
-                    Text(
-                        text = "Amistades",
-                        fontSize = 32.sp,
-                        fontFamily = abrilFatface,
-                        color = MaterialTheme.colors.onBackground
-                    )
                 }
-
-            }
+            )
+        }
+    )
+    //endregion
+    // region CUERPO
+    {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
             item {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(15.dp),
                     elevation = 10.dp
-
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -100,20 +92,6 @@ fun FriendsScreen(
             }
         }
     }
-}
-
-@Composable
-@Preview
-fun FriendsScreenPreviewDT() {
-    TinPetTheme(darkTheme = false) {
-        FriendsScreen(onBackClick = {})
-    }
-}
-@Composable
-@Preview
-fun FriendsScreenPreviewLT() {
-    TinPetTheme(darkTheme = true) {
-        FriendsScreen(onBackClick = {})
-    }
+    //endregion
 }
 

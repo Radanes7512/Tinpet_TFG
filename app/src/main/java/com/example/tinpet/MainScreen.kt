@@ -11,6 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -70,7 +72,9 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                 )
             }
         },
-        bottomBar = { BottomBar2(navController = navController) }
+        bottomBar = {
+            BottomBar2(navController = navController)
+        }
     ) {
         NavGraph(navController = navController)
     }
@@ -164,7 +168,9 @@ fun TopBar(
 
 //region MENÚ INFERIOR
 @Composable
-fun BottomBar2(navController: NavHostController) {
+fun BottomBar2(
+    navController: NavHostController,
+) {
     val screens = listOf(
         AppScreens.Places,
         AppScreens.Connect,
@@ -184,7 +190,7 @@ fun BottomBar2(navController: NavHostController) {
             screens.forEach { screen ->
                 AddItem(
                     screen = screen,
-                    currentDestination = currentDestination,
+                    isSelected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                     navController = navController
                 )
             }
@@ -197,27 +203,29 @@ fun BottomBar2(navController: NavHostController) {
 @Composable
 fun RowScope.AddItem(
     screen: AppScreens,
-    currentDestination: NavDestination?,
+    isSelected: Boolean,
     navController: NavHostController
 ) {
     BottomNavigationItem(
-        /*label = {
-            Text(text = screen.title)
-        },*/
         icon = {
             Icon(
                 imageVector = screen.icon,
                 contentDescription = "Navigation Icon",
-                tint = if (isSystemInDarkTheme()) {
-                    Color.White
+                tint = if (isSelected) {
+                    MaterialTheme.colors.onError // Cambia el color del icono cuando está seleccionado
                 } else {
-                    Color.Black
+                    if (isSystemInDarkTheme()) {
+                        Color.White
+                    } else {
+                        Color.Black
+                    }
                 }
             )
         },
-        selected = currentDestination?.hierarchy?.any {
+        selected = isSelected,
+        /*currentDestination?.hierarchy?.any {
             it.route == screen.route
-        } == true,
+        } == true,*/
         unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
         onClick = {
             navController.navigate(screen.route) {

@@ -17,7 +17,7 @@ class ChatViewModel() : ViewModel() {
 
     var selectedUserName: String? = null
 
-    private val _message = MutableLiveData("")
+    private val _message = MutableLiveData<String>()
     val message: LiveData<String> = _message
 
     private var _messages = MutableLiveData(emptyList<Map<String, Any>>().toMutableList())

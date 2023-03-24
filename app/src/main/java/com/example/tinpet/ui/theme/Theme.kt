@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 private val DarkColorPalette = darkColors(
     background = GreyBG, // FONDO PANTALLA
     onBackground = White, // TEXTO SOBRE FONDO
+    onError = Yellow10,
 
     primaryVariant = GreyNavBar, // BARRA NAVEGACIÓN SUPERIOR
 
@@ -22,7 +23,6 @@ private val DarkColorPalette = darkColors(
     secondary = Green10, // COLOR SECUNDARIO
     secondaryVariant = YellowNavBar, // VARIANTE SECUNDARIO
 
-
     onSurface = GreyNavBar // NO ESPECIFICADO
 )
 
@@ -30,6 +30,8 @@ private val DarkColorPalette = darkColors(
 private val LightColorPalette = lightColors(
     background = White, // FONDO PANTALLA
     onBackground = Black, // TEXTO SOBRE FONDO
+    onError = GreyNavBar,
+
 
     primaryVariant = YellowNavBar, // BARRA NAVEGACIÓN SUPERIOR
 

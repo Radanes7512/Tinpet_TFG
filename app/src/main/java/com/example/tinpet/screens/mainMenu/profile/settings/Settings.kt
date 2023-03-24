@@ -81,7 +81,7 @@ fun SettingsScreen(
                         Text(
                             modifier = Modifier
                                 .align(alignment = Alignment.CenterVertically),
-                            text = "Notifiaciones",
+                            text = "Notificaciones",
                             fontSize = 15.sp,
                             fontFamily = abrilFatface,
                             color = MaterialTheme.colors.onPrimary

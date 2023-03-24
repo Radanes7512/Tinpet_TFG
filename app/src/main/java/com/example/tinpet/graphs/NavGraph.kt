@@ -73,7 +73,23 @@ fun NavGraph(
                 onAddClick = {
                     navController.popBackStack()
                     navController.navigate(AppScreens.Addpet.route)
+                },
+                onPetClick = {
+                    navController.navigate(AppScreens.PetProfile.route)
                 }
+            )
+        }
+        composable(AppScreens.PetProfile.route){
+            PetProfileScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.Profile.route)
+                },
+                onChatClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.Chat.route)
+                },
+                nombreMascota = String()
             )
         }
         composable(route = AppScreens.Requests.route){
@@ -130,7 +146,7 @@ fun NavGraph(
             SignupScreen (
                 onClick = {
                     navController.popBackStack()
-                    navController.navigate(AppScreens.SmsInput.route)
+                    navController.navigate(AppScreens.Addpet.route)
                 },
                 onBackClick = {
                     navController.popBackStack()
@@ -139,20 +155,12 @@ fun NavGraph(
                 viewModel = LoginViewModel(LocalContext.current)
             )
         }
-        composable(AppScreens.SmsInput.route){
-            InputSmsNumScreen(
-                onClick = {
-                    navController.popBackStack()
-                    navController.navigate(AppScreens.Addpet.route)
-                },
-                viewModel = LoginViewModel(LocalContext.current)
-            )
-        }
+
         composable(AppScreens.Addpet.route){
             AddPetScreen(
                 onClick = {
                     navController.popBackStack()
-                    navController.navigate(Graph.MAIN)
+                    navController.navigate(Graph.AUTHENTICATION)
                 },
                 viewModel = LoginViewModel(LocalContext.current)
             )

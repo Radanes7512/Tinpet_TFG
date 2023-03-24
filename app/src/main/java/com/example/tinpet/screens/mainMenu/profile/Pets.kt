@@ -11,7 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,8 +27,11 @@ import com.example.tinpet.ui.theme.abrilFatface
 @Composable
 fun PetsScreen(
     onBackClick: () -> Unit,
-    onAddClick:()->Unit
+    onAddClick:()->Unit,
+    onPetClick: () -> Unit
 ){
+    var nombreMascota by remember { mutableStateOf("Max") }
+
     Scaffold(
         //region BARRA SUPERIOR CON NOMBRE Y FLECHA PARA IR ATRÁS
         topBar = {
@@ -83,19 +86,18 @@ fun PetsScreen(
                         .fillMaxWidth()
                         .padding(15.dp),
                     elevation = 10.dp
-
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
-                            .clickable { }
+                            .clickable { onPetClick() }
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
                             .padding(10.dp)
                     ) {
                         Text(
                             modifier = Modifier.align(alignment = Alignment.CenterVertically),
-                            text = "Max".uppercase(),
+                            text = nombreMascota.uppercase(),
                             fontSize = 32.sp,
                             fontFamily = abrilFatface,
                             color = MaterialTheme.colors.onPrimary

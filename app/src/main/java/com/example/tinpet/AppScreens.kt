@@ -24,10 +24,6 @@ sealed class AppScreens(
         icon = Icons.Filled.AppRegistration
     )
 
-    object SmsInput:AppScreens(
-        route = "smsinput",
-        icon = Icons.Filled.Sms
-    )
     object  Addpet : AppScreens(
         route = "addpet",
         icon = Icons.Filled.Pets
@@ -71,6 +67,11 @@ sealed class AppScreens(
     )
     // DENTRO DEL PERFIL
 
+        // PERFIL MASCOTA
+    object PetProfile : AppScreens(
+            route = "petprofile",
+            icon = Icons.Filled.Pets
+    )
         // AJUSTES
     object  Settings : AppScreens(
         route = "settings",

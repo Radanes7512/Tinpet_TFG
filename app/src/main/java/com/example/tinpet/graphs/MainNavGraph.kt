@@ -30,21 +30,11 @@ fun MainNavigationGraph(navController: NavHostController) {
             SignupScreen(
                 onClick = {
                     navController.popBackStack()
-                    navController.navigate(AppScreens.SmsInput.route)
+                    navController.navigate(AppScreens.Addpet.route)
                 },
                 onBackClick = {
                     navController.popBackStack()
                     navController.navigate(Graph.AUTHENTICATION)
-                },
-                viewModel = LoginViewModel(LocalContext.current)
-            )
-        }
-
-        composable(AppScreens.SmsInput.route){
-            InputSmsNumScreen(
-                onClick = {
-                    navController.popBackStack()
-                    navController.navigate(AppScreens.Addpet.route)
                 },
                 viewModel = LoginViewModel(LocalContext.current)
             )

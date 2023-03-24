@@ -94,6 +94,7 @@ fun SignupScreen(
             if(signupEnable){
                 Button(
                     onClick = {
+                        onClick()
                         viewModel.register(context)
                     },
                     enabled = true,

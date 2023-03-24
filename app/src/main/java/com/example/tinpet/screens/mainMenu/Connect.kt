@@ -145,19 +145,3 @@ fun ConnectScreen(){
         )
     }
 }
-
-
-@Composable
-@Preview
-fun ConnectPreviewDT() {
-    TinPetTheme(darkTheme = false) {
-        ConnectScreen()
-    }
-}
-@Composable
-@Preview
-fun ConnectPreviewLT() {
-    TinPetTheme(darkTheme = true) {
-        ConnectScreen()
-    }
-}

@@ -3,6 +3,7 @@ package com.example.tinpet.screens.mainMenu.profile
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -13,6 +14,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -78,41 +80,26 @@ fun PetProfileScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-            ){
+            ) {
                 item {
                     Box(
                         modifier = Modifier
                             .padding(16.dp)
+                            .fillMaxWidth()
+                            .size(350.dp)
                     ) {
                         Image(
                             painter = painterResource(R.drawable.default_pet),
                             alpha = 0.8f,
-                            contentScale = ContentScale.FillBounds,
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .fillMaxWidth(),
                             contentDescription = "profilePhoto"
                         )
-                        //region NOMBRE
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                        ) {
-                            // Nombre de la mascota
-                            Text(
-                                modifier = Modifier.padding(5.dp),
-                                text = name,
-                                fontSize = 32.sp,
-                                fontFamily = abrilFatface,
-                                color = MaterialTheme.colors.onBackground
-                            )
-                        }
-                        //endregion
                         //region IMAGEN
                         Row(
                             horizontalArrangement = Arrangement.Center,
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .align(Alignment.BottomCenter)
                                 .padding(16.dp)
                         ) {
                             Image(
@@ -124,26 +111,39 @@ fun PetProfileScreen(
                             )
                         }
                         //endregion
-                        //region EDAD
+                    }
+                    //region NOMBRE Y EDAD
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment= Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        // Nombre de la mascota
+                        Text(
+                            modifier = Modifier.padding(5.dp),
+                            text = "Nombre: ${name}",
+                            fontSize = 20.sp,
+                            fontFamily = abrilFatface,
+                            color = MaterialTheme.colors.onBackground
+                        )
+                        // Edad de la mascota
+                            Spacer(Modifier.height(16.dp))
                         ages.shuffled().take(1).forEach { age ->
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
-                            ) {
                                 // Edad de la mascota
                                 Text(
                                     modifier = Modifier.padding(5.dp),
-                                    text = age,
-                                    fontSize = 32.sp,
+                                    text = "Edad: ${age}",
+                                    fontSize = 20.sp,
                                     fontFamily = abrilFatface,
                                     color = MaterialTheme.colors.onBackground
                                 )
-                            }
                         }
                         //endregion
                     }
+                    //endregion
+
                 }
                 item {
                     //region CATEGORÍAS

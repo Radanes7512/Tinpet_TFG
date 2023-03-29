@@ -106,7 +106,7 @@ fun PetsScreen(
                         )
                         Text(
                             modifier = Modifier.align(alignment = Alignment.CenterVertically),
-                            text = nombreMascota.uppercase(),
+                            text = nombreMascota,
                             fontSize = 20.sp,
                             fontFamily = abrilFatface,
                             color = MaterialTheme.colors.onPrimary

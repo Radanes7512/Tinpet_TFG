@@ -35,7 +35,7 @@ fun ChatScreen(
 
     //Mensajes actualizados a mostrar
     val messages:
-            List<Map<String, Any>> by viewModel.messages.observeAsState(emptyList<Map<String, Any>>().toMutableList())
+            List<String> by viewModel.messages.observeAsState(emptyList<String>().toMutableList())
 
     // Agregar un mensaje
     @Composable
@@ -92,7 +92,7 @@ fun ChatScreen(
                             backgroundColor = if (index % 2 == 0) Color.Gray else Color.LightGray,
                             content = {
                                 Text(
-                                    text = message.values.toString(),
+                                    text = message,
                                     color = Color.White,
                                     modifier = Modifier.padding(8.dp)
                                 )

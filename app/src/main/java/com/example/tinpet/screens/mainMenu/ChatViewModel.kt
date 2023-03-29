@@ -20,8 +20,9 @@ class ChatViewModel() : ViewModel() {
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> = _message
 
-    private var _messages = MutableLiveData(emptyList<Map<String, Any>>().toMutableList())
-    val messages: LiveData<MutableList<Map<String, Any>>> = _messages
+    private var _messages = MutableLiveData(emptyList<String>().toMutableList())
+    val messages: LiveData<MutableList<String>> = _messages
+
 
     //endregion
 
@@ -67,6 +68,7 @@ class ChatViewModel() : ViewModel() {
                 if (value != null) {
                     //Leemos cada uno de los documentos dentro de la coleccion "Mensajes" de la base de datos
                     for (doc in value) {
+
                         //Extraemos los datos
                         val data = doc.data
                         //Añadimos info de si los mensajes son nuestros o no
@@ -82,7 +84,12 @@ class ChatViewModel() : ViewModel() {
     }
 
     private fun updateMessages(list: MutableList<Map<String, Any>>) {
-        _messages.value = list.asReversed()
+
+        val messageList = emptyList<String>().toMutableList()
+        for (message in list){
+            messageList.add(message.get("message").toString())
+        }
+        _messages.value =messageList.asReversed()
     }
     //endregion
 }

@@ -49,7 +49,7 @@ fun ChatScreen(
 
     //Mensajes actualizados a mostrar
     val messages:
-            List<Map<String, Any>> by viewModel.messages.observeAsState(emptyList<Map<String, Any>>().toMutableList())
+            List<String> by viewModel.messages.observeAsState(emptyList<String>().toMutableList())
 
     // Agregar un mensaje
     @Composable
@@ -102,6 +102,7 @@ fun ChatScreen(
                     itemsIndexed(messages) { index, message ->
                         Card(
                             modifier = Modifier
+<<<<<<< HEAD
                                 .padding(
                                     if (index % 2 == 0) PaddingValues(
                                         50.dp,
@@ -109,6 +110,15 @@ fun ChatScreen(
                                         5.dp,
                                         0.dp
                                     ) else PaddingValues(5.dp, 5.dp, 50.dp, 0.dp)
+=======
+                                .padding(if (index % 2 == 0) PaddingValues(50.dp, 5.dp, 5.dp, 0.dp) else PaddingValues(5.dp, 5.dp, 50.dp, 0.dp)),
+                            backgroundColor = if (index % 2 == 0) Color.Gray else Color.LightGray,
+                            content = {
+                                Text(
+                                    text = message,
+                                    color = Color.White,
+                                    modifier = Modifier.padding(8.dp)
+>>>>>>> Andres
                                 )
                         )
                         {

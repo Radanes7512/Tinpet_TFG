@@ -27,7 +27,6 @@ import com.example.tinpet.ui.theme.abrilFatface
 fun PetProfileScreen(
     onBackClick: () -> Unit,
     onChatClick: () -> Unit,
-    nombreMascota: String
 ) {
     // LISTA DE NOMBRE  ( DE MOMENTO ASÍ)
     val names = listOf("Max", "Scooby", "Calcetines", "Brutus", "Duke")
@@ -46,138 +45,122 @@ fun PetProfileScreen(
         "Comilón",
         "Dormilón",
     )
-    //region BARRA SUPERIOR CON NOMBRE Y FLECHA PARA IR ATRÁS
-    Scaffold(
+    names.shuffled().take(1).forEach { name ->
+        //region BARRA SUPERIOR CON NOMBRE Y FLECHA PARA IR ATRÁS
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
 
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Perfil",
-                        fontFamily = abrilFatface
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { onBackClick() }) {
-                        Icon(
-                            Icons.Filled.ArrowBack,
-                            contentDescription = null
+                        Text(
+                            text = "Perfil de $name",
+                            fontFamily = abrilFatface
+                        )
+
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { onBackClick() }) {
+                            Icon(
+                                Icons.Filled.ArrowBack,
+                                contentDescription = null
+                            )
+                        }
+                    }
+                )
+            }
+        )
+        //endregion
+        {
+            //region PROFILE CONTENT
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                //region NOMBRE
+                item {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        // Nombre de la mascota
+                        Text(
+                            modifier = Modifier.padding(5.dp),
+                            text = name,
+                            fontSize = 32.sp,
+                            fontFamily = abrilFatface,
+                            color = MaterialTheme.colors.onBackground
                         )
                     }
                 }
-            )
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text={
-                    Text(
-                        text = "Enviar mensaje",
-                        fontFamily = abrilFatface
-                    )
-                },
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.Chat,
-                        contentDescription = "Añadir"
-                    )
-                },
-                onClick = {
-                    onChatClick()
-                }
-            )
-        },
-        floatingActionButtonPosition = FabPosition.End
-    )
-    //endregion
-    {
-        //region PROFILE CONTENT
-        LazyColumn(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            //region NOMBRE
-            item {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    // Nombre de la mascota
-                    Text(
-                        modifier = Modifier.padding(5.dp),
-                        text = "$nombreMascota",
-                        fontSize = 32.sp,
-                        fontFamily = abrilFatface,
-                        color = MaterialTheme.colors.onBackground
-                    )
-
-                }
-            }
-            //endregion
-            //region IMAGEN
-            item{
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Image(
+                //endregion
+                //region IMAGEN
+                item {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
                         modifier = Modifier
-                            .clip(CircleShape)
-                            .size(50.dp),
-                        painter = painterResource(R.drawable.default_pet),
-                        contentDescription = "profilePhoto"
-                    )
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .size(150.dp),
+                            painter = painterResource(R.drawable.default_pet),
+                            contentDescription = "profilePhoto"
+                        )
+                    }
                 }
-            }
-            //endregion
-            //region EDAD
-            item {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    // Edad de la mascota
-                    Text(
-                        modifier = Modifier.padding(5.dp),
-                        text = ages.toString(),
-                        fontSize = 32.sp,
-                        fontFamily = abrilFatface,
-                        color = MaterialTheme.colors.onBackground
-                    )
-                }
-            }
-            //endregion
-            //region CATEGORÍAS
-            item {
-
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-
-                ) {
-                    category.shuffled().take(3).forEach { category ->
-                        Card(
-                            modifier = Modifier.padding(8.dp),
-                            elevation = 10.dp
+                //endregion
+                //region EDAD
+                item {
+                    ages.shuffled().take(1).forEach { age ->
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
                         ) {
+                            // Edad de la mascota
                             Text(
-                                modifier = Modifier.padding(8.dp),
-                                text = category,
-                                fontSize = 16.sp,
-                                fontFamily = abrilFatface
+                                modifier = Modifier.padding(5.dp),
+                                text = age,
+                                fontSize = 32.sp,
+                                fontFamily = abrilFatface,
+                                color = MaterialTheme.colors.onBackground
                             )
                         }
                     }
                 }
+                //endregion
+                //region CATEGORÍAS
+                item {
+
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+
+                    ) {
+                        category.shuffled().take(3).forEach { category ->
+                            Card(
+                                modifier = Modifier.padding(8.dp),
+                                elevation = 10.dp
+                            ) {
+                                Text(
+                                    modifier = Modifier.padding(8.dp),
+                                    text = category,
+                                    fontSize = 16.sp,
+                                    fontFamily = abrilFatface
+                                )
+                            }
+                        }
+                    }
+                }
+                //endregion
             }
             //endregion
         }
-        //endregion
     }
 }

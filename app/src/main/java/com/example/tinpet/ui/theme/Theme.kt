@@ -30,7 +30,7 @@ private val DarkColorPalette = darkColors(
 private val LightColorPalette = lightColors(
     background = White, // FONDO PANTALLA
     onBackground = Black, // TEXTO SOBRE FONDO
-    onError = GreyNavBar,
+    onError = White,
 
 
     primaryVariant = YellowNavBar, // BARRA NAVEGACIÓN SUPERIOR

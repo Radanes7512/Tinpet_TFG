@@ -88,29 +88,28 @@ fun PetsScreen(
                     elevation = 10.dp
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.Start,
                         modifier = Modifier
                             .clickable { onPetClick() }
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
                             .padding(10.dp)
                     ) {
-                        Text(
-                            modifier = Modifier.align(alignment = Alignment.CenterVertically),
-                            text = nombreMascota.uppercase(),
-                            fontSize = 32.sp,
-                            fontFamily = abrilFatface,
-                            color = MaterialTheme.colors.onPrimary
-                        )
                         Image(
                             modifier = Modifier
-                                //.align(Alignment(0,0,))
-                                //.fillMaxWidth()
+                                .padding(16.dp, 0.dp)
                                 .clip(CircleShape)
-                                .size(50.dp)
+                                .size(25.dp,25.dp)
                                 .align(alignment = Alignment.CenterVertically),
                             painter = painterResource(R.drawable.default_pet),
                             contentDescription = null,
+                        )
+                        Text(
+                            modifier = Modifier.align(alignment = Alignment.CenterVertically),
+                            text = nombreMascota.uppercase(),
+                            fontSize = 20.sp,
+                            fontFamily = abrilFatface,
+                            color = MaterialTheme.colors.onPrimary
                         )
                     }
                 }

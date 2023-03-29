@@ -10,6 +10,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Chat
+import androidx.compose.material.icons.filled.ChatBubbleOutline
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +28,9 @@ import com.example.tinpet.ui.theme.abrilFatface
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun RequestScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onPetClick: () -> Unit,
+    onChatClick: () -> Unit
 ){
     Scaffold(
         //region BARRA SUPERIOR CON NOMBRE Y FLECHA PARA IR ATRÁS
@@ -64,29 +69,37 @@ fun RequestScreen(
 
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.Start,
                         modifier = Modifier
-                            .clickable { }
+                            .clickable { onPetClick() }
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
                             .padding(10.dp)
                     ) {
-                        Text(
-                            modifier = Modifier.align(alignment = Alignment.CenterVertically),
-                            text = "Calcetines".uppercase(),
-                            fontSize = 32.sp,
-                            fontFamily = abrilFatface,
-                            color = MaterialTheme.colors.onPrimary
-                        )
                         Image(
                             modifier = Modifier
-                                //.align(Alignment(0,0,))
-                                //.fillMaxWidth()
+                                .padding(16.dp, 0.dp)
                                 .clip(CircleShape)
-                                .size(50.dp)
+                                .size(25.dp, 25.dp)
                                 .align(alignment = Alignment.CenterVertically),
                             painter = painterResource(R.drawable.default_pet_3),
                             contentDescription = null,
+                        )
+                        Text(
+                            modifier = Modifier.align(alignment = Alignment.CenterVertically),
+                            text = "Calcetines",
+                            fontSize = 20.sp,
+                            fontFamily = abrilFatface,
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Icon(
+                            imageVector = Icons.Filled.ChatBubbleOutline,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .align(alignment = Alignment.CenterVertically)
+                                .size(ButtonDefaults.IconSize)
+                                .clickable { onChatClick() }
                         )
                     }
                 }
@@ -100,30 +113,39 @@ fun RequestScreen(
 
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        horizontalArrangement = Arrangement.Start,
                         modifier = Modifier
-                            .clickable { }
+                            .clickable { onPetClick() }
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
                             .padding(10.dp)
                     ) {
-                        Text(
-                            modifier = Modifier.align(alignment = Alignment.CenterVertically),
-                            text = "Brutus".uppercase(),
-                            fontSize = 32.sp,
-                            fontFamily = abrilFatface,
-                            color = MaterialTheme.colors.onPrimary
-                        )
                         Image(
                             modifier = Modifier
-                                //.align(Alignment(0,0,))
-                                //.fillMaxWidth()
+                                .padding(16.dp, 0.dp)
                                 .clip(CircleShape)
-                                .size(50.dp)
+                                .size(25.dp, 25.dp)
                                 .align(alignment = Alignment.CenterVertically),
                             painter = painterResource(R.drawable.default_pet_4),
                             contentDescription = null,
                         )
+                        Text(
+                            modifier = Modifier.align(alignment = Alignment.CenterVertically),
+                            text = "Brutus",
+                            fontSize = 20.sp,
+                            fontFamily = abrilFatface,
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Icon(
+                            imageVector = Icons.Filled.ChatBubbleOutline,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .align(alignment = Alignment.CenterVertically)
+                                .size(ButtonDefaults.IconSize)
+                                .clickable { onChatClick() }
+                        )
+
                     }
                 }
             }

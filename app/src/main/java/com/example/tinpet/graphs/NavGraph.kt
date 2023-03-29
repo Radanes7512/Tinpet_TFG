@@ -44,6 +44,9 @@ fun NavGraph(
                     navController.popBackStack()
                     navController.navigate(AppScreens.ChatUsers.route)
                 },
+                onPetClick = {
+                    navController.navigate(AppScreens.PetProfile.route)
+                },
                 viewModel= ChatViewModel()
             )
         }
@@ -83,13 +86,11 @@ fun NavGraph(
             PetProfileScreen(
                 onBackClick = {
                     navController.popBackStack()
-                    navController.navigate(AppScreens.Profile.route)
                 },
                 onChatClick = {
                     navController.popBackStack()
                     navController.navigate(AppScreens.Chat.route)
-                },
-                nombreMascota = String()
+                }
             )
         }
         composable(route = AppScreens.Requests.route){
@@ -97,6 +98,12 @@ fun NavGraph(
                 onBackClick = {
                     navController.popBackStack()
                     navController.navigate(AppScreens.Profile.route)
+                },
+                onPetClick = {
+                    navController.navigate(AppScreens.PetProfile.route)
+                },
+                onChatClick = {
+                    navController.navigate(AppScreens.Chat.route)
                 }
             )
         }
@@ -105,6 +112,12 @@ fun NavGraph(
                 onBackClick = {
                     navController.popBackStack()
                     navController.navigate(AppScreens.Profile.route)
+                },
+                onPetClick = {
+                    navController.navigate(AppScreens.PetProfile.route)
+                },
+                onChatClick = {
+                    navController.navigate(AppScreens.Chat.route)
                 }
             )
         }

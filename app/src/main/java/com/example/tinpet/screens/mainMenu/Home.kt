@@ -1,5 +1,7 @@
 package com.example.tinpet.screens.mainMenu
 
+import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -61,6 +63,7 @@ fun HomeScreen() {
     var liked by remember { mutableStateOf(false) }
     var disliked by remember { mutableStateOf(false) }
     var showEndBox by remember { mutableStateOf(false) }
+    var offsetX by remember { mutableStateOf(0.dp) }
 
 
     // LÓGICA PARA QUE CUANDO NO HAYA MÁS IMÁGENES PARA MOSTAR, SE VEA EL BOX DE FIN
@@ -95,14 +98,49 @@ fun HomeScreen() {
             Image(
                 painter = painterResource(imageRes),
                 contentDescription = "My Image",
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .offset(
+                        x = offsetX,
+                        y = 0.dp
+                    )
+                    .fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
+            if (liked) {
+                LaunchedEffect(Unit) {
+                    animate(
+                        initialValue = 0f,
+                        targetValue = 100f,
+                        animationSpec = tween(durationMillis = 500)
+                    ) { value, _ ->
+                        offsetX = value.dp
+                    }
+                }
+            } else if (disliked) {
+                LaunchedEffect(Unit) {
+                    animate(
+                        initialValue = 0f,
+                        targetValue = -100f,
+                        animationSpec = tween(durationMillis = 500)
+                    ) { value, _ ->
+                        offsetX = value.dp
+                    }
+                }
+            } else {
+                LaunchedEffect(Unit) {
+                    animate(
+                        initialValue = 0f,
+                        targetValue = 0f,
+                        animationSpec = tween(durationMillis = 500)
+                    ) { value, _ ->
+                        offsetX = value.dp
+                    }
+                }
+            }
 
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-
                   //  .background(Color(0x80000000))
             ) {
                 Text(

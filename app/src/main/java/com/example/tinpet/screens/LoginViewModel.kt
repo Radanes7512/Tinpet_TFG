@@ -83,19 +83,18 @@ class LoginViewModel(context: Context) : ViewModel() {
 
 
 
-    fun onLoginChanged(number: String, password: String) {
-        _email.value= number
+    fun onLoginChanged(email: String, password: String) {
+        _email.value= email
         _password.value = password
-        _loginEnable.value = isValidNumber(number) && isValidPassword(password)
+        _loginEnable.value = isValidEmail(email) && isValidPassword(password)
     }
 
     fun onSignupChanged(email: String,name: String,password: String, password2:String){
-
         _name.value = name
         _email.value= email
         _password.value = password
         _password2.value = password2
-        _signupEnable.value = isValidNumber(email) && isValidName(name) && isValidPassword(password) && password == password2
+        _signupEnable.value = isValidEmail(email) && isValidName(name) && isValidPassword(password) && password == password2
     }
 
 
@@ -202,9 +201,8 @@ class LoginViewModel(context: Context) : ViewModel() {
 
 
 
-    private fun isValidPassword(password: String): Boolean = true
-
-    private fun isValidNumber(number: String): Boolean  = true
+    private fun isValidPassword(password: String): Boolean = password.length >= 6
+    private fun isValidEmail(email: String): Boolean  = email.contains("@gmail.com")
     private fun isValidName(name: String): Boolean = name.length > 1
     private fun isValidPetName(petname:String): Boolean = petname.length > 1
     private fun isValidPetAge(petage:String): Boolean = petage.length in 1..2

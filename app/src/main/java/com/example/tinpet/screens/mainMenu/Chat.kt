@@ -4,17 +4,13 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.os.SystemClock
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -146,7 +142,35 @@ fun ChatScreen(
                                     horizontalArrangement = Arrangement.End,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .background(if (index % 2 == 0) Color.Gray else Color.LightGray)
+                                        .background(
+                                            // SI MENSAJES SON PARES
+                                            if (index % 2 == 0)
+                                            {
+                                                // Y EL MODO OSCURO ESTA ACTIVADO
+                                                if(isSystemInDarkTheme())
+                                                {
+                                                    // FONDO GRIS
+                                                    Color.Gray
+                                                }else
+                                                {
+                                                    // SINO FONDO "onBackground"
+                                                    MaterialTheme.colors.onBackground
+                                                }
+                                                // SI MENSAJES IMPARES
+                                            } else{
+                                                // Y EL MODO OSCURO ESTA ACTIVADO
+                                                if(isSystemInDarkTheme())
+                                                {
+                                                    // FONDO GRIS CLARITO
+                                                    Color.LightGray
+                                                }else
+                                                {
+                                                    // SINO FONDO "background"
+                                                    MaterialTheme.colors.background
+                                                }
+                                            }
+                                        )
+
                                         .padding(10.dp)
                                 ){
                                     // OPCION 1

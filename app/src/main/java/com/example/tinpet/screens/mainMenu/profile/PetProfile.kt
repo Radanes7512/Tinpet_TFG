@@ -2,6 +2,7 @@ package com.example.tinpet.screens.mainMenu.profile
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -14,6 +15,8 @@ import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -71,71 +74,79 @@ fun PetProfileScreen(
         )
         //endregion
         {
-            //region PROFILE CONTENT
+            //PROFILE CONTENT
             LazyColumn(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                //region NOMBRE
+                modifier = Modifier
+                    .fillMaxSize()
+            ){
                 item {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
+                    Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
-                        // Nombre de la mascota
-                        Text(
-                            modifier = Modifier.padding(5.dp),
-                            text = name,
-                            fontSize = 32.sp,
-                            fontFamily = abrilFatface,
-                            color = MaterialTheme.colors.onBackground
-                        )
-                    }
-                }
-                //endregion
-                //region IMAGEN
-                item {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
                             .padding(16.dp)
                     ) {
                         Image(
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .size(150.dp),
                             painter = painterResource(R.drawable.default_pet),
+                            alpha = 0.8f,
+                            contentScale = ContentScale.FillBounds,
+                            modifier = Modifier.fillMaxSize(),
                             contentDescription = "profilePhoto"
                         )
-                    }
-                }
-                //endregion
-                //region EDAD
-                item {
-                    ages.shuffled().take(1).forEach { age ->
+                        //region NOMBRE
                         Row(
                             horizontalArrangement = Arrangement.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp)
                         ) {
-                            // Edad de la mascota
+                            // Nombre de la mascota
                             Text(
                                 modifier = Modifier.padding(5.dp),
-                                text = age,
+                                text = name,
                                 fontSize = 32.sp,
                                 fontFamily = abrilFatface,
                                 color = MaterialTheme.colors.onBackground
                             )
                         }
+                        //endregion
+                        //region IMAGEN
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                        ) {
+                            Image(
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .size(150.dp),
+                                painter = painterResource(R.drawable.default_pet),
+                                contentDescription = "profilePhoto"
+                            )
+                        }
+                        //endregion
+                        //region EDAD
+                        ages.shuffled().take(1).forEach { age ->
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                            ) {
+                                // Edad de la mascota
+                                Text(
+                                    modifier = Modifier.padding(5.dp),
+                                    text = age,
+                                    fontSize = 32.sp,
+                                    fontFamily = abrilFatface,
+                                    color = MaterialTheme.colors.onBackground
+                                )
+                            }
+                        }
+                        //endregion
                     }
                 }
-                //endregion
-                //region CATEGORÍAS
                 item {
-
+                    //region CATEGORÍAS
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
@@ -157,10 +168,9 @@ fun PetProfileScreen(
                             }
                         }
                     }
+                    //endregion
                 }
-                //endregion
             }
-            //endregion
         }
     }
 }

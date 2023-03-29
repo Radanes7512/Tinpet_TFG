@@ -9,10 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.ChatBubbleOutline
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -94,12 +91,27 @@ fun RequestScreen(
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Icon(
-                            imageVector = Icons.Filled.ChatBubbleOutline,
+                            imageVector = Icons.Filled.Close,
                             contentDescription = null,
                             modifier = Modifier
                                 .align(alignment = Alignment.CenterVertically)
                                 .size(ButtonDefaults.IconSize)
-                                .clickable { onChatClick() }
+                                .clickable {  }
+                        )
+                        Text(
+                            modifier = Modifier.align(alignment = Alignment.CenterVertically),
+                            text = " | ",
+                            fontSize = 20.sp,
+                            fontFamily = abrilFatface,
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.Done,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .align(alignment = Alignment.CenterVertically)
+                                .size(ButtonDefaults.IconSize)
+                                .clickable {  }
                         )
                     }
                 }
@@ -138,14 +150,28 @@ fun RequestScreen(
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Icon(
-                            imageVector = Icons.Filled.ChatBubbleOutline,
+                            imageVector = Icons.Filled.Close,
                             contentDescription = null,
                             modifier = Modifier
                                 .align(alignment = Alignment.CenterVertically)
                                 .size(ButtonDefaults.IconSize)
-                                .clickable { onChatClick() }
+                                .clickable {  }
                         )
-
+                        Text(
+                            modifier = Modifier.align(alignment = Alignment.CenterVertically),
+                            text = " | ",
+                            fontSize = 20.sp,
+                            fontFamily = abrilFatface,
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                        Icon(
+                            imageVector = Icons.Filled.Done,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .align(alignment = Alignment.CenterVertically)
+                                .size(ButtonDefaults.IconSize)
+                                .clickable {  }
+                        )
                     }
                 }
             }

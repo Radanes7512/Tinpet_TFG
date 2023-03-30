@@ -2,15 +2,16 @@ package com.example.tinpet.screens.mainMenu
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.os.SystemClock
+import android.widget.Toast
+import android.content.Context
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -21,16 +22,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.tinpet.R
-import com.example.tinpet.screens.LoginViewModel
 import com.example.tinpet.ui.theme.abrilFatface
-import com.google.type.DateTime
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.time.Duration.Companion.days
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -41,6 +39,8 @@ fun ChatScreen(
     onPetClick: () -> Unit
 
 ) {
+    val context = LocalContext.current
+
     // Guardar el estado de la lista
     val listState = rememberLazyListState()
     val userName = viewModel.selectedUserName ?: ""
@@ -102,7 +102,6 @@ fun ChatScreen(
                     itemsIndexed(messages) { index, message ->
                         Card(
                             modifier = Modifier
-<<<<<<< HEAD
                                 .padding(
                                     if (index % 2 == 0) PaddingValues(
                                         50.dp,
@@ -110,24 +109,29 @@ fun ChatScreen(
                                         5.dp,
                                         0.dp
                                     ) else PaddingValues(5.dp, 5.dp, 50.dp, 0.dp)
-=======
-                                .padding(if (index % 2 == 0) PaddingValues(50.dp, 5.dp, 5.dp, 0.dp) else PaddingValues(5.dp, 5.dp, 50.dp, 0.dp)),
-                            backgroundColor = if (index % 2 == 0) Color.Gray else Color.LightGray,
-                            content = {
-                                Text(
-                                    text = message,
-                                    color = Color.White,
-                                    modifier = Modifier.padding(8.dp)
->>>>>>> Andres
                                 )
-                        )
-                        {
+                                .heightIn(min = 48.dp, max = Float.POSITIVE_INFINITY.dp)
+                        ){
                             Column() {
                                 Row(
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .background(if (index % 2 == 0) Color.Gray else Color.LightGray)
+                                        .background(// SI MENSAJES SON PARES
+                                            if (index % 2 == 0) {// Y EL MODO OSCURO ESTA ACTIVADO
+                                                if (isSystemInDarkTheme()) {// FONDO GRIS
+                                                    Color.Gray
+                                                } else {// SINO FONDO "onBackground"
+                                                    MaterialTheme.colors.onSurface
+                                                }// SI MENSAJES IMPARES
+                                            } else {// Y EL MODO OSCURO ESTA ACTIVADO
+                                                if (isSystemInDarkTheme()) {// FONDO GRIS CLARITO
+                                                    Color.LightGray
+                                                } else {// SINO FONDO "background"
+                                                    MaterialTheme.colors.surface
+                                                }
+                                            }
+                                        )
                                         .padding(10.dp)
                                 ) {
                                     // IMAGEN DEL USUARIO
@@ -142,7 +146,7 @@ fun ChatScreen(
                                     )
                                     // MENSAJE
                                     Text(
-                                        text = message.values.toString(),
+                                        text = message,
                                         color = MaterialTheme.colors.onBackground,
                                         modifier = Modifier.padding(8.dp)
                                     )
@@ -154,33 +158,27 @@ fun ChatScreen(
                                         .fillMaxWidth()
                                         .background(
                                             // SI MENSAJES SON PARES
-                                            if (index % 2 == 0)
-                                            {
+                                            if (index % 2 == 0) {
                                                 // Y EL MODO OSCURO ESTA ACTIVADO
-                                                if(isSystemInDarkTheme())
-                                                {
+                                                if (isSystemInDarkTheme()) {
                                                     // FONDO GRIS
                                                     Color.Gray
-                                                }else
-                                                {
+                                                } else {
                                                     // SINO FONDO "onBackground"
-                                                    MaterialTheme.colors.onBackground
+                                                    MaterialTheme.colors.onSurface
                                                 }
                                                 // SI MENSAJES IMPARES
-                                            } else{
+                                            } else {
                                                 // Y EL MODO OSCURO ESTA ACTIVADO
-                                                if(isSystemInDarkTheme())
-                                                {
+                                                if (isSystemInDarkTheme()) {
                                                     // FONDO GRIS CLARITO
                                                     Color.LightGray
-                                                }else
-                                                {
+                                                } else {
                                                     // SINO FONDO "background"
-                                                    MaterialTheme.colors.background
+                                                    MaterialTheme.colors.surface
                                                 }
                                             }
                                         )
-
                                         .padding(10.dp)
                                 ){
                                     // OPCION 1
@@ -211,15 +209,23 @@ fun ChatScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     TextField(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f),
+                        shape = CutCornerShape(5.dp),
                         value = message,
                         onValueChange = { viewModel.updateMessage(it) },
-                        label = { Text("Escribir mensaje...") }
+                        label = { Text("Escribir mensaje...") },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = MaterialTheme.colors.onBackground,
+                            unfocusedBorderColor = Color.Gray
+                        )
                     )
                     Button(
                         onClick = {
                             if (message.isNotBlank()) {
                                 viewModel.addMessage()
+                            }else{
+                                Toast.makeText(context, "¡Mensaje vacío!", Toast.LENGTH_SHORT).show()
                             }
                         },
                         modifier = Modifier

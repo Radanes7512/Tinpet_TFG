@@ -17,8 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,6 +35,15 @@ fun PetProfileScreen(
     onBackClick: () -> Unit,
     onChatClick: () -> Unit,
 ) {
+    // LISTA DE FOTOS DE PERROS ( DE MOMENTO LAS ALMACENAMOS ASÍ)
+    val images = listOf(
+        R.drawable.default_pet,
+        R.drawable.default_pet_2,
+        R.drawable.default_pet_3,
+        R.drawable.default_pet_4,
+        R.drawable.default_pet_5
+    )
+
     // LISTA DE NOMBRE  ( DE MOMENTO ASÍ)
     val names = listOf("Max", "Scooby", "Calcetines", "Brutus", "Duke")
 
@@ -80,6 +91,11 @@ fun PetProfileScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
+                    .paint(
+                        painterResource(
+                            R.drawable.icon_pawprint
+                        )
+                    )
             ) {
                 item {
                     Box(
@@ -101,6 +117,7 @@ fun PetProfileScreen(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
                                 .padding(16.dp)
+                                .border(1.dp, Color.Yellow, CircleShape)
                         ) {
                             Image(
                                 modifier = Modifier
@@ -123,7 +140,7 @@ fun PetProfileScreen(
                         // Nombre de la mascota
                         Text(
                             modifier = Modifier.padding(5.dp),
-                            text = "Nombre: ${name}",
+                            text = "Nombre: $name",
                             fontSize = 20.sp,
                             fontFamily = abrilFatface,
                             color = MaterialTheme.colors.onBackground
@@ -134,7 +151,7 @@ fun PetProfileScreen(
                                 // Edad de la mascota
                                 Text(
                                     modifier = Modifier.padding(5.dp),
-                                    text = "Edad: ${age}",
+                                    text = "Edad: $age",
                                     fontSize = 20.sp,
                                     fontFamily = abrilFatface,
                                     color = MaterialTheme.colors.onBackground

@@ -68,13 +68,11 @@ class ChatViewModel() : ViewModel() {
                 if (value != null) {
                     //Leemos cada uno de los documentos dentro de la coleccion "Mensajes" de la base de datos
                     for (doc in value) {
-
                         //Extraemos los datos
                         val data = doc.data
                         //Añadimos info de si los mensajes son nuestros o no
                         data[Constants.IS_CURRENT_USER] =
                             Firebase.auth.currentUser?.uid.toString() == data[Constants.SENT_BY].toString()
-
                         list.add(data)
                     }
                 }

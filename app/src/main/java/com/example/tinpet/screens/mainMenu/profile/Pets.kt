@@ -52,7 +52,7 @@ fun PetsScreen(
                 }
             )
         },
-        floatingActionButton = {
+        /*floatingActionButton = {
            ExtendedFloatingActionButton(
                 text={
                      Text(
@@ -70,8 +70,8 @@ fun PetsScreen(
                     onAddClick()
                 }
             )
-        },
-        floatingActionButtonPosition = FabPosition.End
+        },*/
+        //floatingActionButtonPosition = FabPosition.End
     )
     //endregion
     // region CUERPO

@@ -31,6 +31,8 @@ class LoginViewModel(context: Context) : ViewModel() {
 
     private val rtdb = Firebase.database.reference
 
+    private val Firestore = Firebase.firestore
+
 
 
 
@@ -95,7 +97,8 @@ class LoginViewModel(context: Context) : ViewModel() {
         _password.value = password
         _password2.value = password2
         _signupEnable.value = isValidEmail(email) && isValidName(name) && isValidPassword(password) && password == password2
-    }
+
+        }
 
 
     fun onAddpetChanged(petname: String, petage: String){
@@ -109,11 +112,11 @@ class LoginViewModel(context: Context) : ViewModel() {
                 auth.signInWithEmailAndPassword(it, it1)
                     .addOnCompleteListener(context as Activity) { task ->
                         if (task.isSuccessful) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Si es correcto el login sale un mensaje al usuario y se envia el email
                             Log.d(TAG, "signInWithEmail:success")
                             checkIfEmailVerified()
                         } else {
-                            // If sign in fails, display a message to the user.
+                            // Si el login falla sale un mensaje al usuario
                             Log.w(TAG, "signInWithEmail:failure", task.exception)
                             Toast.makeText(context, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show()
@@ -131,6 +134,15 @@ class LoginViewModel(context: Context) : ViewModel() {
                 auth.createUserWithEmailAndPassword(it, it1)
                     .addOnCompleteListener(context as Activity) { task ->
                         if (task.isSuccessful) {
+                            val userdb = hashMapOf(
+                                "userinfo" to name,
+                                "userinfo" to email,
+                                "userinfo" to petname,
+                                "userinfo" to petage
+                            )
+                            Firestore.collection("users")
+                                .document(inc.toString())
+                                .set(userdb)
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success")
                             val user = auth.currentUser
@@ -192,13 +204,6 @@ class LoginViewModel(context: Context) : ViewModel() {
             }
         })
     }
-
-
-
-
-
-
-
 
 
     private fun isValidPassword(password: String): Boolean = password.length >= 6

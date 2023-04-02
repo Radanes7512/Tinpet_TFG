@@ -13,7 +13,6 @@ import com.google.firebase.ktx.Firebase
 
 class ChatViewModel() : ViewModel() {
     //region VARIABLES
-   val testMessage = mutableStateOf(listOf<String>())
 
     var selectedUserName: String? = null
 

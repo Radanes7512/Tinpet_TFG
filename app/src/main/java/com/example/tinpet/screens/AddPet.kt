@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -39,6 +40,8 @@ fun AddPetScreen(
 ) {
     // Agregar un estado composable para almacenar la imagen seleccionada
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+
+    val context = LocalContext.current
 
     val addpetEnable: Boolean by viewModel.addpetEnable.observeAsState(initial = false)
     Column(
@@ -97,6 +100,8 @@ fun AddPetScreen(
                 Button(
                     onClick = {
                         onClick()
+                        viewModel.register(context)
+
                     },
                     enabled = true,
                     shape = RoundedCornerShape(25),

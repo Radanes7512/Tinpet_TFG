@@ -1,5 +1,6 @@
 package com.example.tinpet.screens
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -44,6 +45,8 @@ class LoginViewModel(context: Context) : ViewModel() {
 
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> = _name
+
+
 
     var username = ""
 
@@ -136,9 +139,9 @@ class LoginViewModel(context: Context) : ViewModel() {
                         if (task.isSuccessful) {
                             val userdb = hashMapOf(
                                 "userinfo" to name,
-                                "userinfo" to email,
-                                "userinfo" to petname,
-                                "userinfo" to petage
+                                "userinfo2" to email,
+                                "userinfo3" to petname,
+                                "userinfo4" to petage
                             )
                             Firestore.collection("users")
                                 .document(inc.toString())
@@ -204,6 +207,9 @@ class LoginViewModel(context: Context) : ViewModel() {
             }
         })
     }
+
+
+
 
 
     private fun isValidPassword(password: String): Boolean = password.length >= 6

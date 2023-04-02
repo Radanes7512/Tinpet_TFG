@@ -32,7 +32,8 @@ fun NavGraph(
         }
         composable(route=AppScreens.ChatUsers.route){
             ChatUsersScreen(
-                onClick = {
+                onClick = {name  ->
+
                     navController.navigate(AppScreens.Chat.route)
                 },
                 viewModel= ChatViewModel()

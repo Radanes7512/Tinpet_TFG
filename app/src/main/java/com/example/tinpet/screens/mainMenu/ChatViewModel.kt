@@ -22,13 +22,19 @@ class ChatViewModel() : ViewModel() {
     private var _messages = MutableLiveData(emptyList<String>().toMutableList())
     val messages: LiveData<MutableList<String>> = _messages
 
+    private val _usernames = MutableLiveData(emptyList<String>().toMutableList())
+    val usernames: LiveData<MutableList<String>> = _usernames
+
+    var test:String = ""
 
     //endregion
 
     //region FUNCIONES
 
     init {
+        test =test
         getMessages()
+        getUsers()
     }
 
     //update del mensaje que enviamos
@@ -87,6 +93,44 @@ class ChatViewModel() : ViewModel() {
             messageList.add(message.get("message").toString())
         }
         _messages.value =messageList.asReversed()
+    }
+
+    fun getUsers() {
+        Firebase.firestore.collection("users")
+            .addSnapshotListener { value, e ->
+                if (e != null) {
+                    Log.w(Constants.TAG, "Listen failed.", e)
+                    return@addSnapshotListener
+                }
+
+                val list = emptyList<Map<String, Any>>().toMutableList()
+                //Value es el estado de la base de datos en el momento que lo recibimos (listener)
+                if (value != null) {
+                    //Leemos cada uno de los documentos dentro de la coleccion "Mensajes" de la base de datos
+                    for (doc in value) {
+                        //Extraemos los datos
+                        val data = doc.data
+                        val test = data.get("userinfo")
+                        //Añadimos info de si los mensajes son nuestros o no
+                        if (test != null)
+                            list.add(test as Map<String, Any>)
+                    }
+                }
+                getUsernames(list)
+            }
+    }
+
+    private fun getUsernames(list: MutableList<Map<String,Any>>) {
+
+        val usernameList = emptyList<String>().toMutableList()
+        for (user in list){
+            usernameList.add(user.get("value").toString())
+        }
+        _usernames.value = usernameList
+    }
+
+    fun assingUsers(name:String){
+    test= name
     }
     //endregion
 }

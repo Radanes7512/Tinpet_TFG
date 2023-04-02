@@ -3,7 +3,6 @@ package com.example.tinpet.screens
 object Constants {
 
         const val TAG = "flash-chat"
-
         const val MESSAGES = "messages"
         const val MESSAGE = "message"
         const val SENT_BY = "sent_by"

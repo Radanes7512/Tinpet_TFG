@@ -41,6 +41,7 @@ fun SignupScreen(
     onBackClick:() -> Unit
 ) {
     val signupEnable: Boolean by viewModel.signupEnable.observeAsState(initial = false)
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -95,6 +96,7 @@ fun SignupScreen(
                 Button(
                     onClick = {
                         onClick()
+                        viewModel.register(context)
                     },
                     enabled = true,
                     shape = RoundedCornerShape(25),

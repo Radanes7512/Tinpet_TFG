@@ -100,7 +100,6 @@ fun AddPetScreen(
                 Button(
                     onClick = {
                         onClick()
-                        viewModel.register(context)
 
                     },
                     enabled = true,

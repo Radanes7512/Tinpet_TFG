@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -15,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
+import com.example.tinpet.screens.LoginViewModel
 import com.example.tinpet.ui.theme.abrilFatface
 
 
@@ -22,6 +24,7 @@ import com.example.tinpet.ui.theme.abrilFatface
 @Composable
 fun ChatUsersScreen(
     viewModel: ChatViewModel,
+
      onClick: (String) -> Unit,
 ) {
     //region LISTA DE FOTOS DE PERROS ( DE MOMENTO LAS ALMACENAMOS ASÍ)
@@ -35,9 +38,12 @@ fun ChatUsersScreen(
     val firstImage: Int = images.toIntArray()[0]
 //endregion
     //region LISTA DE NOMBRE  ( DE MOMENTO ASÍ)
-    val names = listOf(
-        "Max", "Scooby", "Calcetines", "Brutus", "Duke"
-    )
+
+    val names by viewModel.usernames.observeAsState(listOf())
+    //val names = listOf(
+
+    //viewModel.usernames.value
+    //)
     //endregion
     //region CUERPO DE LA PANTALLA
     Box(
@@ -61,7 +67,7 @@ fun ChatUsersScreen(
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                .clickable { onClick(name) }
+                                .clickable { onClick(name.toString()) }
                                 .fillMaxWidth()
                                 .background(MaterialTheme.colors.primary)
                                 .padding(10.dp)
@@ -75,7 +81,7 @@ fun ChatUsersScreen(
                             )
                             Text(
                                 modifier = Modifier.padding(8.dp),
-                                text = name,
+                                text = name.toString(),
                                 fontSize = 16.sp,
                                 fontFamily = abrilFatface
                             )

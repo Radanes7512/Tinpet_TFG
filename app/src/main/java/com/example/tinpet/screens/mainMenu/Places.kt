@@ -21,7 +21,7 @@ import com.google.maps.android.compose.*
 @Composable
 fun PlacesScreen() {
     var search by remember { mutableStateOf("") }
-    val markers = listOf(
+    /*val markers = listOf(
         Marker(
             position = LatLng(40.421290016336684, -3.543930244461727),
             title = "Parque la Colina",
@@ -37,8 +37,8 @@ fun PlacesScreen() {
             title = "Parque canino",
             snippet = "Zona poco transcurrida"
         )
-    )
-    val filteredMarkers = remember { mutableListOf<Marker>() }
+    )*/
+    //val filteredMarkers = remember { mutableListOf<Marker>() }
     val properties by remember { mutableStateOf(MapProperties(mapType = MapType.SATELLITE)) }
     val uiSettings by remember { mutableStateOf(MapUiSettings(zoomControlsEnabled = false)) }
     val spain = LatLng(39.53721928672391, -3.416821204546524)
@@ -63,7 +63,22 @@ fun PlacesScreen() {
                     properties = properties,
                     uiSettings = uiSettings
                 ) {
-                    markers.forEach { marker ->
+                    Marker(
+                        position = LatLng(40.421290016336684, -3.543930244461727),
+                        title = "Parque la Colina",
+                        snippet = "Zona muy transcurrida"
+                    )
+                    Marker(
+                        position = LatLng(40.46036862008319, -3.450723624671722),
+                        title = "Parque de la Mancha Amarilla",
+                        snippet = "Zona transcurrida"
+                    )
+                    Marker(
+                        position = LatLng(40.42373493132333, -3.53992243227222),
+                        title = "Parque canino",
+                        snippet = "Zona poco transcurrida"
+                    )
+                   /* markers.forEach { marker ->
                         val index = markers.indexOf(marker)
                         val filteredMarker = filteredMarkers.getOrNull(index)
                         if (filteredMarker != null) {
@@ -73,9 +88,9 @@ fun PlacesScreen() {
                                 snippet = filteredMarker.snippet
                             )
                         }
-                    }
+                    }*/
                 }
-                if (filteredMarkers.isNotEmpty()) {
+               /*if (filteredMarkers.isNotEmpty()) {
                     Column(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             text = "Resultados:",
@@ -97,7 +112,7 @@ fun PlacesScreen() {
                             }
                         }
                     }
-                }
+                }*/
             }
         }
     )

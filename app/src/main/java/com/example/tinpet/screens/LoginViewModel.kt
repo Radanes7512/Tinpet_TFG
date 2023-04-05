@@ -36,8 +36,6 @@ class LoginViewModel(context: Context) : ViewModel() {
 
 
 
-
-
     // USER INFO
 
     private val _email = MutableLiveData<String>()
@@ -46,8 +44,6 @@ class LoginViewModel(context: Context) : ViewModel() {
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> = _name
 
-
-
     var username = ""
 
     private val _password = MutableLiveData<String>()
@@ -55,10 +51,6 @@ class LoginViewModel(context: Context) : ViewModel() {
 
     private val _password2 = MutableLiveData<String>()
     val password2: LiveData<String> = _password2
-
-    // SMS
-    private val _smscode = MutableLiveData<String>()
-    val smscode: LiveData<String> = _smscode
 
     // PET INFO
     private val _petname = MutableLiveData<String>()
@@ -77,8 +69,10 @@ class LoginViewModel(context: Context) : ViewModel() {
     private val _signupEnable = MutableLiveData<Boolean>()
     val signupEnable: LiveData<Boolean> = _signupEnable
 
-    private val _smsEnable = MutableLiveData<Boolean>()
-    val smsEnable: LiveData<Boolean> = _smsEnable
+    private val _emailVerified = MutableLiveData<Boolean>()
+    val emailVerified: LiveData<Boolean> = _emailVerified
+
+    var regState : Boolean = false
 
     private val _addpetEnable = MutableLiveData<Boolean>()
     val addpetEnable: LiveData<Boolean> = _addpetEnable
@@ -152,10 +146,12 @@ class LoginViewModel(context: Context) : ViewModel() {
                             sendVerificationEmail()
                             name.value?.let { it2 -> writeNewUser(inc, it2, email.value!!) }
                             readUser()
+                            regState = true
                             Toast.makeText(context, "Se ha creado su cuenta correctamente",
                                 Toast.LENGTH_SHORT).show()
                         } else {
                             // If sign in fails, display a message to the user.
+                            regState = false
                             Log.w(TAG, "createUserWithEmail:failure", task.exception)
                             Toast.makeText(context, "Ha ocurrido un error, en el registro",
                                 Toast.LENGTH_SHORT).show()

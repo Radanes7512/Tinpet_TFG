@@ -27,11 +27,11 @@ import com.example.tinpet.ui.theme.abrilFatface
 
 
 @Composable
-fun InputSmsNumScreen(
+fun VerifyEmailScreen(
     viewModel: LoginViewModel,
     onClick: () -> Unit
 ) {
-    val smsEnable: Boolean by viewModel.smsEnable.observeAsState(initial = false)
+    val emailVerified: Boolean by viewModel.emailVerified.observeAsState(initial = false)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -73,7 +73,7 @@ fun InputSmsNumScreen(
             }
         }
         // INPUTSMSNUM COMPONENTS
-        InputSms(Modifier, viewModel)
+        EmailVerify(Modifier, viewModel)
 
         // BOTÓN VERIFICAR CODIGO
         Row(
@@ -81,7 +81,7 @@ fun InputSmsNumScreen(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            if (smsEnable) {
+            if (emailVerified) {
                 Button(
                     onClick = { onClick() },
                     enabled = true,
@@ -101,7 +101,7 @@ fun InputSmsNumScreen(
 
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text(
-                        text = stringResource(R.string.isn_access_ES)
+                        text = stringResource(R.string.vfdem_access_ES)
                     )
                 }
             } else {
@@ -128,12 +128,11 @@ fun InputSmsNumScreen(
 }
 
 @Composable
-fun InputSms(modifier: Modifier, viewModel: LoginViewModel) {
-    val smscode: String by viewModel.smscode.observeAsState(initial = "")
+fun EmailVerify(modifier: Modifier, viewModel: LoginViewModel) {
 
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.padding(15.dp))
-        ISTitleText(Modifier.align(Alignment.CenterHorizontally))
+        VETitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
 
 
@@ -146,7 +145,7 @@ fun InputSms(modifier: Modifier, viewModel: LoginViewModel) {
 }
 
 @Composable
-fun ISTitleText(modifier: Modifier) {
+fun VETitleText(modifier: Modifier) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -157,7 +156,7 @@ fun ISTitleText(modifier: Modifier) {
         Text(
             modifier = Modifier.padding(5.dp),
             textAlign = TextAlign.Center,
-            text = (stringResource(R.string.ISN_ES)),
+            text = (stringResource(R.string.VFEM_ES)),
             fontSize = 32.sp,
             fontFamily = abrilFatface,
             color = MaterialTheme.colors.onBackground
@@ -166,7 +165,7 @@ fun ISTitleText(modifier: Modifier) {
 }
 
 @Composable
-fun ISinput(smscode: String, onTextFieldChanged: (String) -> Unit) {
+fun VEinput(smscode: String, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -181,13 +180,13 @@ fun ISinput(smscode: String, onTextFieldChanged: (String) -> Unit) {
             },
             label = {
                 Text(
-                    text = stringResource(R.string.sms_label_ES),
+                    text = "text 1",
                     color = MaterialTheme.colors.onBackground
                 )
             },
             placeholder = {
                 Text(
-                    text = stringResource(R.string.sms_placeholder_ES),
+                    text = "text 2",
                     color = MaterialTheme.colors.onBackground
                 )
             },
@@ -202,21 +201,5 @@ fun ISinput(smscode: String, onTextFieldChanged: (String) -> Unit) {
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
-    }
-}
-
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun ISNScreenPreviewPreviewLT() {
-    TinPetTheme(darkTheme = false) {
-        InputSmsNumScreen(viewModel = LoginViewModel(LocalContext.current), onClick = {})
-    }
-}
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun ISNScreenPreviewPreviewDT() {
-    TinPetTheme(darkTheme = true) {
-        InputSmsNumScreen(viewModel = LoginViewModel(LocalContext.current), onClick = {})
     }
 }

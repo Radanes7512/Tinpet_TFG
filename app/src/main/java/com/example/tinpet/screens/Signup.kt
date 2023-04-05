@@ -2,6 +2,7 @@ package com.example.tinpet.screens
 
 import android.app.Activity
 import android.renderscript.ScriptGroup.Binding
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -95,8 +96,10 @@ fun SignupScreen(
             if(signupEnable){
                 Button(
                     onClick = {
-                        onClick()
                         viewModel.register(context)
+                        if( viewModel.regState ) {
+                            onClick()
+                        }
                     },
                     enabled = true,
                     shape = RoundedCornerShape(25),

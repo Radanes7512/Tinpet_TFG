@@ -30,7 +30,7 @@ fun MainNavigationGraph(navController: NavHostController) {
             SignupScreen(
                 onClick = {
                     navController.popBackStack()
-                    navController.navigate(AppScreens.Addpet.route)
+                    navController.navigate(AppScreens.Verify.route)
                 },
                 onBackClick = {
                     navController.popBackStack()
@@ -39,7 +39,15 @@ fun MainNavigationGraph(navController: NavHostController) {
                 viewModel = LoginViewModel(LocalContext.current)
             )
         }
-
+        composable(AppScreens.Verify.route){
+            VerifyEmailScreen(
+                viewModel = LoginViewModel(LocalContext.current),
+                onClick = {
+                    navController.popBackStack()
+                    navController.navigate(AppScreens.Addpet.route)
+                }
+            )
+        }
         composable(AppScreens.Addpet.route){
             AddPetScreen(
                 onClick = {

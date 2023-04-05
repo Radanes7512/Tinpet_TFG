@@ -24,6 +24,10 @@ sealed class AppScreens(
         icon = Icons.Filled.AppRegistration
     )
 
+    object Verify : AppScreens(
+        route = "verify",
+        icon = Icons.Filled.Verified
+    )
     object  Addpet : AppScreens(
         route = "addpet",
         icon = Icons.Filled.Pets

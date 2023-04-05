@@ -10,11 +10,11 @@
     <string name="login_ES">Iniciar sesión</string>
     <string name="register_ES">Crea tu cuenta</string>
     <string name="addpet_ES">Añadir mascota</string>
-    <string name="ISN_ES">Introduce el código SMS</string>
+    <string name="VFEM_ES">Verifique su cuenta</string>
             <!-- MAIN FUNCTIONS -->
     <string name="login_access_ES">Acceder</string>
     <string name="signup_access_ES">Crear cuenta</string>
-    <string name="isn_access_ES">Continuar</string>
+    <string name="vfdem_access_ES">Continuar</string>
     <string name="addpet_access_ES">Añadir mascota</string>
     <string name="go_to_login_ES">Ya tengo cuenta</string>
     <string name="go_to_register_ES">Crear una cuenta</string>
@@ -26,9 +26,6 @@
     <string name="password_ES">Contraseña</string>
     <string name="pswd_text_ES">Introducir contraseña</string>
     <string name="repeat_password_ES">Repetir contraseña</string>
-        <!-- SMS -->
-    <string name="sms_label_ES">Código</string>
-    <string name="sms_placeholder_ES">Introduce código SMS</string>
         <!-- PET -->
     <string name="petname_ES">Nombre</string>
     <string name="pname_ES">Nombre de la mascota</string>

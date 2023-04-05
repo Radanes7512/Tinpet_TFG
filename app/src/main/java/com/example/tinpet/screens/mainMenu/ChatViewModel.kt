@@ -6,10 +6,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.tinpet.screens.Constants
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+
 
 class ChatViewModel() : ViewModel() {
     //region VARIABLES
@@ -22,8 +26,8 @@ class ChatViewModel() : ViewModel() {
     private var _messages = MutableLiveData(emptyList<String>().toMutableList())
     val messages: LiveData<MutableList<String>> = _messages
 
-    private val _usernames = MutableLiveData(emptyList<String>().toMutableList())
-    val usernames: LiveData<MutableList<String>> = _usernames
+    private val _usernames = MutableLiveData(emptyList<Map<String,String>>().toMutableList())
+    val usernames: LiveData<MutableList<Map<String,String>>> = _usernames
 
     var test:String = ""
 
@@ -32,8 +36,7 @@ class ChatViewModel() : ViewModel() {
     //region FUNCIONES
 
     init {
-        test =test
-        getMessages()
+
         getUsers()
     }
 
@@ -59,10 +62,10 @@ class ChatViewModel() : ViewModel() {
     }
 
 
-    private fun getMessages() {
-        Firebase.firestore.collection(Constants.MESSAGES)
-            .orderBy(Constants.SENT_ON)
-            .addSnapshotListener { value, e ->
+    private fun getMessages(chatId: String) {
+        Firebase.firestore.collection(Constants.CONVERSATIONS)
+            .document(chatId)
+            .addSnapshotListener { doc, e ->
                 if (e != null) {
                     Log.w(Constants.TAG, "Listen failed.", e)
                     return@addSnapshotListener
@@ -70,21 +73,27 @@ class ChatViewModel() : ViewModel() {
 
                 val list = emptyList<Map<String, Any>>().toMutableList()
                 //Value es el estado de la base de datos en el momento que lo recibimos (listener)
-                if (value != null) {
+                if (doc != null) {
                     //Leemos cada uno de los documentos dentro de la coleccion "Mensajes" de la base de datos
-                    for (doc in value) {
                         //Extraemos los datos
                         val data = doc.data
                         //Añadimos info de si los mensajes son nuestros o no
-                        data[Constants.IS_CURRENT_USER] =
-                            Firebase.auth.currentUser?.uid.toString() == data[Constants.SENT_BY].toString()
-                        list.add(data)
-                    }
+
+                    //!!!!!!!!!!!No le pasamos la id de la conversacion si no la del usuario!!!!!!!!!
                 }
 
                 updateMessages(list)
             }
     }
+
+
+
+    public  fun callGetMessages(chatId:String){
+        viewModelScope.launch {
+            getMessages(chatId)
+        }
+    }
+
 
     private fun updateMessages(list: MutableList<Map<String, Any>>) {
 
@@ -103,28 +112,32 @@ class ChatViewModel() : ViewModel() {
                     return@addSnapshotListener
                 }
 
-                val list = emptyList<Map<String, Any>>().toMutableList()
+                val list = emptyList<Map<String, String>>().toMutableList()
                 //Value es el estado de la base de datos en el momento que lo recibimos (listener)
                 if (value != null) {
                     //Leemos cada uno de los documentos dentro de la coleccion "Mensajes" de la base de datos
                     for (doc in value) {
+
                         //Extraemos los datos
                         val data = doc.data
-                        val test = data.get("userinfo")
+                        val userMap = mapOf<String,String>(
+                            "id" to doc.id,
+                            "name" to data.get("Username").toString()
+                        )
                         //Añadimos info de si los mensajes son nuestros o no
-                        if (test != null)
-                            list.add(test as Map<String, Any>)
+                        list.add(userMap)
+
                     }
                 }
                 getUsernames(list)
             }
     }
 
-    private fun getUsernames(list: MutableList<Map<String,Any>>) {
+    private fun getUsernames(list: MutableList<Map<String,String>>) {
 
-        val usernameList = emptyList<String>().toMutableList()
+        val usernameList = emptyList<Map<String,String>>().toMutableList()
         for (user in list){
-            usernameList.add(user.get("value").toString())
+            usernameList.add(user)
         }
         _usernames.value = usernameList
     }

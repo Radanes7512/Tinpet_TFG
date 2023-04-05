@@ -3,7 +3,6 @@ package com.example.tinpet.screens.mainMenu
 import android.annotation.SuppressLint
 import android.os.Build
 import android.widget.Toast
-import android.content.Context
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -34,11 +33,12 @@ import java.util.*
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChatScreen(
+    chatId:String,
     viewModel: ChatViewModel,
     onBackClick: () -> Unit,
     onPetClick: () -> Unit
-
 ) {
+    viewModel.callGetMessages(chatId)
     val context = LocalContext.current
 
     // Guardar el estado de la lista
@@ -137,7 +137,7 @@ fun ChatScreen(
                                     // IMAGEN DEL USUARIO
                                     Image(
                                         modifier = Modifier
-                                            .clickable { onPetClick() }
+                                            .clickable { onPetClick()}
                                             .clip(CircleShape)
                                             .size(25.dp)
                                             .align(alignment = Alignment.CenterVertically),

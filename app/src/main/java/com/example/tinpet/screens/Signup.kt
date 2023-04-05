@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.tinpet.R
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
@@ -43,7 +44,7 @@ fun SignupScreen(
 ) {
     val signupEnable: Boolean by viewModel.signupEnable.observeAsState(initial = false)
     val context = LocalContext.current
-
+    val navController = rememberNavController()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -97,9 +98,6 @@ fun SignupScreen(
                 Button(
                     onClick = {
                         viewModel.register(context)
-                        if( viewModel.regState ) {
-                            onClick()
-                        }
                     },
                     enabled = true,
                     shape = RoundedCornerShape(25),

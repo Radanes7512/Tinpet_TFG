@@ -8,9 +8,14 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.tinpet.AppScreens
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -22,11 +27,9 @@ import com.google.firebase.ktx.Firebase
 import kotlin.random.Random
 
 
-class LoginViewModel(context: Context) : ViewModel() {
-
+class LoginViewModel(context: Context, navController: NavController) : ViewModel() {
     //Context parameter
     private val applicationContext = context.applicationContext
-
 
     private val auth = Firebase.auth
 
@@ -146,12 +149,10 @@ class LoginViewModel(context: Context) : ViewModel() {
                             sendVerificationEmail()
                             name.value?.let { it2 -> writeNewUser(inc, it2, email.value!!) }
                             readUser()
-                            regState = true
-                            Toast.makeText(context, "Se ha creado su cuenta correctamente",
-                                Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Se ha creado su cuenta correctamente",Toast.LENGTH_SHORT).show()
+                            //navController.navigate(AppScreens.Verify.route)
                         } else {
                             // If sign in fails, display a message to the user.
-                            regState = false
                             Log.w(TAG, "createUserWithEmail:failure", task.exception)
                             Toast.makeText(context, "Ha ocurrido un error, en el registro",
                                 Toast.LENGTH_SHORT).show()

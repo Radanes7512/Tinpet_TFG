@@ -40,7 +40,7 @@ fun NavGraph(
                     navController.navigate(AppScreens.Chat.route)
                 },
                 chatViewModel= ChatViewModel(),
-                loginViewModel = LoginViewModel(LocalContext.current)
+                loginViewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
         composable(route=AppScreens.Chat.route){
@@ -53,7 +53,7 @@ fun NavGraph(
                     navController.navigate(AppScreens.PetProfile.route)
                 },
                 chatViewModel= ChatViewModel(),
-                loginViewModel = LoginViewModel(LocalContext.current)
+                loginViewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
         composable(route = AppScreens.Profile.route){
@@ -70,7 +70,7 @@ fun NavGraph(
                 onRqtClick ={
                     navController.navigate(AppScreens.Requests.route)
                 },
-                viewModel = LoginViewModel(LocalContext.current)
+                viewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
         composable(route = AppScreens.Pets.route){
@@ -158,7 +158,7 @@ fun NavGraph(
                     navController.popBackStack()
                     navController.navigate(AppScreens.Signup.route)
                 },
-                viewModel = LoginViewModel(LocalContext.current)
+                viewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
         composable(AppScreens.Signup.route){
@@ -171,13 +171,13 @@ fun NavGraph(
                     navController.popBackStack()
                     navController.navigate(Graph.AUTHENTICATION)
                 },
-                viewModel = LoginViewModel(LocalContext.current)
+                viewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
 
         composable(AppScreens.Verify.route){
             VerifyEmailScreen(
-                viewModel = LoginViewModel(LocalContext.current),
+                viewModel = LoginViewModel(LocalContext.current, navController),
                 onClick = {
                     navController.popBackStack()
                     navController.navigate(AppScreens.Addpet.route)
@@ -190,7 +190,7 @@ fun NavGraph(
                     navController.popBackStack()
                     navController.navigate(Graph.AUTHENTICATION)
                 },
-                viewModel = LoginViewModel(LocalContext.current)
+                viewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
         composable(

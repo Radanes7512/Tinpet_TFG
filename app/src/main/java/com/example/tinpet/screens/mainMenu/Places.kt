@@ -2,19 +2,22 @@ package com.example.tinpet.screens.mainMenu
 
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
+import com.example.tinpet.R
 import com.example.tinpet.ui.theme.abrilFatface
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -46,6 +49,11 @@ fun PlacesScreen() {
         position = CameraPosition.fromLatLngZoom(spain, 5.5f)
     }
 
+
+
+    // Crear el descriptor de bitmap con la imagen escalada
+    val markerIcon = BitmapDescriptorFactory.fromResource(R.drawable.icon_pawprint)
+
     Scaffold(
         topBar = {
             TopBar(search, onSearchChange = { newSearch ->
@@ -66,17 +74,20 @@ fun PlacesScreen() {
                     Marker(
                         position = LatLng(40.421290016336684, -3.543930244461727),
                         title = "Parque la Colina",
-                        snippet = "Zona muy transcurrida"
+                        snippet = "Zona muy transcurrida",
+                        icon = markerIcon
                     )
                     Marker(
                         position = LatLng(40.46036862008319, -3.450723624671722),
                         title = "Parque de la Mancha Amarilla",
-                        snippet = "Zona transcurrida"
+                        snippet = "Zona transcurrida",
+                        icon = markerIcon
                     )
                     Marker(
                         position = LatLng(40.42373493132333, -3.53992243227222),
                         title = "Parque canino",
-                        snippet = "Zona poco transcurrida"
+                        snippet = "Zona poco transcurrida",
+                        icon = markerIcon
                     )
                    /* markers.forEach { marker ->
                         val index = markers.indexOf(marker)

@@ -44,7 +44,7 @@ fun MainNavigationGraph(navController: NavHostController) {
                 viewModel = LoginViewModel(LocalContext.current, navController),
                 onClick = {
                     navController.popBackStack()
-                    navController.navigate(AppScreens.Addpet.route)
+                    navController.navigate(Graph.AUTHENTICATION)
                 }
             )
         }

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -65,6 +67,9 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
     private val _petImageUri = MutableLiveData<Uri>()
     val petImageUri: LiveData<Uri> = _petImageUri
 
+    private val _petcategory = MutableLiveData<String>()
+    val petcategory: LiveData<String> = _petcategory
+
     // VAL FUNCTIONS
     private val _loginEnable = MutableLiveData<Boolean>()
     val loginEnable: LiveData<Boolean> = _loginEnable
@@ -82,9 +87,6 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
 
     var uiState = mutableStateOf<UiState>(UiState.SignedOut)
 
-
-
-
     fun onLoginChanged(email: String, password: String) {
         _email.value= email
         _password.value = password
@@ -97,15 +99,17 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
         _password.value = password
         _password2.value = password2
         _signupEnable.value = isValidEmail(email) && isValidName(name) && isValidPassword(password) && password == password2
-
         }
 
 
-    fun onAddpetChanged(petname: String, petage: String){
+    fun onAddpetChanged(petname: String, petage: String, petcategory: String, petimage: Uri){
         _petname.value = petname
         _petage.value = petage
-        _addpetEnable.value = isValidPetName(petname) && isValidPetAge(petage)
+        _petcategory.value = petcategory
+        _petImageUri.value = petimage
+        _addpetEnable.value = isValidPetCategory(petcategory) && isValidPetName(petname) && isValidPetAge(petage) && isValidPetImage(petimage)
     }
+
     fun login(context: Context){
         email.value?.let {
             password.value?.let { it1 ->
@@ -210,11 +214,19 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
 
 
     private fun isValidPassword(password: String): Boolean = password.length >= 6
-    private fun isValidEmail(email: String): Boolean  = email.contains("@gmail.com")
+    private fun isValidEmail(email: String): Boolean  = email.contains("@gmail.com") || email.contains("@hotmail.com")
     private fun isValidName(name: String): Boolean = name.length > 1
     private fun isValidPetName(petname:String): Boolean = petname.length > 1
+    private fun isValidPetCategory(petcategory:String): Boolean = petcategory.length > 1
     private fun isValidPetAge(petage:String): Boolean = petage.length in 1..2
-
-
+    private fun isValidPetImage(petimage: Uri): Boolean = petimage.isRelative
+/*{
+        val isImageExists = try {
+            context.checkUriPermission(petimage, null, null, Intent.FLAG_GRANT_READ_URI_PERMISSION) == PackageManager.PERMISSION_GRANTED
+        } catch (e: Exception) {
+            false
+        }
+        return isImageExists && petimage.isAbsolute
+    }*/
 
 }

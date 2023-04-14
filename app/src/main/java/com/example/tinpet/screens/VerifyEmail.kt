@@ -81,7 +81,7 @@ fun VerifyEmailScreen(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            if (emailVerified) {
+            //if (emailVerified) {
                 Button(
                     onClick = { onClick() },
                     enabled = true,
@@ -104,7 +104,7 @@ fun VerifyEmailScreen(
                         text = stringResource(R.string.vfdem_access_ES)
                     )
                 }
-            } else {
+           /* } else {
                 Button(
                     onClick = {},
                     enabled = false,
@@ -122,7 +122,7 @@ fun VerifyEmailScreen(
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
                 }
-            }
+            //}*/
         }
     }
 }
@@ -134,13 +134,8 @@ fun EmailVerify(modifier: Modifier, viewModel: LoginViewModel) {
         Spacer(modifier = Modifier.padding(15.dp))
         VETitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-
-
+        VEBodyText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(5.dp))
-
-        Spacer(modifier = Modifier.padding(5.dp))
-
-        Spacer(modifier = Modifier.padding(15.dp))
     }
 }
 
@@ -165,41 +160,28 @@ fun VETitleText(modifier: Modifier) {
 }
 
 @Composable
-fun VEinput(smscode: String, onTextFieldChanged: (String) -> Unit) {
+fun VEBodyText(modifier: Modifier) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        // Nombre del usuario
-        OutlinedTextField(
-            value = smscode,
-            onValueChange = {
-                onTextFieldChanged(it)
-            },
-            label = {
-                Text(
-                    text = "text 1",
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            placeholder = {
-                Text(
-                    text = "text 2",
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            leadingIcon = {
-                IconButton(onClick = { }) {
-                    Icon(
-                        imageVector = Icons.Filled.Sms,
-                        tint = MaterialTheme.colors.onBackground,
-                        contentDescription = null
-                    )
-                }
-            },
-            colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
+        Text(
+            modifier = Modifier.padding(5.dp),
+            textAlign = TextAlign.Center,
+            text = "Estimado usuario,\n" +
+                    "\n" +
+                    "Le informamos que para poder completar el proceso de registro en nuestro servicio, es necesario que verifique su dirección de correo electrónico. Se ha enviado un correo electrónico a la dirección proporcionada durante el registro con un enlace de verificación. Por favor, revise su bandeja de entrada y siga las instrucciones en el correo electrónico para verificar su dirección de correo electrónico.\n" +
+                    "\n" +
+                    "Una vez verificado, puede continuar con el proceso de registro en nuestro servicio. Si tiene alguna pregunta o problema, no dude en contactarnos.\n" +
+                    "\n" +
+                    "Atentamente,\n" +
+                    "\n" +
+                    "El equipo de soporte técnico.",
+            fontSize = 16.sp,
+            fontFamily = abrilFatface,
+            color = MaterialTheme.colors.onBackground
         )
     }
 }

@@ -24,35 +24,12 @@ import com.google.maps.android.compose.*
 @Composable
 fun PlacesScreen() {
     var search by remember { mutableStateOf("") }
-    /*val markers = listOf(
-        Marker(
-            position = LatLng(40.421290016336684, -3.543930244461727),
-            title = "Parque la Colina",
-            snippet = "Zona muy transcurrida"
-        ),
-        Marker(
-            position = LatLng(40.46036862008319, -3.450723624671722),
-            title = "Parque de la Mancha Amarilla",
-            snippet = "Zona transcurrida"
-        ),
-        Marker(
-            position = LatLng(40.42373493132333, -3.53992243227222),
-            title = "Parque canino",
-            snippet = "Zona poco transcurrida"
-        )
-    )*/
-    //val filteredMarkers = remember { mutableListOf<Marker>() }
-    val properties by remember { mutableStateOf(MapProperties(mapType = MapType.SATELLITE)) }
+    val properties by remember { mutableStateOf(MapProperties(mapType = MapType.SATELLITE, isMyLocationEnabled = true)) }
     val uiSettings by remember { mutableStateOf(MapUiSettings(zoomControlsEnabled = false)) }
     val spain = LatLng(39.53721928672391, -3.416821204546524)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(spain, 5.5f)
     }
-
-
-
-    // Crear el descriptor de bitmap con la imagen escalada
-    val markerIcon = BitmapDescriptorFactory.fromResource(R.drawable.icon_pawprint)
 
     Scaffold(
         topBar = {
@@ -75,55 +52,23 @@ fun PlacesScreen() {
                         position = LatLng(40.421290016336684, -3.543930244461727),
                         title = "Parque la Colina",
                         snippet = "Zona muy transcurrida",
-                        icon = markerIcon
                     )
                     Marker(
                         position = LatLng(40.46036862008319, -3.450723624671722),
                         title = "Parque de la Mancha Amarilla",
                         snippet = "Zona transcurrida",
-                        icon = markerIcon
                     )
                     Marker(
                         position = LatLng(40.42373493132333, -3.53992243227222),
                         title = "Parque canino",
                         snippet = "Zona poco transcurrida",
-                        icon = markerIcon
                     )
-                   /* markers.forEach { marker ->
-                        val index = markers.indexOf(marker)
-                        val filteredMarker = filteredMarkers.getOrNull(index)
-                        if (filteredMarker != null) {
-                            Marker(
-                                position = filteredMarker.position,
-                                title = filteredMarker.title,
-                                snippet = filteredMarker.snippet
-                            )
-                        }
-                    }*/
+                    Marker(
+                        position = LatLng(22.678290518593332, -73.82836630373427),
+                        title = "Avión hundido",
+                        snippet = "Triángulo de las Bermudas",
+                    )
                 }
-               /*if (filteredMarkers.isNotEmpty()) {
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        Text(
-                            text = "Resultados:",
-                            fontFamily = abrilFatface,
-                            modifier = Modifier.padding(16.dp)
-                        )
-                        LazyColumn {
-                            items(filteredMarkers.size) { index ->
-                                val marker = filteredMarkers[index]
-                                Card(
-                                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                                    elevation = 8.dp
-                                ) {
-                                    Column(modifier = Modifier.padding(16.dp)) {
-                                        Text(text = marker.title ?: "Título no disponible")
-                                        Text(text = marker.snippet ?: "Snippet no disponible")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }*/
             }
         }
     )

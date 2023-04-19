@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                 Manifest.permission.READ_EXTERNAL_STORAGE
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // Solicitar permiso de galería
+            // Solicitar permiso de galerías
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),

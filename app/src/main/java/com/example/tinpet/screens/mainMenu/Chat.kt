@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContentProviderCompat.requireContext
+//import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.tinpet.R
 import com.example.tinpet.ui.theme.abrilFatface
 import java.util.*
@@ -33,23 +33,29 @@ import java.util.*
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChatScreen(
-    chatId:String,
+    chatId: String,
+    message: String = "",
     viewModel: ChatViewModel,
     onBackClick: () -> Unit,
     onPetClick: () -> Unit
 ) {
-    viewModel.callGetMessages(chatId)
+    viewModel.callGetMessages(chatId, message)
     val context = LocalContext.current
 
     // Guardar el estado de la lista
     val listState = rememberLazyListState()
     val userName = viewModel.selectedUserName ?: ""
 
+    val messages: List<String> by viewModel.messages.observeAsState(emptyList<String>().toMutableList())
+
+
     val message: String by viewModel.message.observeAsState("")
 
+
+
     //Mensajes actualizados a mostrar
-    val messages:
-            List<String> by viewModel.messages.observeAsState(emptyList<String>().toMutableList())
+    // val messages:
+    //     List<String> by viewModel.messages.observeAsState(emptyList<String>().toMutableList())
 
     // Agregar un mensaje
     @Composable
@@ -223,8 +229,9 @@ fun ChatScreen(
                     Button(
                         onClick = {
                             if (message.isNotBlank()) {
-                                viewModel.addMessage()
-                            }else{
+                                viewModel.sendMessage(chatId, message)
+                                viewModel.updateMessage("")
+                            } else {
                                 Toast.makeText(context, "¡Mensaje vacío!", Toast.LENGTH_SHORT).show()
                             }
                         },

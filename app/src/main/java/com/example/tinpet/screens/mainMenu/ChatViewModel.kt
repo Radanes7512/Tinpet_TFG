@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tinpet.screens.Constants
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
@@ -20,8 +21,13 @@ class ChatViewModel() : ViewModel() {
 
     var selectedUserName: String? = null
 
+    val auth = Firebase.auth
+
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> = _message
+
+    private val _messagesState = MutableLiveData<List<String>>()
+    val messagesState: LiveData<List<String>> = _messagesState
 
     private var _messages = MutableLiveData(emptyList<String>().toMutableList())
     val messages: LiveData<MutableList<String>> = _messages
@@ -30,6 +36,7 @@ class ChatViewModel() : ViewModel() {
     val usernames: LiveData<MutableList<Map<String,String>>> = _usernames
 
     var test:String = ""
+
 
     //endregion
 
@@ -53,7 +60,7 @@ class ChatViewModel() : ViewModel() {
                 hashMapOf(
                     Constants.MESSAGE to message,
                     Constants.SENT_BY to Firebase.auth.currentUser?.uid,
-                    Constants.SENT_ON to System.currentTimeMillis()
+                    Constants.SENT_TO to System.currentTimeMillis()
                 )
             ).addOnSuccessListener {
                 _message.value = ""
@@ -62,38 +69,146 @@ class ChatViewModel() : ViewModel() {
     }
 
 
-    private fun getMessages(chatId: String) {
-        Firebase.firestore.collection(Constants.CONVERSATIONS)
-            .document(chatId)
-            .addSnapshotListener { doc, e ->
-                if (e != null) {
-                    Log.w(Constants.TAG, "Listen failed.", e)
-                    return@addSnapshotListener
+    /*  private fun getMessages(chatId: String) {
+          val user =auth.currentUser
+
+
+          if (user != null) {
+              Firebase.firestore.collection(Constants.USERS)
+                  .whereEqualTo("Email", user.email)
+                  .addSnapshotListener { value, e ->
+                      if (e != null) {
+                          Log.w(Constants.TAG, "Listen failed.", e)
+                          return@addSnapshotListener
+                      }
+                      if (value != null) {
+
+                          for (doc in value) {
+
+                              //Extraemos los datos
+                              val currentUser = doc.id
+                             // val messages =
+                              val users = arrayOf(chatId,currentUser)
+                              val conversationdb = hashMapOf(
+                                  "users" to users,
+                                  //"messages" to
+                              )
+
+                          }
+                      }
+                  }
+          }
+      }
+
+
+      private fun createMessages() {
+          Firebase.firestore.collection(Constants.MESSAGES)
+              .orderBy(Constants.SENT_ON)
+              .addSnapshotListener { value, e ->
+                  if (e != null) {
+                      Log.w(Constants.TAG, "Listen failed.", e)
+                      return@addSnapshotListener
+                  }
+
+                  val list = emptyList<Map<String, Any>>().toMutableList()
+                  //Value es el estado de la base de datos en el momento que lo recibimos (listener)
+                  if (value != null) {
+                      //Leemos cada uno de los documentos dentro de la coleccion "Mensajes" de la base de datos
+                      for (doc in value) {
+                          //Extraemos los datos
+                          val data = doc.data
+                          //Añadimos info de si los mensajes son nuestros o no
+                          data[Constants.IS_CURRENT_USER] =
+                              Firebase.auth.currentUser?.uid.toString() == data[Constants.SENT_BY].toString()
+
+                          list.add(data)
+                      }
+                  }
+
+                  updateMessages(list)
+              }
+      }*/
+
+    fun sendMessage(chatId: String, message: String) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            // Crear un nuevo documento en la colección "Mensajes"
+            val messageData = hashMapOf(
+                Constants.SENT_BY to currentUser.uid,
+                Constants.SENT_TO to chatId,
+                Constants.MESSAGE to message,
+                Constants.SENT_TO to FieldValue.serverTimestamp()
+            )
+            Firebase.firestore.collection(Constants.MESSAGES).add(messageData)
+                .addOnSuccessListener { documentReference ->
+                    Log.d(Constants.TAG, "Mensaje enviado con ID: ${documentReference.id}")
+                    // Actualizar la colección de conversaciones
+                    val conversationData = hashMapOf(
+                        Constants.USER1_ID to currentUser.uid,
+                        Constants.USER2_ID to chatId,
+                        Constants.LAST_MESSAGE to message,
+                        Constants.LAST_MESSAGE_TIME to FieldValue.serverTimestamp()
+                    )
+                    Firebase.firestore.collection(Constants.CONVERSATIONS).document(documentReference.id)
+                        .set(conversationData)
+                        .addOnSuccessListener {
+                            Log.d(Constants.TAG, "Conversación actualizada correctamente")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(Constants.TAG, "Error al actualizar la conversación", e)
+                        }
                 }
-
-                val list = emptyList<Map<String, Any>>().toMutableList()
-                //Value es el estado de la base de datos en el momento que lo recibimos (listener)
-                if (doc != null) {
-                    //Leemos cada uno de los documentos dentro de la coleccion "Mensajes" de la base de datos
-                        //Extraemos los datos
-                        val data = doc.data
-                        //Añadimos info de si los mensajes son nuestros o no
-
-                    //!!!!!!!!!!!No le pasamos la id de la conversacion si no la del usuario!!!!!!!!!
+                .addOnFailureListener { e ->
+                    Log.w(Constants.TAG, "Error al enviar el mensaje", e)
                 }
-
-                updateMessages(list)
-            }
-    }
-
-
-
-    public  fun callGetMessages(chatId:String){
-        viewModelScope.launch {
-            getMessages(chatId)
         }
     }
 
+
+    public  fun callGetMessages(chatId:String, message: String){
+        viewModelScope.launch {
+            sendMessage(chatId,message)
+        }
+    }
+
+    fun getMessages(chatId: String, onMessagesFetched: (List<String>) -> Unit) {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            Firebase.firestore.collection(Constants.MESSAGES)
+                .whereEqualTo(Constants.SENT_BY, currentUser.uid)
+                .whereEqualTo(Constants.SENT_TO, chatId)
+                .orderBy(Constants.SENT_TO)
+                .addSnapshotListener { value, error ->
+                    if (error != null) {
+                        Log.w(Constants.TAG, "Error al obtener los mensajes", error)
+                        return@addSnapshotListener
+                    }
+
+                    if (value != null) {
+                        val messages = mutableListOf<String>()
+                        for (doc in value) {
+                            val message = doc.getString(Constants.MESSAGE)
+                            if (message != null) {
+                                messages.add(message)
+                            }
+                        }
+
+                        // Llamar la función de devolución de llamada con los mensajes recuperados
+                        onMessagesFetched(messages)
+                    }
+                }
+        }
+    }
+
+    fun fetchMessages(chatId: String) {
+        getMessages(chatId) { messages ->
+            viewModelScope.launch {
+                _messagesState.value = messages
+            }
+        }
+    }
 
     private fun updateMessages(list: MutableList<Map<String, Any>>) {
 
@@ -104,6 +219,9 @@ class ChatViewModel() : ViewModel() {
         _messages.value =messageList.asReversed()
     }
 
+    fun sendUserMessage(chatId: String, message: String) {
+        sendMessage(chatId, message)
+    }
     fun getUsers() {
         Firebase.firestore.collection("users")
             .addSnapshotListener { value, e ->
@@ -143,7 +261,7 @@ class ChatViewModel() : ViewModel() {
     }
 
     fun assingUsers(name:String){
-    test= name
+        test= name
     }
     //endregion
 }

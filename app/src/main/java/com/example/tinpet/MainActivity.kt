@@ -15,74 +15,62 @@ import com.google.accompanist.permissions.rememberPermissionState
 
 class MainActivity : ComponentActivity() {
 
-    private val locationPermissionRequestCode = 100
-    private val galleryPermissionRequestCode = 200
+    private val requestPermissionsCode = 100
+    private val permissionsToRequest = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Verificar si se han otorgado los permisos de ubicación
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // Solicitar permiso de ubicación
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                locationPermissionRequestCode
-            )
+        val permissionsDenied = permissionsToRequest.filter {
+            ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_DENIED
         }
-        // Verificar si se han otorgado los permisos de galería
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // Solicitar permiso de galerías
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                galleryPermissionRequestCode
-            )
-        }
-
-        setContent {
-            TinPetTheme {
-                MainNavigationGraph(navController = rememberNavController())
+        if (permissionsDenied.isEmpty()) {
+            // Todos los permisos fueron otorgados
+            setContent {
+                TinPetTheme {
+                    MainNavigationGraph(navController = rememberNavController())
+                }
             }
+        } else {
+            // Al menos un permiso fue denegado, solicitar permisos de nuevo
+            ActivityCompat.requestPermissions(
+                this,
+                permissionsDenied.toTypedArray(),
+                requestPermissionsCode
+            )
         }
     }
 
-    // Este método se llama cuando el usuario otorga o niega los permisos solicitados
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            locationPermissionRequestCode -> {
-                // Si el permiso fue otorgado
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Hacer algo con el permiso de ubicación
-                } else {
-                    // El permiso fue denegado
-                }
-                return
+        if (requestCode == requestPermissionsCode) {
+            val permissionsDenied = permissions.filterIndexed { index, _ ->
+                grantResults[index] == PackageManager.PERMISSION_DENIED
             }
-            galleryPermissionRequestCode -> {
-                // Si el permiso fue otorgado
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Hacer algo con el permiso de galería
-                } else {
-                    // El permiso fue denegado
+            if (permissionsDenied.isEmpty()) {
+                // Todos los permisos fueron otorgados
+                setContent {
+                    TinPetTheme {
+                        MainNavigationGraph(navController = rememberNavController())
+                    }
                 }
-                return
+            } else {
+                // Al menos un permiso fue denegado, volver a solicitar permisos
+                ActivityCompat.requestPermissions(
+                    this,
+                    permissionsDenied.toTypedArray(),
+                    requestPermissionsCode
+                )
             }
         }
     }
 }
-
 
 

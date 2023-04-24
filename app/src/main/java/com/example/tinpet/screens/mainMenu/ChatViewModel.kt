@@ -14,6 +14,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.util.*
 
 
 class ChatViewModel() : ViewModel() {
@@ -133,34 +134,47 @@ class ChatViewModel() : ViewModel() {
         val currentUser = auth.currentUser
 
         if (currentUser != null) {
-            // Crear un nuevo documento en la colección "Mensajes"
-            val messageData = hashMapOf(
-                Constants.SENT_BY to currentUser.uid,
-                Constants.SENT_TO to chatId,
-                Constants.MESSAGE to message,
-                Constants.SENT_TO to FieldValue.serverTimestamp()
-            )
-            Firebase.firestore.collection(Constants.MESSAGES).add(messageData)
-                .addOnSuccessListener { documentReference ->
-                    Log.d(Constants.TAG, "Mensaje enviado con ID: ${documentReference.id}")
-                    // Actualizar la colección de conversaciones
-                    val conversationData = hashMapOf(
-                        Constants.USER1_ID to currentUser.uid,
-                        Constants.USER2_ID to chatId,
-                        Constants.LAST_MESSAGE to message,
-                        Constants.LAST_MESSAGE_TIME to FieldValue.serverTimestamp()
-                    )
-                    Firebase.firestore.collection(Constants.CONVERSATIONS).document(documentReference.id)
-                        .set(conversationData)
-                        .addOnSuccessListener {
-                            Log.d(Constants.TAG, "Conversación actualizada correctamente")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(Constants.TAG, "Error al actualizar la conversación", e)
-                        }
+            // Crear o actualizar un documento en la colección "Chats"
+            val chatRef = Firebase.firestore.collection(Constants.CHATS).document(chatId)
+            chatRef.get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        // El chat ya existe, actualizarlo con el nuevo mensaje
+                        val messageData = hashMapOf(
+                            Constants.SENT_BY to currentUser.uid,
+                            Constants.MESSAGE to message,
+                            Constants.SENT_AT to Date()
+                        )
+                        chatRef.update(Constants.MESSAGES, FieldValue.arrayUnion(messageData))
+                            .addOnSuccessListener {
+                                Log.d(Constants.TAG, "Mensaje enviado con éxito")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(Constants.TAG, "Error al enviar el mensaje", e)
+                            }
+                    } else {
+                        // El chat no existe, crearlo con el nuevo mensaje
+                        val chatData = hashMapOf(
+                            Constants.USERS to listOf(currentUser.uid, chatId),
+                            Constants.MESSAGES to listOf(
+                                hashMapOf(
+                                    Constants.SENT_BY to currentUser.uid,
+                                    Constants.MESSAGE to message,
+                                    Constants.SENT_AT to Date()
+                                )
+                            )
+                        )
+                        chatRef.set(chatData)
+                            .addOnSuccessListener {
+                                Log.d(Constants.TAG, "Chat creado con éxito")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(Constants.TAG, "Error al crear el chat", e)
+                            }
+                    }
                 }
                 .addOnFailureListener { e ->
-                    Log.w(Constants.TAG, "Error al enviar el mensaje", e)
+                    Log.w(Constants.TAG, "Error al obtener el chat existente", e)
                 }
         }
     }

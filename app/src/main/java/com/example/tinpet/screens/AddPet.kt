@@ -38,6 +38,7 @@ fun AddPetScreen(
     viewModel: LoginViewModel,
     onClick: () -> Unit
 ) {
+    /*
     // Agregar un estado composable para almacenar la imagen seleccionada
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
@@ -143,9 +144,10 @@ fun AddPetScreen(
 
         }
     }
+    */
 }
 
-
+/*
 @Composable
 fun AddPet(
     modifier: Modifier,
@@ -160,7 +162,7 @@ fun AddPet(
         Spacer(modifier = Modifier.padding(15.dp))
         ApTitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        ApPetName(petname) { viewModel.onAddpetChanged(it, petage) }
+        ApPetName(petname) { viewModel.onAddpetChanged(it, petage, pe) }
         Spacer(modifier = Modifier.padding(5.dp))
         ApPetAge(petage) { viewModel.onAddpetChanged(petname, it) }
         Spacer(modifier = Modifier.padding(5.dp))
@@ -398,3 +400,4 @@ fun ApAddPhotos(
 
 
 
+*/

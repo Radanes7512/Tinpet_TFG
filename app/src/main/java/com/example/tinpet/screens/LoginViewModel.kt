@@ -4,13 +4,20 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.tinpet.AppScreens
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -22,19 +29,15 @@ import com.google.firebase.ktx.Firebase
 import kotlin.random.Random
 
 
-class LoginViewModel(context: Context) : ViewModel() {
-
+class LoginViewModel(context: Context, navController: NavController) : ViewModel() {
     //Context parameter
     private val applicationContext = context.applicationContext
-
 
     private val auth = Firebase.auth
 
     private val rtdb = Firebase.database.reference
 
     private val Firestore = Firebase.firestore
-
-
 
 
 
@@ -46,8 +49,6 @@ class LoginViewModel(context: Context) : ViewModel() {
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> = _name
 
-
-
     var username = ""
 
     private val _password = MutableLiveData<String>()
@@ -55,10 +56,6 @@ class LoginViewModel(context: Context) : ViewModel() {
 
     private val _password2 = MutableLiveData<String>()
     val password2: LiveData<String> = _password2
-
-    // SMS
-    private val _smscode = MutableLiveData<String>()
-    val smscode: LiveData<String> = _smscode
 
     // PET INFO
     private val _petname = MutableLiveData<String>()
@@ -70,6 +67,9 @@ class LoginViewModel(context: Context) : ViewModel() {
     private val _petImageUri = MutableLiveData<Uri>()
     val petImageUri: LiveData<Uri> = _petImageUri
 
+    private val _petcategory = MutableLiveData<String>()
+    val petcategory: LiveData<String> = _petcategory
+
     // VAL FUNCTIONS
     private val _loginEnable = MutableLiveData<Boolean>()
     val loginEnable: LiveData<Boolean> = _loginEnable
@@ -77,16 +77,15 @@ class LoginViewModel(context: Context) : ViewModel() {
     private val _signupEnable = MutableLiveData<Boolean>()
     val signupEnable: LiveData<Boolean> = _signupEnable
 
-    private val _smsEnable = MutableLiveData<Boolean>()
-    val smsEnable: LiveData<Boolean> = _smsEnable
+    private val _emailVerified = MutableLiveData<Boolean>()
+    val emailVerified: LiveData<Boolean> = _emailVerified
+
+    var regState : Boolean = false
 
     private val _addpetEnable = MutableLiveData<Boolean>()
     val addpetEnable: LiveData<Boolean> = _addpetEnable
 
     var uiState = mutableStateOf<UiState>(UiState.SignedOut)
-
-
-
 
     fun onLoginChanged(email: String, password: String) {
         _email.value= email
@@ -100,15 +99,17 @@ class LoginViewModel(context: Context) : ViewModel() {
         _password.value = password
         _password2.value = password2
         _signupEnable.value = isValidEmail(email) && isValidName(name) && isValidPassword(password) && password == password2
-
         }
 
 
-    fun onAddpetChanged(petname: String, petage: String){
+    fun onAddpetChanged(petname: String, petage: String, petcategory: String, petimage: Uri){
         _petname.value = petname
         _petage.value = petage
-        _addpetEnable.value = isValidPetName(petname) && isValidPetAge(petage)
+        _petcategory.value = petcategory
+        _petImageUri.value = petimage
+        _addpetEnable.value = isValidPetCategory(petcategory) && isValidPetName(petname) && isValidPetAge(petage) && isValidPetImage(petimage)
     }
+
     fun login(context: Context){
         email.value?.let {
             password.value?.let { it1 ->
@@ -152,8 +153,8 @@ class LoginViewModel(context: Context) : ViewModel() {
                             sendVerificationEmail()
                             name.value?.let { it2 -> writeNewUser(inc, it2, email.value!!) }
                             readUser()
-                            Toast.makeText(context, "Se ha creado su cuenta correctamente",
-                                Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Se ha creado su cuenta correctamente",Toast.LENGTH_SHORT).show()
+                            //navController.navigate(AppScreens.Verify.route)
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.exception)
@@ -213,11 +214,19 @@ class LoginViewModel(context: Context) : ViewModel() {
 
 
     private fun isValidPassword(password: String): Boolean = password.length >= 6
-    private fun isValidEmail(email: String): Boolean  = email.contains("@gmail.com")
+    private fun isValidEmail(email: String): Boolean  = email.contains("@gmail.com") || email.contains("@hotmail.com")
     private fun isValidName(name: String): Boolean = name.length > 1
     private fun isValidPetName(petname:String): Boolean = petname.length > 1
+    private fun isValidPetCategory(petcategory:String): Boolean = petcategory.length > 1
     private fun isValidPetAge(petage:String): Boolean = petage.length in 1..2
-
-
+    private fun isValidPetImage(petimage: Uri): Boolean = petimage.isRelative
+/*{
+        val isImageExists = try {
+            context.checkUriPermission(petimage, null, null, Intent.FLAG_GRANT_READ_URI_PERMISSION) == PackageManager.PERMISSION_GRANTED
+        } catch (e: Exception) {
+            false
+        }
+        return isImageExists && petimage.isAbsolute
+    }*/
 
 }

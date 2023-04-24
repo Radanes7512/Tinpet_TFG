@@ -23,8 +23,8 @@ import com.example.tinpet.ui.theme.abrilFatface
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ChatUsersScreen(
-    viewModel: ChatViewModel,
-
+    chatViewModel: ChatViewModel,
+    loginViewModel: LoginViewModel,
      onClick: (String) -> Unit,
 ) {
     //region LISTA DE FOTOS DE PERROS ( DE MOMENTO LAS ALMACENAMOS ASÍ)
@@ -39,7 +39,7 @@ fun ChatUsersScreen(
 //endregion
     //region LISTA DE NOMBRE  ( DE MOMENTO ASÍ)
 
-    val names by viewModel.usernames.observeAsState(listOf())
+    val names by chatViewModel.usernames.observeAsState(listOf())
     //val names = listOf(
 
     //viewModel.usernames.value

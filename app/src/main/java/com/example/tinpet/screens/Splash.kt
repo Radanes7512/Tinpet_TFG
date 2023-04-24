@@ -42,51 +42,13 @@ fun SplashScreen(navController:NavHostController) {
     val context = LocalContext.current
     val internetPermissionState = rememberPermissionState(Manifest.permission.ACCESS_NETWORK_STATE)
 
-    if (internetPermissionState.status.isGranted) {
-        // El permiso de Internet ya está concedido, continuar con la pantalla de bienvenida
         LaunchedEffect(key1 = true){
             delay(3000)
             navController.popBackStack()
             navController.navigate(AppScreens.Index.route)
         }
         Splash()
-    } else if (internetPermissionState.status.shouldShowRationale) {
-        // El permiso de Internet ha sido denegado previamente, pero se puede mostrar una explicación al usuario.
-        // Por ejemplo, puede mostrar un diálogo que explique por qué se necesita el permiso de Internet.
-        // Una vez que el usuario acepta, el estado del permiso cambia y se llama de nuevo a esta función composable.
-        AlertDialog(
-            onDismissRequest = { },
-            title = { Text("Permiso de Internet necesario") },
-            text = { Text("Se necesita el permiso de Internet para acceder a los datos en línea. Por favor, otorgue el permiso en la configuración de la aplicación.") },
-            confirmButton = {
-                TextButton(onClick = {
-                    internetPermissionState.launchPermissionRequest()
-                }) {
-                    Text("Aceptar")
-                }
-            }
-        )
-    } else {
-        // El permiso de Internet no se ha concedido, por lo que se lanza una solicitud de permiso.
-        // Una vez que el usuario otorga o deniega el permiso, el estado del permiso cambia y se llama de nuevo a esta función composable.
-        val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                // Permiso concedido, continuar con la pantalla de bienvenida
-                navController.popBackStack()
-                navController.navigate(AppScreens.Index.route)
-            } else {
-                // Permiso denegado, volver a mostrar la pantalla de solicitud de permiso.
-                Toast.makeText(context, "Permiso de Internet denegado", Toast.LENGTH_SHORT).show()
-            }
-        }
-        LaunchedEffect(key1 = true) {
-            launcher.launch(Manifest.permission.INTERNET)
-        }
-    }
 }
-
-
-
 @Composable
 fun Splash() {
     val infiniteTransition = rememberInfiniteTransition()

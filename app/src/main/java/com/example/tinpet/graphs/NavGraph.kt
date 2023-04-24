@@ -1,5 +1,7 @@
 package com.example.tinpet.graphs
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.*
@@ -11,6 +13,7 @@ import com.example.tinpet.screens.mainMenu.*
 import com.example.tinpet.screens.mainMenu.profile.*
 import com.example.tinpet.screens.mainMenu.profile.settings.*
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavGraph(
     navController: NavHostController
@@ -36,7 +39,8 @@ fun NavGraph(
 
                     navController.navigate(AppScreens.Chat.route)
                 },
-                viewModel= ChatViewModel()
+                chatViewModel= ChatViewModel(),
+                loginViewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
         composable(route=AppScreens.Chat.route){
@@ -48,7 +52,8 @@ fun NavGraph(
                 onPetClick = {
                     navController.navigate(AppScreens.PetProfile.route)
                 },
-                viewModel= ChatViewModel()
+                chatViewModel= ChatViewModel(),
+                loginViewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
         composable(route = AppScreens.Profile.route){
@@ -65,7 +70,7 @@ fun NavGraph(
                 onRqtClick ={
                     navController.navigate(AppScreens.Requests.route)
                 },
-                viewModel = LoginViewModel(LocalContext.current)
+                viewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
         composable(route = AppScreens.Pets.route){
@@ -153,30 +158,39 @@ fun NavGraph(
                     navController.popBackStack()
                     navController.navigate(AppScreens.Signup.route)
                 },
-                viewModel = LoginViewModel(LocalContext.current)
+                viewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
         composable(AppScreens.Signup.route){
             SignupScreen (
                 onClick = {
                     navController.popBackStack()
-                    navController.navigate(AppScreens.Addpet.route)
+                    navController.navigate(AppScreens.Verify.route)
                 },
                 onBackClick = {
                     navController.popBackStack()
                     navController.navigate(Graph.AUTHENTICATION)
                 },
-                viewModel = LoginViewModel(LocalContext.current)
+                viewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
 
+        composable(AppScreens.Verify.route){
+            VerifyEmailScreen(
+                viewModel = LoginViewModel(LocalContext.current, navController),
+                onClick = {
+                    navController.popBackStack()
+                    navController.navigate(Graph.AUTHENTICATION)
+                }
+            )
+        }
         composable(AppScreens.Addpet.route){
             AddPetScreen(
                 onClick = {
                     navController.popBackStack()
                     navController.navigate(Graph.AUTHENTICATION)
                 },
-                viewModel = LoginViewModel(LocalContext.current)
+                viewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
         composable(

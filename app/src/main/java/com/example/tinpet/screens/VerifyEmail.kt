@@ -27,11 +27,11 @@ import com.example.tinpet.ui.theme.abrilFatface
 
 
 @Composable
-fun InputSmsNumScreen(
+fun VerifyEmailScreen(
     viewModel: LoginViewModel,
     onClick: () -> Unit
 ) {
-    val smsEnable: Boolean by viewModel.smsEnable.observeAsState(initial = false)
+    val emailVerified: Boolean by viewModel.emailVerified.observeAsState(initial = false)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -73,7 +73,7 @@ fun InputSmsNumScreen(
             }
         }
         // INPUTSMSNUM COMPONENTS
-        InputSms(Modifier, viewModel)
+        EmailVerify(Modifier, viewModel)
 
         // BOTÓN VERIFICAR CODIGO
         Row(
@@ -81,7 +81,7 @@ fun InputSmsNumScreen(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            if (smsEnable) {
+            //if (emailVerified) {
                 Button(
                     onClick = { onClick() },
                     enabled = true,
@@ -101,10 +101,10 @@ fun InputSmsNumScreen(
 
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text(
-                        text = stringResource(R.string.isn_access_ES)
+                        text = stringResource(R.string.vfdem_access_ES)
                     )
                 }
-            } else {
+           /* } else {
                 Button(
                     onClick = {},
                     enabled = false,
@@ -122,31 +122,25 @@ fun InputSmsNumScreen(
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
                 }
-            }
+            //}*/
         }
     }
 }
 
 @Composable
-fun InputSms(modifier: Modifier, viewModel: LoginViewModel) {
-    val smscode: String by viewModel.smscode.observeAsState(initial = "")
+fun EmailVerify(modifier: Modifier, viewModel: LoginViewModel) {
 
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.padding(15.dp))
-        ISTitleText(Modifier.align(Alignment.CenterHorizontally))
+        VETitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-
-
+        VEBodyText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(5.dp))
-
-        Spacer(modifier = Modifier.padding(5.dp))
-
-        Spacer(modifier = Modifier.padding(15.dp))
     }
 }
 
 @Composable
-fun ISTitleText(modifier: Modifier) {
+fun VETitleText(modifier: Modifier) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -157,7 +151,7 @@ fun ISTitleText(modifier: Modifier) {
         Text(
             modifier = Modifier.padding(5.dp),
             textAlign = TextAlign.Center,
-            text = (stringResource(R.string.ISN_ES)),
+            text = (stringResource(R.string.VFEM_ES)),
             fontSize = 32.sp,
             fontFamily = abrilFatface,
             color = MaterialTheme.colors.onBackground
@@ -166,57 +160,28 @@ fun ISTitleText(modifier: Modifier) {
 }
 
 @Composable
-fun ISinput(smscode: String, onTextFieldChanged: (String) -> Unit) {
+fun VEBodyText(modifier: Modifier) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        // Nombre del usuario
-        OutlinedTextField(
-            value = smscode,
-            onValueChange = {
-                onTextFieldChanged(it)
-            },
-            label = {
-                Text(
-                    text = stringResource(R.string.sms_label_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.sms_placeholder_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            leadingIcon = {
-                IconButton(onClick = { }) {
-                    Icon(
-                        imageVector = Icons.Filled.Sms,
-                        tint = MaterialTheme.colors.onBackground,
-                        contentDescription = null
-                    )
-                }
-            },
-            colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
+        Text(
+            modifier = Modifier.padding(5.dp),
+            textAlign = TextAlign.Center,
+            text = "Estimado usuario,\n" +
+                    "\n" +
+                    "Le informamos que para poder completar el proceso de registro en nuestro servicio, es necesario que verifique su dirección de correo electrónico. Se ha enviado un correo electrónico a la dirección proporcionada durante el registro con un enlace de verificación. Por favor, revise su bandeja de entrada y siga las instrucciones en el correo electrónico para verificar su dirección de correo electrónico.\n" +
+                    "\n" +
+                    "Una vez verificado, puede continuar con el proceso de registro en nuestro servicio. Si tiene alguna pregunta o problema, no dude en contactarnos.\n" +
+                    "\n" +
+                    "Atentamente,\n" +
+                    "\n" +
+                    "El equipo de soporte técnico.",
+            fontSize = 16.sp,
+            fontFamily = abrilFatface,
+            color = MaterialTheme.colors.onBackground
         )
-    }
-}
-
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun ISNScreenPreviewPreviewLT() {
-    TinPetTheme(darkTheme = false) {
-        InputSmsNumScreen(viewModel = LoginViewModel(LocalContext.current), onClick = {})
-    }
-}
-@Composable
-@Preview(showBackground = true, showSystemUi = true)
-fun ISNScreenPreviewPreviewDT() {
-    TinPetTheme(darkTheme = true) {
-        InputSmsNumScreen(viewModel = LoginViewModel(LocalContext.current), onClick = {})
     }
 }

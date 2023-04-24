@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.tinpet.R
+import com.example.tinpet.screens.LoginViewModel
 import com.example.tinpet.ui.theme.abrilFatface
 import java.util.*
 
@@ -34,22 +35,22 @@ import java.util.*
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChatScreen(
-    viewModel: ChatViewModel,
+    chatViewModel: ChatViewModel,
+    loginViewModel: LoginViewModel,
     onBackClick: () -> Unit,
     onPetClick: () -> Unit
-
 ) {
     val context = LocalContext.current
 
     // Guardar el estado de la lista
     val listState = rememberLazyListState()
-    val userName = viewModel.selectedUserName ?: ""
-
-    val message: String by viewModel.message.observeAsState("")
+    val userName = chatViewModel.selectedUserName ?: ""
+    val test = loginViewModel.email.value
+    val message: String by chatViewModel.message.observeAsState("")
 
     //Mensajes actualizados a mostrar
     val messages:
-            List<String> by viewModel.messages.observeAsState(emptyList<String>().toMutableList())
+            List<String> by chatViewModel.messages.observeAsState(emptyList<String>().toMutableList())
 
     // Agregar un mensaje
     @Composable
@@ -213,7 +214,7 @@ fun ChatScreen(
                             .weight(1f),
                         shape = CutCornerShape(5.dp),
                         value = message,
-                        onValueChange = { viewModel.updateMessage(it) },
+                        onValueChange = { chatViewModel.updateMessage(it) },
                         label = { Text("Escribir mensaje...") },
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = MaterialTheme.colors.onBackground,
@@ -223,7 +224,7 @@ fun ChatScreen(
                     Button(
                         onClick = {
                             if (message.isNotBlank()) {
-                                viewModel.addMessage()
+                                chatViewModel.addMessage()
                             }else{
                                 Toast.makeText(context, "¡Mensaje vacío!", Toast.LENGTH_SHORT).show()
                             }

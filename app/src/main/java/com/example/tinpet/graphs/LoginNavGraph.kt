@@ -29,7 +29,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
                     navController.popBackStack()
                     navController.navigate(AppScreens.Signup.route)
                 },
-                viewModel = LoginViewModel(LocalContext.current)
+                viewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
     }

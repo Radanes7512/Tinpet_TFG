@@ -1,6 +1,7 @@
 package com.example.tinpet.screens.mainMenu.profile.settings
 
 import android.annotation.SuppressLint
+import android.widget.Button
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,12 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
 import com.example.tinpet.ui.theme.abrilFatface
+import org.w3c.dom.Text
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -29,9 +29,9 @@ fun SettingsScreen(
     onBackClick: () -> Unit,
     onCloseClick: () -> Unit,
     onNotifyClick: () -> Unit,
-    onAboutClick: () -> Unit
+    onAboutClick: () -> Unit,
 ) {
-    val logoutConfirm = remember { mutableStateOf(false)}
+    val logoutConfirm = remember { mutableStateOf(false) }
 
     Scaffold(
         //region BARRA SUPERIOR CON NOMBRE Y FLECHA PARA IR ATRÁS
@@ -51,7 +51,12 @@ fun SettingsScreen(
                         )
                     }
                 }
+
             )
+        }
+        ,
+        bottomBar = {
+            BottomSBar()
         }
     )
     //endregion
@@ -61,7 +66,7 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            item{
+            item {
                 // NOTIFICACIONES
                 Card(
                     modifier = Modifier
@@ -96,40 +101,40 @@ fun SettingsScreen(
                     }
                 }
                 // SOBRE NOSOTROS
-                    Card(
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp),
+                    elevation = 10.dp
+
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
+                            .clickable { onAboutClick() }
+                            //.border(1.dp, MaterialTheme.colors.onBackground)
                             .fillMaxWidth()
-                            .padding(15.dp),
-                        elevation = 10.dp
+                            .background(MaterialTheme.colors.primary)
+                            .padding(10.dp)
 
                     ) {
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceBetween,
+                        Text(
                             modifier = Modifier
-                                .clickable { onAboutClick() }
-                                //.border(1.dp, MaterialTheme.colors.onBackground)
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colors.primary)
-                                .padding(10.dp)
-
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .align(alignment = Alignment.CenterVertically),
-                                text = "Sobre nosotros",
-                                fontSize = 15.sp,
-                                fontFamily = abrilFatface,
-                                color = MaterialTheme.colors.onPrimary
-                            )
-                            Image(
-                                modifier = Modifier
-                                    .size(25.dp, 25.dp),
-                                painter = painterResource(R.drawable.icon_aboutus),
-                                contentDescription = null,
-                                alignment = Alignment.Center
-                            )
-                        }
+                                .align(alignment = Alignment.CenterVertically),
+                            text = "Sobre nosotros",
+                            fontSize = 15.sp,
+                            fontFamily = abrilFatface,
+                            color = MaterialTheme.colors.onPrimary
+                        )
+                        Image(
+                            modifier = Modifier
+                                .size(25.dp, 25.dp),
+                            painter = painterResource(R.drawable.icon_aboutus),
+                            contentDescription = null,
+                            alignment = Alignment.Center
+                        )
                     }
+                }
                 // CERRAR SESIÓN
                 Card(
                     modifier = Modifier
@@ -173,25 +178,6 @@ fun SettingsScreen(
             onDismissRequest = {
                 logoutConfirm.value = false
             },
-            /*title = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                    //horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        modifier = Modifier
-                            .size(50.dp),
-                        painter = if (isSystemInDarkTheme()) {
-                            painterResource(R.drawable.icon_pawprint)
-                        } else {
-                            painterResource(R.drawable.icon_pawprint)
-                        },
-                        contentDescription = null
-                    )
-                }
-            },*/
             text = {
                 Text(
                     text = "¿Desea cerrar sesión?",
@@ -229,7 +215,7 @@ fun SettingsScreen(
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.error),
                         shape = RoundedCornerShape(size = 30.dp),
                         //elevation = 10,
-                        onClick = {  onCloseClick() }
+                        onClick = { onCloseClick() }
                     ) {
                         Text(
                             text = "Cerrar sesión",
@@ -241,5 +227,20 @@ fun SettingsScreen(
                 }
             }
         )
+    }
+}
+
+@Composable
+fun BottomSBar() {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Button(
+            onClick = { /*TODO*/ }
+        ){
+            Text(text="Borrar cuenta")
+        }
     }
 }

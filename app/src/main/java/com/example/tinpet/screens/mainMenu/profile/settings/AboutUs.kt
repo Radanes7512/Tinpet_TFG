@@ -63,7 +63,7 @@ fun AboutUsScreen(
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = "    La historia detrás de la creación de la aplicación: " +
+                        text =  "\tLa historia detrás de la creación de la aplicación: " +
                                 "Puedes contar cómo surgió la idea de crear la aplicación, por qué los desarrolladores decidieron crearla " +
                                 "y cómo creen que puede ayudar a los dueños de perros.\n" +
                                 "\n" +

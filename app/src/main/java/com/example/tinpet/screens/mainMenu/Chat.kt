@@ -33,13 +33,13 @@ import java.util.*
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChatScreen(
-    chatId: String,
+    chatUserId: String,
     message: String = "",
     viewModel: ChatViewModel,
     onBackClick: () -> Unit,
     onPetClick: () -> Unit
 ) {
-    viewModel.callGetMessages(chatId, message)
+    viewModel.getChat(chatUserId)
     val context = LocalContext.current
 
     // Guardar el estado de la lista
@@ -229,7 +229,7 @@ fun ChatScreen(
                     Button(
                         onClick = {
                             if (message.isNotBlank()) {
-                                viewModel.sendMessage(chatId, message)
+                                viewModel.sendMessage(message)
                                 viewModel.updateMessage("")
                             } else {
                                 Toast.makeText(context, "¡Mensaje vacío!", Toast.LENGTH_SHORT).show()

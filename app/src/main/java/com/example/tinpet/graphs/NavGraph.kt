@@ -36,10 +36,10 @@ fun NavGraph(
                 viewModel= ChatViewModel()
             )
         }
-        composable(route=AppScreens.Chat.route + "/{chatId}"){ backStackEntry ->
-            val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
+        composable(route=AppScreens.Chat.route + "/{chatUserId}"){ backStackEntry ->
+            val chatUserId = backStackEntry.arguments?.getString("chatUserId") ?: ""
             ChatScreen(
-                chatId = chatId,
+                chatUserId = chatUserId,
                 onBackClick = {
                     navController.popBackStack()
                     navController.navigate(AppScreens.ChatUsers.route)

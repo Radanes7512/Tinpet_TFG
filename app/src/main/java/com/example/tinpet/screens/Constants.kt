@@ -9,6 +9,7 @@ object Constants {
         const val SENT_TO = "sent_to"
         const val SENT_AT = "sent_at"
         const val CHATS = "chat"
+        const val EMAIL = "Email"
         const val IS_CURRENT_USER = "is_current_user"
         const val CONVERSATIONS = "conversations"
         const val USERS = "users"

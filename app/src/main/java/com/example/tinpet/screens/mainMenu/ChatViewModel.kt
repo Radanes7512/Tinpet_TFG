@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tinpet.screens.Constants
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -30,13 +31,17 @@ class ChatViewModel() : ViewModel() {
     private val _messagesState = MutableLiveData<List<String>>()
     val messagesState: LiveData<List<String>> = _messagesState
 
+    private val _chatId = MutableLiveData<String>()
+    val chatId: LiveData<String> = _chatId
+
+    private val _chatUserDocument = MutableLiveData<DocumentSnapshot>()
+    val chatUserDocument: LiveData<DocumentSnapshot> = _chatUserDocument
+
     private var _messages = MutableLiveData(emptyList<String>().toMutableList())
     val messages: LiveData<MutableList<String>> = _messages
 
-    private val _usernames = MutableLiveData(emptyList<Map<String,String>>().toMutableList())
-    val usernames: LiveData<MutableList<Map<String,String>>> = _usernames
-
-    var test:String = ""
+    private val _usernames = MutableLiveData(emptyList<Map<String, String>>().toMutableList())
+    val usernames: LiveData<MutableList<Map<String, String>>> = _usernames
 
 
     //endregion
@@ -130,59 +135,69 @@ class ChatViewModel() : ViewModel() {
               }
       }*/
 
-    fun sendMessage(chatId: String, message: String) {
+    fun sendMessage(message: String) {
         val currentUser = auth.currentUser
 
         if (currentUser != null) {
             // Crear o actualizar un documento en la colección "Chats"
-            val chatRef = Firebase.firestore.collection(Constants.CHATS).document(chatId)
-            chatRef.get()
-                .addOnSuccessListener { document ->
-                    if (document.exists()) {
-                        // El chat ya existe, actualizarlo con el nuevo mensaje
-                        val messageData = hashMapOf(
-                            Constants.SENT_BY to currentUser.uid,
-                            Constants.MESSAGE to message,
-                            Constants.SENT_AT to Date()
-                        )
-                        chatRef.update(Constants.MESSAGES, FieldValue.arrayUnion(messageData))
-                            .addOnSuccessListener {
-                                Log.d(Constants.TAG, "Mensaje enviado con éxito")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.w(Constants.TAG, "Error al enviar el mensaje", e)
-                            }
-                    } else {
-                        // El chat no existe, crearlo con el nuevo mensaje
-                        val chatData = hashMapOf(
-                            Constants.USERS to listOf(currentUser.uid, chatId),
-                            Constants.MESSAGES to listOf(
-                                hashMapOf(
-                                    Constants.SENT_BY to currentUser.uid,
-                                    Constants.MESSAGE to message,
-                                    Constants.SENT_AT to Date()
+            val chatRef = _chatId.value?.let {
+                Firebase.firestore.collection(Constants.CHATS).document(
+                    it
+                )
+            }
+            if (chatRef != null) {
+                chatRef.get()
+                    .addOnSuccessListener { document ->
+                        if (document.exists()) {
+                            // El chat ya existe, actualizarlo con el nuevo mensaje
+                            val messageData = hashMapOf(
+                                Constants.SENT_BY to currentUser.email,
+                                Constants.MESSAGE to message,
+                                Constants.SENT_AT to Date()
+                            )
+                            chatRef.update(Constants.MESSAGES, FieldValue.arrayUnion(messageData))
+                                .addOnSuccessListener {
+                                    Log.d(Constants.TAG, "Mensaje enviado con éxito")
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(Constants.TAG, "Error al enviar el mensaje", e)
+                                }
+                        } else {
+                            val chatUserData = chatUserDocument.value?.data
+                            if (chatUserData?.get(Constants.EMAIL) != null){
+                                val chatData = hashMapOf(
+                                Constants.USERS to listOf(currentUser.email,
+                                    chatUserData.get(Constants.EMAIL)
+                                ),
+                                Constants.MESSAGES to listOf(
+                                    hashMapOf(
+                                        Constants.SENT_BY to currentUser.email,
+                                        Constants.MESSAGE to message,
+                                        Constants.SENT_AT to Date()
+                                    )
                                 )
                             )
-                        )
-                        chatRef.set(chatData)
-                            .addOnSuccessListener {
-                                Log.d(Constants.TAG, "Chat creado con éxito")
-                            }
-                            .addOnFailureListener { e ->
-                                Log.w(Constants.TAG, "Error al crear el chat", e)
-                            }
+                                chatRef.set(chatData)
+                                    .addOnSuccessListener {
+                                        Log.d(Constants.TAG, "Chat creado con éxito")
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w(Constants.TAG, "Error al crear el chat", e)
+                                    }}
+
+                        }
                     }
-                }
-                .addOnFailureListener { e ->
-                    Log.w(Constants.TAG, "Error al obtener el chat existente", e)
-                }
+                    .addOnFailureListener { e ->
+                        Log.w(Constants.TAG, "Error al obtener el chat existente", e)
+                    }
+            }
         }
     }
 
 
-    public  fun callGetMessages(chatId:String, message: String){
+    public fun callGetMessages(message: String) {
         viewModelScope.launch {
-            sendMessage(chatId,message)
+            sendMessage( message)
         }
     }
 
@@ -227,15 +242,13 @@ class ChatViewModel() : ViewModel() {
     private fun updateMessages(list: MutableList<Map<String, Any>>) {
 
         val messageList = emptyList<String>().toMutableList()
-        for (message in list){
+        for (message in list) {
             messageList.add(message.get("message").toString())
         }
-        _messages.value =messageList.asReversed()
+        _messages.value = messageList.asReversed()
     }
 
-    fun sendUserMessage(chatId: String, message: String) {
-        sendMessage(chatId, message)
-    }
+
     fun getUsers() {
         Firebase.firestore.collection("users")
             .addSnapshotListener { value, e ->
@@ -252,7 +265,7 @@ class ChatViewModel() : ViewModel() {
 
                         //Extraemos los datos
                         val data = doc.data
-                        val userMap = mapOf<String,String>(
+                        val userMap = mapOf<String, String>(
                             "id" to doc.id,
                             "name" to data.get("Username").toString()
                         )
@@ -265,17 +278,61 @@ class ChatViewModel() : ViewModel() {
             }
     }
 
-    private fun getUsernames(list: MutableList<Map<String,String>>) {
+    private fun getUsernames(list: MutableList<Map<String, String>>) {
 
-        val usernameList = emptyList<Map<String,String>>().toMutableList()
-        for (user in list){
+        val usernameList = emptyList<Map<String, String>>().toMutableList()
+        for (user in list) {
             usernameList.add(user)
         }
         _usernames.value = usernameList
     }
 
-    fun assingUsers(name:String){
-        test= name
+
+    fun getChat(chatUserId: String) {
+
+        val userRef = Firebase.firestore.collection(Constants.USERS).document(chatUserId)
+        userRef.get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                val currentUser = auth.currentUser
+                    _chatUserDocument.value = document
+                val userData = document.data
+
+                    if (currentUser != null && userData?.get(Constants.EMAIL) != null) {
+                        currentUser.email?.let {
+                            Firebase.firestore.collection(Constants.CHATS)
+                                .whereArrayContains(Constants.USERS, it)
+                                .addSnapshotListener { value, error ->
+                                    if (error != null) {
+                                        Log.w(Constants.TAG, "Error al obtener los mensajes", error)
+                                        return@addSnapshotListener
+                                    }
+                                    if (value != null) {
+                                        for (doc in value) {
+                                          var chatData = doc.data
+
+                                            val users = chatData[Constants.USERS] as Array<String>
+                                            val contieneTodos = users.all { valor -> listOf(it,userData.get(Constants.EMAIL)).contains(valor) }
+                                            if (contieneTodos){
+                                                _chatId.value = doc.id
+                                            }
+                                            println("El array contiene todos los valores especificados: $contieneTodos")
+                                        }
+
+                                    }
+                                }
+                        }
+                    }
+                    }
+
+
+            }
+            .addOnFailureListener { e ->
+                Log.w(Constants.TAG, "Error al obtener el usuario existente", e)
+            }
+
+
+
     }
     //endregion
 }

@@ -71,8 +71,8 @@ fun ChatUsersScreen(
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                .clickable { val chatId = user.get("id")
-                                    navController.navigate(AppScreens.Chat.route + "/${chatId}")}
+                                .clickable { val chatUserId = user.get("id")
+                                    navController.navigate(AppScreens.Chat.route + "/${chatUserId}")}
                                 .fillMaxWidth()
                                 .background(MaterialTheme.colors.primary)
                                 .padding(10.dp)

@@ -2,6 +2,7 @@ package com.example.tinpet.screens.mainMenu
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +12,7 @@ import com.example.tinpet.screens.Constants
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
@@ -75,67 +77,60 @@ class ChatViewModel() : ViewModel() {
     }
 
 
-    /*  private fun getMessages(chatId: String) {
-          val user =auth.currentUser
 
-
-          if (user != null) {
-              Firebase.firestore.collection(Constants.USERS)
-                  .whereEqualTo("Email", user.email)
-                  .addSnapshotListener { value, e ->
-                      if (e != null) {
-                          Log.w(Constants.TAG, "Listen failed.", e)
-                          return@addSnapshotListener
-                      }
-                      if (value != null) {
-
-                          for (doc in value) {
-
-                              //Extraemos los datos
-                              val currentUser = doc.id
-                             // val messages =
-                              val users = arrayOf(chatId,currentUser)
-                              val conversationdb = hashMapOf(
-                                  "users" to users,
-                                  //"messages" to
-                              )
-
-                          }
-                      }
-                  }
-          }
-      }
-
-
-      private fun createMessages() {
-          Firebase.firestore.collection(Constants.MESSAGES)
-              .orderBy(Constants.SENT_ON)
-              .addSnapshotListener { value, e ->
-                  if (e != null) {
-                      Log.w(Constants.TAG, "Listen failed.", e)
-                      return@addSnapshotListener
-                  }
-
-                  val list = emptyList<Map<String, Any>>().toMutableList()
-                  //Value es el estado de la base de datos en el momento que lo recibimos (listener)
-                  if (value != null) {
-                      //Leemos cada uno de los documentos dentro de la coleccion "Mensajes" de la base de datos
-                      for (doc in value) {
-                          //Extraemos los datos
-                          val data = doc.data
-                          //Añadimos info de si los mensajes son nuestros o no
-                          data[Constants.IS_CURRENT_USER] =
-                              Firebase.auth.currentUser?.uid.toString() == data[Constants.SENT_BY].toString()
-
-                          list.add(data)
-                      }
-                  }
-
-                  updateMessages(list)
-              }
-      }*/
 
     fun sendMessage(message: String) {
+        val currentUser = auth.currentUser
+        //Variable temporal
+        val currentUserEmail = auth.currentUser?.email
+
+
+        if (currentUser != null) {
+            // Crear o actualizar un documento en la colección "Chats"
+            val chatRef = Firebase.firestore.collection(Constants.CHATS).document(currentUserEmail.toString())
+            chatRef.get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        // El chat ya existe, actualizarlo con el nuevo mensaje
+                        val messageData = hashMapOf(
+                            Constants.SENT_BY to currentUser.email.toString(),
+                            Constants.MESSAGE to message,
+                            Constants.SENT_AT to Date()
+                        )
+                        chatRef.update(Constants.MESSAGES, FieldValue.arrayUnion(messageData))
+                            .addOnSuccessListener {
+                                Log.d(Constants.TAG, "Mensaje enviado con éxito")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(Constants.TAG, "Error al enviar el mensaje", e)
+                            }
+                    } else {
+                        // El chat no existe, crearlo con el nuevo mensaje
+                        val chatData = hashMapOf(
+                            Constants.USERS to listOf(currentUser.email, chatId),
+                            Constants.MESSAGES to listOf(
+                                hashMapOf(
+                                    Constants.SENT_BY to currentUser.email.toString(),
+                                    Constants.MESSAGE to message,
+                                    Constants.SENT_AT to Date()
+                                )
+                            )
+                        )
+                        chatRef.set(chatData)
+                            .addOnSuccessListener {
+                                Log.d(Constants.TAG, "Chat creado con éxito")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(Constants.TAG, "Error al crear el chat", e)
+                            }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.w(Constants.TAG, "Error al obtener el chat existente", e)
+                }
+        }
+    }
+    /*fun sendMessage2(message: String) {
         val currentUser = auth.currentUser
 
         if (currentUser != null) {
@@ -166,17 +161,17 @@ class ChatViewModel() : ViewModel() {
                             val chatUserData = chatUserDocument.value?.data
                             if (chatUserData?.get(Constants.EMAIL) != null){
                                 val chatData = hashMapOf(
-                                Constants.USERS to listOf(currentUser.email,
-                                    chatUserData.get(Constants.EMAIL)
-                                ),
-                                Constants.MESSAGES to listOf(
-                                    hashMapOf(
-                                        Constants.SENT_BY to currentUser.email,
-                                        Constants.MESSAGE to message,
-                                        Constants.SENT_AT to Date()
+                                    Constants.USERS to listOf(currentUser.email,
+                                        chatUserData.get(Constants.EMAIL)
+                                    ),
+                                    Constants.MESSAGES to listOf(
+                                        hashMapOf(
+                                            Constants.SENT_BY to currentUser.email,
+                                            Constants.MESSAGE to message,
+                                            Constants.SENT_AT to Date()
+                                        )
                                     )
                                 )
-                            )
                                 chatRef.set(chatData)
                                     .addOnSuccessListener {
                                         Log.d(Constants.TAG, "Chat creado con éxito")
@@ -192,13 +187,12 @@ class ChatViewModel() : ViewModel() {
                     }
             }
         }
-    }
+    }*/
 
-
-    public fun callGetMessages(message: String) {
-        viewModelScope.launch {
-            sendMessage( message)
-        }
+   public fun callGetMessages(message: String) {
+       viewModelScope.launch {
+            sendMessage(message)
+      }
     }
 
     fun getMessages(chatId: String, onMessagesFetched: (List<String>) -> Unit) {
@@ -258,7 +252,6 @@ class ChatViewModel() : ViewModel() {
                 }
 
                 val list = emptyList<Map<String, String>>().toMutableList()
-                //Value es el estado de la base de datos en el momento que lo recibimos (listener)
                 if (value != null) {
                     //Leemos cada uno de los documentos dentro de la coleccion "Mensajes" de la base de datos
                     for (doc in value) {

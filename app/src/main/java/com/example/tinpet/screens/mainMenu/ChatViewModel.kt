@@ -31,8 +31,10 @@ class ChatViewModel() : ViewModel() {
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> = _message
 
-    private val _messagesState = MutableLiveData<List<String>>()
-    val messagesState: LiveData<List<String>> = _messagesState
+    private val _messagesState = MutableLiveData<List<Map<String, String>>>()
+    val messagesState: LiveData<List<Map<String, String>>> = _messagesState
+
+
 
     private val _chatId = MutableLiveData<String>()
     val chatId: LiveData<String> = _chatId
@@ -54,6 +56,7 @@ class ChatViewModel() : ViewModel() {
     init {
 
         getUsers()
+
     }
 
     //update del mensaje que enviamos
@@ -144,40 +147,36 @@ class ChatViewModel() : ViewModel() {
         }
     }
 
-    fun getMessages(chatId: String, onMessagesFetched: (List<String>) -> Unit) {
+    fun getMessages(chatId: String) {
         val currentUser = auth.currentUser
-
-        if (currentUser != null) {
-            Firebase.firestore.collection(Constants.MESSAGES)
-                .whereEqualTo(Constants.SENT_BY, currentUser.uid)
-                .whereEqualTo(Constants.SENT_TO, chatId)
-                .orderBy(Constants.SENT_TO)
-                .addSnapshotListener { value, error ->
-                    if (error != null) {
-                        Log.w(Constants.TAG, "Error al obtener los mensajes", error)
-                        return@addSnapshotListener
-                    }
-
-                    if (value != null) {
-                        val messages = mutableListOf<String>()
-                        for (doc in value) {
-                            val message = doc.getString(Constants.MESSAGE)
-                            if (message != null) {
-                                messages.add(message)
-                            }
+        val userData = chatUserDocument.value?.data
+        if (currentUser != null && userData?.get(Constants.EMAIL) != null) {
+            currentUser.email?.let {
+                Firebase.firestore.collection(Constants.CHATS)
+                    .whereArrayContains(Constants.USERS, it)
+                    .addSnapshotListener { value, error ->
+                        if (error != null) {
+                            Log.w(Constants.TAG, "Error al obtener los mensajes", error)
+                            return@addSnapshotListener
                         }
+                        if (value != null) {
+                            for (doc in value) {
+                                var chatData = doc.data
 
-                        // Llamar la función de devolución de llamada con los mensajes recuperados
-                        onMessagesFetched(messages)
+                                val users = chatData[Constants.USERS] as ArrayList<*>
+                                val contieneTodos = users.all { valor -> listOf(it,userData.get(Constants.EMAIL)).contains(valor) }
+                                if (contieneTodos){
+                                    _chatId.value = doc.id
+                                    val messages = chatData[Constants.MESSAGES] as ArrayList<*>
+                                    viewModelScope.launch {
+                                        _messagesState.value = messages as List<Map<String, String>>
+                                    }
+                                }
+                                println("El array contiene todos los valores especificados: $contieneTodos")
+                            }
+
+                        }
                     }
-                }
-        }
-    }
-
-    fun fetchMessages(chatId: String) {
-        getMessages(chatId) { messages ->
-            viewModelScope.launch {
-                _messagesState.value = messages
             }
         }
     }
@@ -258,6 +257,9 @@ class ChatViewModel() : ViewModel() {
                                             val contieneTodos = users.all { valor -> listOf(it,userData.get(Constants.EMAIL)).contains(valor) }
                                             if (contieneTodos){
                                                 _chatId.value = doc.id
+                                                val messages = chatData[Constants.MESSAGES] as ArrayList<*>
+                                                _messagesState.value = messages as List<Map<String, String>>
+
                                             }
                                             println("El array contiene todos los valores especificados: $contieneTodos")
                                         }

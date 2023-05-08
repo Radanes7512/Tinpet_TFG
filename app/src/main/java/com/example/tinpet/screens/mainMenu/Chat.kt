@@ -40,13 +40,14 @@ fun ChatScreen(
     onPetClick: () -> Unit
 ) {
     viewModel.getChat(chatUserId)
+    viewModel.chatId.value?.let { viewModel.getMessages(it) }
     val context = LocalContext.current
 
     // Guardar el estado de la lista
     val listState = rememberLazyListState()
     val userName = viewModel.selectedUserName ?: ""
 
-    val messages: List<String> by viewModel.messages.observeAsState(emptyList<String>().toMutableList())
+    val messages: List<Map<String, String>> by viewModel.messagesState.observeAsState(emptyList<Map<String, String>>().toMutableList())
 
 
     val message: String by viewModel.message.observeAsState("")
@@ -105,7 +106,7 @@ fun ChatScreen(
                         .weight(1f),
                     verticalArrangement = Arrangement.Bottom
                 ) {
-                    itemsIndexed(messages) { index, message ->
+                    itemsIndexed(messages) { index, msg ->
                         Card(
                             modifier = Modifier
                                 .padding(
@@ -151,11 +152,13 @@ fun ChatScreen(
                                         contentDescription = null
                                     )
                                     // MENSAJE
-                                    Text(
-                                        text = message,
-                                        color = MaterialTheme.colors.onBackground,
-                                        modifier = Modifier.padding(8.dp)
-                                    )
+                                    msg.get("message")?.let { it1 ->
+                                        Text(
+                                            text = it1,
+                                            color = MaterialTheme.colors.onBackground,
+                                            modifier = Modifier.padding(8.dp)
+                                        )
+                                    }
                                 }
                                 // FECHA Y HORA DEL MENSAJE
                                 Row(

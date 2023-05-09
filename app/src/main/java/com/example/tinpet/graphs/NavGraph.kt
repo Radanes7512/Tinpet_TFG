@@ -35,16 +35,16 @@ fun NavGraph(
         }
         composable(route=AppScreens.ChatUsers.route){
             ChatUsersScreen(
-                onClick = {name  ->
 
-                    navController.navigate(AppScreens.Chat.route)
-                },
-                chatViewModel= ChatViewModel(),
-                loginViewModel = LoginViewModel(LocalContext.current, navController)
+                navController = navController,
+                viewModel= ChatViewModel()
+
             )
         }
-        composable(route=AppScreens.Chat.route){
+        composable(route=AppScreens.Chat.route + "/{chatUserId}"){ backStackEntry ->
+            val chatUserId = backStackEntry.arguments?.getString("chatUserId") ?: ""
             ChatScreen(
+                chatUserId = chatUserId,
                 onBackClick = {
                     navController.popBackStack()
                     navController.navigate(AppScreens.ChatUsers.route)
@@ -52,8 +52,7 @@ fun NavGraph(
                 onPetClick = {
                     navController.navigate(AppScreens.PetProfile.route)
                 },
-                chatViewModel= ChatViewModel(),
-                loginViewModel = LoginViewModel(LocalContext.current, navController)
+                viewModel= ChatViewModel()
             )
         }
         composable(route = AppScreens.Profile.route){

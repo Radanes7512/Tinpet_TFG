@@ -15,6 +15,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.tinpet.AppScreens
 import com.example.tinpet.R
 import com.example.tinpet.screens.LoginViewModel
 import com.example.tinpet.ui.theme.abrilFatface
@@ -23,9 +25,8 @@ import com.example.tinpet.ui.theme.abrilFatface
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ChatUsersScreen(
-    chatViewModel: ChatViewModel,
-    loginViewModel: LoginViewModel,
-     onClick: (String) -> Unit,
+    navController: NavHostController,
+    viewModel: ChatViewModel,
 ) {
     //region LISTA DE FOTOS DE PERROS ( DE MOMENTO LAS ALMACENAMOS ASÍ)
     val images = listOf(
@@ -39,7 +40,9 @@ fun ChatUsersScreen(
 //endregion
     //region LISTA DE NOMBRE  ( DE MOMENTO ASÍ)
 
-    val names by chatViewModel.usernames.observeAsState(listOf())
+
+    val users by viewModel.usernames.observeAsState(listOf())
+
     //val names = listOf(
 
     //viewModel.usernames.value
@@ -57,7 +60,7 @@ fun ChatUsersScreen(
         ) {
             item {
                 //region FUNCION PARA CREAR ENTRADAS AL CHAT DEPENDIENDO DEL NUMERO DE PERROS
-                names.forEach { name ->
+                users.forEach { user ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -67,7 +70,8 @@ fun ChatUsersScreen(
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                .clickable { onClick(name.toString()) }
+                                .clickable { val chatUserId = user.get("id")
+                                    navController.navigate(AppScreens.Chat.route + "/${chatUserId}")}
                                 .fillMaxWidth()
                                 .background(MaterialTheme.colors.primary)
                                 .padding(10.dp)
@@ -79,12 +83,14 @@ fun ChatUsersScreen(
                                 painter = painterResource(firstImage),
                                 contentDescription = "profilePhoto"
                             )
-                            Text(
-                                modifier = Modifier.padding(8.dp),
-                                text = name.toString(),
-                                fontSize = 16.sp,
-                                fontFamily = abrilFatface
-                            )
+                            user.get("name")?.let {
+                                Text(
+                                    modifier = Modifier.padding(8.dp),
+                                    text = it,
+                                    fontSize = 16.sp,
+                                    fontFamily = abrilFatface
+                                )
+                            }
                         }
 
                     }

@@ -1,6 +1,5 @@
 package com.example.tinpet.screens
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -26,7 +25,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlin.random.Random
 
 
 class LoginViewModel(context: Context, navController: NavController) : ViewModel() {
@@ -132,29 +130,36 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
 
     }
     fun register(context:Context){
-        var inc =  Random.nextInt(0, 10001)
         email.value?.let {
             password.value?.let { it1 ->
                 auth.createUserWithEmailAndPassword(it, it1)
                     .addOnCompleteListener(context as Activity) { task ->
                         if (task.isSuccessful) {
                             val userdb = hashMapOf(
-                                "userinfo" to name,
-                                "userinfo2" to email,
-                                "userinfo3" to petname,
-                                "userinfo4" to petage
+                                "Username" to name.value,
+                                "Email" to email.value,
+                                "Petname" to petname.value,
+                                "Petage" to petage.value
                             )
                             Firestore.collection("users")
-                                .document(inc.toString())
-                                .set(userdb)
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success")
-                            val user = auth.currentUser
-                            sendVerificationEmail()
-                            name.value?.let { it2 -> writeNewUser(inc, it2, email.value!!) }
-                            readUser()
-                            Toast.makeText(context, "Se ha creado su cuenta correctamente",Toast.LENGTH_SHORT).show()
-                            //navController.navigate(AppScreens.Verify.route)
+                                .add(userdb)
+                                .addOnSuccessListener { documentReference ->
+                                    Log.d(TAG, "DocumentSnapshot written with ID: ${documentReference.id}")
+
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Log.d(TAG, "createUserWithEmail:success")
+                                    val user = auth.currentUser
+                                    sendVerificationEmail()
+                                    name.value?.let { it2 -> writeNewUser(documentReference.id, it2, email.value!!) }
+                                    readUser()
+                                    Toast.makeText(context, "Se ha creado su cuenta correctamente",
+                                        Toast.LENGTH_SHORT).show()
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(TAG, "Error adding document", e)
+                                }
+
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.exception)
@@ -187,9 +192,9 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
         }
     }
 
-    fun writeNewUser(userId : Int ,name: String, email: String) {
+    fun writeNewUser(userId: String, name: String, email: String) {
         val user = User(name, email)
-        rtdb.child("users").child(userId.toString()).setValue(user)
+        rtdb.child("users").child(userId).setValue(user)
 
     }
 

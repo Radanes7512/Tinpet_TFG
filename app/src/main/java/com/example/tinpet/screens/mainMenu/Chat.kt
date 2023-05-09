@@ -3,7 +3,6 @@ package com.example.tinpet.screens.mainMenu
 import android.annotation.SuppressLint
 import android.os.Build
 import android.widget.Toast
-import android.content.Context
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -25,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContentProviderCompat.requireContext
+//import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.tinpet.R
 import com.example.tinpet.screens.LoginViewModel
 import com.example.tinpet.ui.theme.abrilFatface
@@ -35,22 +34,30 @@ import java.util.*
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChatScreen(
-    chatViewModel: ChatViewModel,
-    loginViewModel: LoginViewModel,
+
+    chatUserId: String,
+    message: String = "",
+    viewModel: ChatViewModel,
     onBackClick: () -> Unit,
     onPetClick: () -> Unit
 ) {
+    viewModel.getChat(chatUserId)
+    viewModel.chatId.value?.let { viewModel.getMessages(it) }
     val context = LocalContext.current
 
     // Guardar el estado de la lista
-    val listState = rememberLazyListState()
-    val userName = chatViewModel.selectedUserName ?: ""
-    val test = loginViewModel.email.value
-    val message: String by chatViewModel.message.observeAsState("")
 
-    //Mensajes actualizados a mostrar
-    val messages:
-            List<String> by chatViewModel.messages.observeAsState(emptyList<String>().toMutableList())
+    val listState = rememberLazyListState()
+
+
+    val userName = viewModel.selectedUserName ?: ""
+
+    val messages: List<Map<String, String>> by viewModel.messagesState.observeAsState(emptyList<Map<String, String>>().toMutableList())
+
+
+    val message: String by viewModel.message.observeAsState("")
+
+
 
     // Agregar un mensaje
     @Composable
@@ -100,7 +107,7 @@ fun ChatScreen(
                         .weight(1f),
                     verticalArrangement = Arrangement.Bottom
                 ) {
-                    itemsIndexed(messages) { index, message ->
+                    itemsIndexed(messages) { index, msg ->
                         Card(
                             modifier = Modifier
                                 .padding(
@@ -138,7 +145,7 @@ fun ChatScreen(
                                     // IMAGEN DEL USUARIO
                                     Image(
                                         modifier = Modifier
-                                            .clickable { onPetClick() }
+                                            .clickable { onPetClick()}
                                             .clip(CircleShape)
                                             .size(25.dp)
                                             .align(alignment = Alignment.CenterVertically),
@@ -146,11 +153,13 @@ fun ChatScreen(
                                         contentDescription = null
                                     )
                                     // MENSAJE
-                                    Text(
-                                        text = message,
-                                        color = MaterialTheme.colors.onBackground,
-                                        modifier = Modifier.padding(8.dp)
-                                    )
+                                    msg.get("message")?.let { it1 ->
+                                        Text(
+                                            text = it1,
+                                            color = MaterialTheme.colors.onBackground,
+                                            modifier = Modifier.padding(8.dp)
+                                        )
+                                    }
                                 }
                                 // FECHA Y HORA DEL MENSAJE
                                 Row(
@@ -214,7 +223,7 @@ fun ChatScreen(
                             .weight(1f),
                         shape = CutCornerShape(5.dp),
                         value = message,
-                        onValueChange = { chatViewModel.updateMessage(it) },
+                        onValueChange = { viewModel.updateMessage(it) },
                         label = { Text("Escribir mensaje...") },
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = MaterialTheme.colors.onBackground,
@@ -224,8 +233,9 @@ fun ChatScreen(
                     Button(
                         onClick = {
                             if (message.isNotBlank()) {
-                                chatViewModel.addMessage()
-                            }else{
+                                viewModel.sendMessage(message)
+                                viewModel.updateMessage("")
+                            } else {
                                 Toast.makeText(context, "¡Mensaje vacío!", Toast.LENGTH_SHORT).show()
                             }
                         },

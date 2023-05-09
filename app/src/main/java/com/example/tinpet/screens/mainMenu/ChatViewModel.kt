@@ -168,8 +168,10 @@ class ChatViewModel() : ViewModel() {
                                 if (contieneTodos){
                                     _chatId.value = doc.id
                                     val messages = chatData[Constants.MESSAGES] as ArrayList<*>
+                                    val reversedMessages = messages.reversed()
                                     viewModelScope.launch {
-                                        _messagesState.value = messages as List<Map<String, String>>
+                                        _messagesState.value = reversedMessages as List<Map<String, String>>
+
                                     }
                                 }
                                 println("El array contiene todos los valores especificados: $contieneTodos")
@@ -279,6 +281,10 @@ class ChatViewModel() : ViewModel() {
 
 
 
+    }
+    fun isCurrentUserMessage(message : Map<String, String> ): Boolean {
+
+        return message[Constants.SENT_BY] == auth.currentUser?.email
     }
     //endregion
 }

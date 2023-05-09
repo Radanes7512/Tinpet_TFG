@@ -101,7 +101,7 @@ fun ChatScreen(
             ) {
                 LazyColumn(
                     state = listState,
-                    reverseLayout = true,
+                    reverseLayout = false ,
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
@@ -111,7 +111,7 @@ fun ChatScreen(
                         Card(
                             modifier = Modifier
                                 .padding(
-                                    if (index % 2 == 0) PaddingValues(
+                                    if (viewModel.isCurrentUserMessage(msg)) PaddingValues(
                                         50.dp,
                                         5.dp,
                                         5.dp,

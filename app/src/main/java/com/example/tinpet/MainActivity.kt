@@ -17,8 +17,8 @@ class MainActivity : ComponentActivity() {
 
     private val requestPermissionsCode = 100
     private val permissionsToRequest = arrayOf(
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.READ_EXTERNAL_STORAGE
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.ACCESS_FINE_LOCATION
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +27,11 @@ class MainActivity : ComponentActivity() {
         val permissionsDenied = permissionsToRequest.filter {
             ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_DENIED
         }
-        if (permissionsDenied.isEmpty()) {
+        val permissionsGranted = permissionsToRequest.filter {
+            ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
+        }
+
+        if (permissionsDenied.isEmpty() && permissionsGranted.size == permissionsToRequest.size) {
             // Todos los permisos fueron otorgados
             setContent {
                 TinPetTheme {
@@ -42,6 +46,7 @@ class MainActivity : ComponentActivity() {
                 requestPermissionsCode
             )
         }
+
     }
 
     override fun onRequestPermissionsResult(
@@ -54,7 +59,11 @@ class MainActivity : ComponentActivity() {
             val permissionsDenied = permissions.filterIndexed { index, _ ->
                 grantResults[index] == PackageManager.PERMISSION_DENIED
             }
-            if (permissionsDenied.isEmpty()) {
+            val permissionsGranted = permissions.filterIndexed { index, _ ->
+                grantResults[index] == PackageManager.PERMISSION_GRANTED
+            }
+
+            if (permissionsDenied.isEmpty() && permissionsGranted.size == permissionsToRequest.size) {
                 // Todos los permisos fueron otorgados
                 setContent {
                     TinPetTheme {
@@ -62,7 +71,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             } else {
-                // Al menos un permiso fue denegado, volver a solicitar permisos
+                // Al menos un permiso fue denegado, solicitar permisos de nuevo
                 ActivityCompat.requestPermissions(
                     this,
                     permissionsDenied.toTypedArray(),

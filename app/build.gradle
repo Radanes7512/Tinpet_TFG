@@ -105,6 +105,8 @@ dependencies {
     // MAPS_API_KEY = AIzaSyAqjsX5K16DdCmP-XIbdpovqsZBkpFMWkY
     implementation "com.google.maps.android:maps-compose:1.0.0"
     implementation "com.google.android.gms:play-services-maps:18.1.0"
+    implementation "com.google.accompanist:accompanist-places:1.0.0"
+
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"

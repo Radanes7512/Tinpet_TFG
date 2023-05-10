@@ -25,7 +25,9 @@ import com.example.tinpet.ui.theme.abrilFatface
 
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    viewModel: HomeViewModel
+) {
     // LISTA DE FOTOS DE PERROS ( DE MOMENTO LAS ALMACENAMOS ASÍ)
     val images = listOf(
         R.drawable.default_pet,

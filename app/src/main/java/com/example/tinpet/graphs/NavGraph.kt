@@ -31,7 +31,9 @@ fun NavGraph(
         }
         composable(
             route=AppScreens.Home.route){
-            HomeScreen()
+            HomeScreen(
+                viewModel= HomeViewModel()
+            )
         }
         composable(route=AppScreens.ChatUsers.route){
             ChatUsersScreen(

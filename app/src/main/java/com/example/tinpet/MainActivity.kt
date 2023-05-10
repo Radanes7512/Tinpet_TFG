@@ -16,8 +16,9 @@ import com.google.accompanist.permissions.rememberPermissionState
 class MainActivity : ComponentActivity() {
 
     private val requestPermissionsCode = 100
+
     private val permissionsToRequest = arrayOf(
-        Manifest.permission.READ_EXTERNAL_STORAGE,
+        //Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.ACCESS_FINE_LOCATION
     )
 

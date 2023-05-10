@@ -50,7 +50,7 @@ fun ChatScreen(
     val listState = rememberLazyListState()
 
 
-    val userName = viewModel.selectedUserName ?: ""
+    val users by viewModel.usernames.observeAsState(listOf())
 
     val messages: List<Map<String, String>> by viewModel.messagesState.observeAsState(emptyList<Map<String, String>>().toMutableList())
 
@@ -75,10 +75,14 @@ fun ChatScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = userName,
-                        fontFamily = abrilFatface
-                    )
+                    users.forEach { user ->
+                        user.get("name")?.let {
+                            Text(
+                                text = it,
+                                fontFamily = abrilFatface
+                            )
+                        }
+                    }
                 },
                 navigationIcon = {
                     IconButton(onClick = { onBackClick() }) {
@@ -126,15 +130,15 @@ fun ChatScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .background(// SI MENSAJES SON PARES
-                                            if (index % 2 == 0) {// Y EL MODO OSCURO ESTA ACTIVADO
+                                            if (viewModel.isCurrentUserMessage(msg)) {// Y EL MODO OSCURO ESTA ACTIVADO
                                                 if (isSystemInDarkTheme()) {// FONDO GRIS
-                                                    Color.Gray
+                                                    MaterialTheme.colors.secondary
                                                 } else {// SINO FONDO "onBackground"
-                                                    MaterialTheme.colors.onSurface
+                                                    MaterialTheme.colors.secondary
                                                 }// SI MENSAJES IMPARES
                                             } else {// Y EL MODO OSCURO ESTA ACTIVADO
                                                 if (isSystemInDarkTheme()) {// FONDO GRIS CLARITO
-                                                    Color.LightGray
+                                                    MaterialTheme.colors.primary
                                                 } else {// SINO FONDO "background"
                                                     MaterialTheme.colors.surface
                                                 }
@@ -167,24 +171,16 @@ fun ChatScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .background(
-                                            // SI MENSAJES SON PARES
-                                            if (index % 2 == 0) {
-                                                // Y EL MODO OSCURO ESTA ACTIVADO
-                                                if (isSystemInDarkTheme()) {
-                                                    // FONDO GRIS
-                                                    Color.Gray
-                                                } else {
-                                                    // SINO FONDO "onBackground"
-                                                    MaterialTheme.colors.onSurface
-                                                }
-                                                // SI MENSAJES IMPARES
-                                            } else {
-                                                // Y EL MODO OSCURO ESTA ACTIVADO
-                                                if (isSystemInDarkTheme()) {
-                                                    // FONDO GRIS CLARITO
-                                                    Color.LightGray
-                                                } else {
-                                                    // SINO FONDO "background"
+                                            if (viewModel.isCurrentUserMessage(msg)) {// Y EL MODO OSCURO ESTA ACTIVADO
+                                                if (isSystemInDarkTheme()) {// FONDO GRIS
+                                                    MaterialTheme.colors.secondary
+                                                } else {// SINO FONDO "onBackground"
+                                                    MaterialTheme.colors.secondary
+                                                }// SI MENSAJES IMPARES
+                                            } else {// Y EL MODO OSCURO ESTA ACTIVADO
+                                                if (isSystemInDarkTheme()) {// FONDO GRIS CLARITO
+                                                    MaterialTheme.colors.primary
+                                                } else {// SINO FONDO "background"
                                                     MaterialTheme.colors.surface
                                                 }
                                             }

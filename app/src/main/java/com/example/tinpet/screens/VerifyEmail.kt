@@ -172,9 +172,13 @@ fun VEBodyText(modifier: Modifier) {
             textAlign = TextAlign.Center,
             text = "Estimado usuario,\n" +
                     "\n" +
-                    "Le informamos que para poder completar el proceso de registro en nuestro servicio, es necesario que verifique su dirección de correo electrónico. Se ha enviado un correo electrónico a la dirección proporcionada durante el registro con un enlace de verificación. Por favor, revise su bandeja de entrada y siga las instrucciones en el correo electrónico para verificar su dirección de correo electrónico.\n" +
-                    "\n" +
-                    "Una vez verificado, puede continuar con el proceso de registro en nuestro servicio. Si tiene alguna pregunta o problema, no dude en contactarnos.\n" +
+                    "Le informamos que para poder completar el proceso de registro en nuestro servicio," +
+                    " es necesario que valide su cuenta. Se ha enviado un" +
+                    " correo electrónico a la dirección proporcionada con un enlace" +
+                    " de verificación. Por favor, revise su bandeja de entrada y siga las instrucciones." +
+                    "\n\n" +
+                    "Una vez verificado, podrá acceder a TinPet." +
+                    " Si tiene alguna duda o problema, no dude en contactarnos.\n" +
                     "\n" +
                     "Atentamente,\n" +
                     "\n" +

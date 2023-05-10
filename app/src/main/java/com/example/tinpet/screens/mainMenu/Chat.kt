@@ -34,7 +34,6 @@ import java.util.*
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChatScreen(
-
     chatUserId: String,
     message: String = "",
     viewModel: ChatViewModel,

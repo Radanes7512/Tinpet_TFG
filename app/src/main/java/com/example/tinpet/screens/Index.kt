@@ -195,13 +195,3 @@ fun IndexScreen(onLoginClick:() -> Unit,onSignupClick:() -> Unit) {
 
     }
 }
-@Composable@Preview()
-fun IndexScreenPreviewLT() {
-    TinPetTheme(darkTheme = false) {
-        IndexScreen(onLoginClick = {}, onSignupClick = {})    }
-}
-@Composable@Preview()
-fun IndexScreenPreviewDT() {
-    TinPetTheme(darkTheme = true) {
-        IndexScreen(onLoginClick = {}, onSignupClick = {})    }
-}

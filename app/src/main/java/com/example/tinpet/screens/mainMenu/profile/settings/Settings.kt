@@ -238,7 +238,8 @@ fun BottomSBar() {
             .fillMaxWidth()
     ) {
         Button(
-            onClick = { /*TODO*/ }
+            onClick = { /*TODO*/ },
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
         ){
             Text(text="Borrar cuenta")
         }

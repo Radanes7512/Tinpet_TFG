@@ -1,5 +1,7 @@
 package com.example.tinpet.screens
 
+import android.annotation.SuppressLint
+import android.view.inputmethod.EditorInfo
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -26,10 +29,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.AppScreens
 import com.example.tinpet.R
+import com.example.tinpet.screens.mainMenu.TopBar
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
@@ -43,116 +48,131 @@ fun LoginScreen(
         is UiState.SignIn -> onClick()
         else -> {}
     }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.background),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // LOGO SUPERIOR
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = MaterialTheme.colors.primaryVariant)
-        ) {
-            // Logo TinPet
-            Box(
+    Scaffold(
+        content = {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-                //horizontalAlignment = Alignment.CenterHorizontally
-
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.background),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
+                // LOGO SUPERIOR
+                Row(
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .size(64.dp)
-                        .padding(8.dp),
-                    painter = if (isSystemInDarkTheme()) {
-                        painterResource(R.drawable.icon_pawprint_black)
+                        .fillMaxWidth()
+                        .background(color = MaterialTheme.colors.primaryVariant)
+                ) {
+                    // Logo TinPet
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                        //horizontalAlignment = Alignment.CenterHorizontally
+
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .size(64.dp)
+                                .padding(8.dp),
+                            painter = if (isSystemInDarkTheme()) {
+                                painterResource(R.drawable.icon_pawprint_black)
+                            } else {
+                                painterResource(R.drawable.icon_pawprint_white)
+                            },
+                            contentDescription = null
+                        )
+                        Text(
+                            text = stringResource(R.string.app_name),
+                            fontSize = 32.sp,
+                            fontFamily = abrilFatface,
+                            color = MaterialTheme.colors.onBackground
+                        )
+                    }
+                }
+                // LOGIN COMPONENTS
+                Login(Modifier, viewModel, onRegClick = { onRegClick() })
+
+                // BOTÓN ACCEDER
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    if (loginEnable) {
+                        Button(
+                            onClick = {
+                                viewModel.login(context)
+
+
+                            },
+                            enabled = true,
+                            shape = RoundedCornerShape(25),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.secondaryVariant,
+                                disabledBackgroundColor = MaterialTheme.colors.onSurface,
+                                contentColor = Color.Black,
+                                disabledContentColor = Color.White
+                            )
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.LockOpen,
+                                contentDescription = null,
+                                modifier = Modifier.size(ButtonDefaults.IconSize)
+                            )
+
+                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                            Text(
+                                text = stringResource(R.string.login_access_ES)
+                            )
+                        }
                     } else {
-                        painterResource(R.drawable.icon_pawprint_white)
-                    },
-                    contentDescription = null
-                )
-                Text(
-                    text = stringResource(R.string.app_name),
-                    fontSize = 32.sp,
-                    fontFamily = abrilFatface,
-                    color = MaterialTheme.colors.onBackground
-                )
-            }
-        }
-        // LOGIN COMPONENTS
-        Login(Modifier, viewModel, onRegClick={onRegClick()})
-
-        // BOTÓN ACCEDER
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            if (loginEnable) {
-                Button(
-                    onClick = {
-                        viewModel.login(context)
-
-
-                    },
-                    enabled = true,
-                    shape = RoundedCornerShape(25),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colors.secondaryVariant,
-                        disabledBackgroundColor = MaterialTheme.colors.onSurface,
-                        contentColor = Color.Black,
-                        disabledContentColor = Color.White
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.LockOpen,
-                        contentDescription = null,
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
-                    )
-
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Button(
+                            onClick = {},
+                            enabled = false,
+                            shape = RoundedCornerShape(25),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = MaterialTheme.colors.secondaryVariant,
+                                disabledBackgroundColor = MaterialTheme.colors.onSurface,
+                                contentColor = Color.Black,
+                                disabledContentColor = Color.White
+                            )
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Lock,
+                                contentDescription = null,
+                                modifier = Modifier.size(ButtonDefaults.IconSize)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.padding(10.dp))
                     Text(
-                        text = stringResource(R.string.login_access_ES)
+                        text = stringResource(R.string.signup_access_ES),
+                        modifier = Modifier.clickable { onRegClick() },
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = if (isSystemInDarkTheme()) {
+                            Color(0xFFFFFFFF)
+                        } else {
+                            Color(0xFFFB9600)
+                        }
                     )
-                }
-            } else {
-                Button(
-                    onClick = {},
-                    enabled = false,
-                    shape = RoundedCornerShape(25),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colors.secondaryVariant,
-                        disabledBackgroundColor = MaterialTheme.colors.onSurface,
-                        contentColor = Color.Black,
-                        disabledContentColor = Color.White
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Lock,
-                        contentDescription = null,
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
+                    Spacer(modifier = Modifier.padding(10.dp))
+                    Text(
+                        text = "He olvidado mi contraseña",
+                        modifier = Modifier.clickable {  },
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = if (isSystemInDarkTheme()) {
+                            Color(0xFFFFFFFF)
+                        } else {
+                            Color(0xFFFB9600)
+                        }
                     )
                 }
             }
-            Spacer(modifier = Modifier.padding(10.dp))
-            Text(
-                text = stringResource(R.string.signup_access_ES),
-                modifier = Modifier.clickable { onRegClick() },
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-                color = if (isSystemInDarkTheme()) {
-                    Color(0xFFFFFFFF)
-                } else {
-                    Color(0xFFFB9600)
-                }
-            )
         }
-    }
-
+    )
 }
 
 @Composable
@@ -181,7 +201,6 @@ fun LTitleText(modifier: Modifier) {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-
         Text(
             modifier = Modifier.padding(5.dp),
             textAlign = TextAlign.Center,
@@ -193,22 +212,29 @@ fun LTitleText(modifier: Modifier) {
     }
 }
 
-@Composable
+/*@Composable
 fun ForgotPassword(modifier: Modifier,onRegClick: () -> Unit) {
-    Text(
-        text = "¿Olvidaste la contraseña?",
-        modifier = modifier
-            .clickable { onRegClick() }
-            .padding(10.dp),
-        fontSize = 12.sp,
-        fontWeight = FontWeight.Bold,
-        color = if (isSystemInDarkTheme()) {
-            Color(0xFFFFFFFF)
-        } else {
-            Color(0xFFFB9600)
-        }
-    )
-}
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "He olvidado mi contraseña",
+            modifier = modifier
+                .clickable { onRegClick() }
+                .padding(10.dp),
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
+            color = if (isSystemInDarkTheme()) {
+                Color(0xFFFFFFFF)
+            } else {
+                Color(0xFFFB9600)
+            }
+        )
+    }
+}*/
 
 @Composable
 fun LPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
@@ -268,13 +294,13 @@ fun LPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
                     )
                 }
             },
-            visualTransformation =
-            if (showPassword) {
+            visualTransformation = if (showPassword) {
                 VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            },
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Send)
+            } else {PasswordVisualTransformation()},
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            )
         )
     }
 }
@@ -314,8 +340,11 @@ fun LUserField(email: String, onTextFieldChanged: (String) -> Unit) {
                     )
                 }
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next // Establecer el botón del teclado como "Siguiente"
+            ),
+            colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground),
         )
     }
 }

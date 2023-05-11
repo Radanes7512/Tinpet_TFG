@@ -18,12 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -71,40 +69,6 @@ fun SignupScreen(
                     .background(MaterialTheme.colors.background),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // LOGO SUPERIOR
-                /*Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color = MaterialTheme.colors.primaryVariant)
-                ) {
-                    // Logo TinPet
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                        //horizontalAlignment = Alignment.CenterHorizontally
-
-                    ) {
-                        Image(
-                            modifier = Modifier
-                                .size(64.dp)
-                                .padding(8.dp),
-                            painter = if (isSystemInDarkTheme()) {
-                                painterResource(R.drawable.icon_pawprint_black)
-                            } else {
-                                painterResource(R.drawable.icon_pawprint_white)
-                            },
-                            contentDescription = null
-                        )
-                        Text(
-                            text = stringResource(R.string.app_name),
-                            fontSize = 32.sp,
-                            fontFamily = abrilFatface,
-                            color = MaterialTheme.colors.onBackground
-                        )
-                    }
-                }*/
                 // SIGNUP COMPONENTS
                 item {
                     Signup(Modifier, viewModel)
@@ -254,9 +218,7 @@ fun SAddpetText(align: Modifier) {
 }
 
 @Composable
-fun SPetName(
-    petname: String, onTextFieldChanged: (String) -> Unit
-) {
+fun SPetName(petname: String, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -284,7 +246,11 @@ fun SPetName(
                     contentDescription = null
                 )
             }
-        }, colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
+        },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next
+            ),
+            colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }
 }
@@ -324,7 +290,7 @@ fun SPetAge(petage: String, onTextFieldChanged: (String) -> Unit) {
                     )
                 }
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
             colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }
@@ -387,7 +353,6 @@ fun SPetImage(petimage: Uri, modifier: Modifier = Modifier, onImageSelected: (Ur
                         Icon(Icons.Filled.Delete, contentDescription = null, tint = Color.Red)
                     }
                 }
-
             }
         }
     }
@@ -469,18 +434,22 @@ fun SPetCategory(petcategory: String, function: (String) -> Unit) {
                 }
             }
         )
-        DropdownMenu(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
+        Box(
+            modifier=Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp),
         ) {
-            items.forEachIndexed { index, item ->
-                DropdownMenuItem(onClick = {
-                    selectedIndex = index
-                    expanded = false
-                    function(item)
-                }) {
-                    Text(text = item)
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                items.forEachIndexed { index, item ->
+                    DropdownMenuItem(onClick = {
+                        selectedIndex = index
+                        expanded = false
+                        function(item)
+                    }) {
+                        Text(text = item)
+                    }
                 }
             }
         }
@@ -516,7 +485,11 @@ fun SUserName(name: String, onTextFieldChanged: (String) -> Unit) {
                     contentDescription = null
                 )
             }
-        }, colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
+        },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next
+            ),
+            colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }
 }
@@ -592,7 +565,11 @@ fun RepeatPassword(password2: String, onTextFieldChanged: (String) -> Unit) {
             VisualTransformation.None
         } else {
             PasswordVisualTransformation()
-        }
+        },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Next
+            )
         )
     }
 }
@@ -648,7 +625,11 @@ fun SPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
             VisualTransformation.None
         } else {
             PasswordVisualTransformation()
-        }
+        },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Next
+            )
         )
     }
 }
@@ -688,42 +669,11 @@ fun SUserField(email: String, onTextFieldChanged: (String) -> Unit) {
                     )
                 }
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            ),
             colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }
 }
-
-//region FUNCIONES PREFIJO
-class SPrefixVisualTransformationDark(private val prefix: String) : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        val transformedText = AnnotatedString(
-            prefix, SpanStyle(Color.White)
-        ) + text
-
-        return TransformedText(transformedText, SPrefixOffsetMapping(prefix))
-    }
-
-}
-
-
-class SPrefixVisualTransformationLight(private val prefix: String) : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        val transformedText = text + AnnotatedString(
-            prefix, SpanStyle(Color.Black)
-        ) + text
-
-        return TransformedText(transformedText, SPrefixOffsetMapping(prefix))
-    }
-
-}
-
-class SPrefixOffsetMapping(private val prefix: String) : OffsetMapping {
-    override fun originalToTransformed(offset: Int): Int = offset + prefix.length
-
-    override fun transformedToOriginal(offset: Int): Int {
-        val delta = offset - prefix.length
-        return if (delta < 0) 0 else delta
-    }
-}
-//endregion

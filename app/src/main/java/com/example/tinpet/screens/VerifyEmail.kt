@@ -169,20 +169,20 @@ fun VEBodyText(modifier: Modifier) {
     ) {
         Text(
             modifier = Modifier.padding(5.dp),
-            textAlign = TextAlign.Center,
-            text = "Estimado usuario,\n" +
-                    "\n" +
+            textAlign = TextAlign.Justify,
+            text = "Estimado usuario," +
+                    "\n\n" +
                     "Le informamos que para poder completar el proceso de registro en nuestro servicio," +
                     " es necesario que valide su cuenta. Se ha enviado un" +
                     " correo electrónico a la dirección proporcionada con un enlace" +
                     " de verificación. Por favor, revise su bandeja de entrada y siga las instrucciones." +
                     "\n\n" +
                     "Una vez verificado, podrá acceder a TinPet." +
-                    " Si tiene alguna duda o problema, no dude en contactarnos.\n" +
+                    " Si tiene alguna duda o problema, no dude en contactarnos." +
+                    "\n\n\n" +
+                    "Atentamente," +
                     "\n" +
-                    "Atentamente,\n" +
-                    "\n" +
-                    "El equipo de soporte técnico.",
+                    "El equipo de soporte técnico de TinPet.",
             fontSize = 16.sp,
             fontFamily = abrilFatface,
             color = MaterialTheme.colors.onBackground

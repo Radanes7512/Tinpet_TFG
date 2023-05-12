@@ -212,30 +212,6 @@ fun LTitleText(modifier: Modifier) {
     }
 }
 
-/*@Composable
-fun ForgotPassword(modifier: Modifier,onRegClick: () -> Unit) {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = "He olvidado mi contraseña",
-            modifier = modifier
-                .clickable { onRegClick() }
-                .padding(10.dp),
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Bold,
-            color = if (isSystemInDarkTheme()) {
-                Color(0xFFFFFFFF)
-            } else {
-                Color(0xFFFB9600)
-            }
-        )
-    }
-}*/
-
 @Composable
 fun LPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
     var showPassword by remember { mutableStateOf(value = false) }

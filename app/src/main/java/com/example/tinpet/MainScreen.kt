@@ -36,8 +36,6 @@ import com.example.tinpet.ui.theme.abrilFatface
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-
-
 @Composable
 fun MainScreen(navController: NavHostController = rememberNavController()) {
     val screens = listOf(

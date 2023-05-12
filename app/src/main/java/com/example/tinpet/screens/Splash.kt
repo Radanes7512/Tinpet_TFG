@@ -1,6 +1,7 @@
 package com.example.tinpet.screens
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,18 +31,11 @@ import com.example.tinpet.AppScreens
 import com.example.tinpet.R
 import com.example.tinpet.graphs.Graph
 import com.example.tinpet.ui.theme.abrilFatface
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalPermissionsApi::class)
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun SplashScreen(navController:NavHostController) {
-    val context = LocalContext.current
-    val internetPermissionState = rememberPermissionState(Manifest.permission.ACCESS_NETWORK_STATE)
-
         LaunchedEffect(key1 = true){
             delay(3000)
             navController.popBackStack()

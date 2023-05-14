@@ -34,12 +34,14 @@ import java.util.*
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChatScreen(
+
     chatUserId: String,
     message: String = "",
     viewModel: ChatViewModel,
     onBackClick: () -> Unit,
     onPetClick: () -> Unit
 ) {
+
     viewModel.getChat(chatUserId)
     viewModel.chatId.value?.let { viewModel.getMessages(it) }
     val context = LocalContext.current

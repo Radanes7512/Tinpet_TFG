@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.protobuf.Empty
 
 
 class LoginViewModel(context: Context, navController: NavController) : ViewModel() {
@@ -139,7 +140,8 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                                 "Username" to name.value,
                                 "Email" to email.value,
                                 "Petname" to petname.value,
-                                "Petage" to petage.value
+                                "Petage" to petage.value,
+                                "Friends" to ArrayList<String>()
                             )
                             Firestore.collection("users")
                                 .add(userdb)

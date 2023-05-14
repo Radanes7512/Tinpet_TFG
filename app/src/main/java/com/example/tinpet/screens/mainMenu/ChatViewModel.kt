@@ -1,5 +1,6 @@
 package com.example.tinpet.screens.mainMenu
 
+import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
@@ -34,6 +35,8 @@ class ChatViewModel() : ViewModel() {
     private val _messagesState = MutableLiveData<List<Map<String, String>>>()
     val messagesState: LiveData<List<Map<String, String>>> = _messagesState
 
+    private val _loggedUserId = MutableLiveData<String>()
+    val loggedUserId: LiveData<String> = _loggedUserId
 
 
     private val _chatId = MutableLiveData<String>()
@@ -96,6 +99,32 @@ class ChatViewModel() : ViewModel() {
                     it
                 )
             }
+           if(chatRef == null) {
+               val userData = _chatUserDocument.value?.data
+               val chat = hashMapOf(
+                   Constants.USERS to userData?.let {
+                       listOf(
+                           currentUser.email,
+                           it[Constants.EMAIL]
+                       )
+                   },
+                 Constants.MESSAGES to kotlin.collections.listOf(
+                      hashMapOf(
+                           Constants.SENT_BY to currentUser.email.toString(),
+                           Constants.MESSAGE to message,
+                           Constants.SENT_AT to java.util.Date()
+                       )
+                   )
+               )
+               Firebase.firestore.collection(Constants.CHATS)
+                   .add(chat)
+                   .addOnSuccessListener { documentReference ->
+                       Log.w(ContentValues.TAG, "Success adding document" )
+                   }
+                   .addOnFailureListener { e ->
+                       Log.w(ContentValues.TAG, "Error adding document", e)
+                   }
+            }
             chatRef?.get()?.addOnSuccessListener { document ->
                 if (document.exists()) {
                     // El chat ya existe, actualizarlo con el nuevo mensaje
@@ -110,29 +139,6 @@ class ChatViewModel() : ViewModel() {
                         }
                         .addOnFailureListener { e ->
                             Log.w(Constants.TAG, "Error al enviar el mensaje", e)
-                        }
-                } else {
-                    // El chat no existe, crearlo con el nuevo mensaje
-                    val userData = _chatUserDocument.value?.data
-
-                    val chatData = hashMapOf(
-                        Constants.USERS to userData?.let { listOf(currentUser.email,
-                            it[Constants.EMAIL]
-                        ) },
-                        Constants.MESSAGES to listOf(
-                            hashMapOf(
-                                Constants.SENT_BY to currentUser.email.toString(),
-                                Constants.MESSAGE to message,
-                                Constants.SENT_AT to Date()
-                            )
-                        )
-                    )
-                    chatRef.set(chatData)
-                        .addOnSuccessListener {
-                            Log.d(Constants.TAG, "Chat creado con éxito")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(Constants.TAG, "Error al crear el chat", e)
                         }
                 }
             }?.addOnFailureListener { e ->
@@ -231,8 +237,8 @@ class ChatViewModel() : ViewModel() {
     }
 
 
-    fun getChat(chatUserId: String) {
 
+    fun getChat(chatUserId: String) {
         val userRef = Firebase.firestore.collection(Constants.USERS).document(chatUserId)
         userRef.get()
             .addOnSuccessListener { document ->
@@ -240,8 +246,6 @@ class ChatViewModel() : ViewModel() {
                     val currentUser = auth.currentUser
                     _chatUserDocument.value = document
                     val userData = document.data
-                    val userisnotnull = currentUser != null
-                    val emailisnotnull = userData?.get(Constants.EMAIL) != null
                     if (currentUser != null && userData?.get(Constants.EMAIL) != null) {
                         currentUser.email?.let {
                             Firebase.firestore.collection(Constants.CHATS)
@@ -275,13 +279,11 @@ class ChatViewModel() : ViewModel() {
 
             }
             .addOnFailureListener { e ->
-                Log.w(Constants.TAG, "Error al obtener el usuario existente", e)
-                println("Failure listener falla kbron")
+                Log.w(Constants.TAG, "Error al obtener el usuario existente",)
             }
-
-
-
     }
+
+
     fun isCurrentUserMessage(message : Map<String, String> ): Boolean {
 
         return message[Constants.SENT_BY] == auth.currentUser?.email

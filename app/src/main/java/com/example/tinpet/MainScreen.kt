@@ -40,7 +40,7 @@ import com.example.tinpet.ui.theme.abrilFatface
 fun MainScreen(navController: NavHostController = rememberNavController()) {
     val screens = listOf(
         AppScreens.Places,
-        AppScreens.Connect,
+        //AppScreens.Connect,
         AppScreens.Home,
         AppScreens.ChatUsers,
         AppScreens.Settings,
@@ -171,7 +171,7 @@ fun BottomBar2(
 ) {
     val screens = listOf(
         AppScreens.Places,
-        AppScreens.Connect,
+        //AppScreens.Connect,
         AppScreens.Home,
         AppScreens.ChatUsers,
         AppScreens.Profile

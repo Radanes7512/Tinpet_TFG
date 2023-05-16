@@ -13,6 +13,8 @@ object Constants {
         const val IS_CURRENT_USER = "is_current_user"
         const val CONVERSATIONS = "conversations"
         const val USERS = "users"
+        const val PET_NAME = "Petname"
+        const val PET_AGE = "Petage"
         const val PENDING_REQUESTS = "pending_requests"
         const val USER1_ID = "user1_id"
         const val USER2_ID = "user2_id"

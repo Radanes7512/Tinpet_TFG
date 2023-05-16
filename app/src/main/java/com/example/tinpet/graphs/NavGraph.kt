@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -102,6 +103,7 @@ fun NavGraph(
         }
         composable(route = AppScreens.Requests.route){
             RequestScreen(
+
                 onBackClick = {
                     navController.popBackStack()
                     navController.navigate(AppScreens.Profile.route)
@@ -111,7 +113,8 @@ fun NavGraph(
                 },
                 onChatClick = {
                     navController.navigate(AppScreens.Chat.route)
-                }
+                },
+                        viewModel = RequestsViewModel()
             )
         }
         composable(route = AppScreens.Friends.route){

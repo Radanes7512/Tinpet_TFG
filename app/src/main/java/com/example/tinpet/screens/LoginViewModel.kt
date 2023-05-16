@@ -141,6 +141,7 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                                 "Email" to email.value,
                                 "Petname" to petname.value,
                                 "Petage" to petage.value,
+                               // "Photo" to ByteArray,
                                 "Friends" to ArrayList<String>()
                             )
                             Firestore.collection("users")

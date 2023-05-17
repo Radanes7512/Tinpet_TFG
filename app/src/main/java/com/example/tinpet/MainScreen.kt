@@ -210,7 +210,7 @@ fun RowScope.AddItem(
                 imageVector = screen.icon,
                 contentDescription = "Navigation Icon",
                 tint = if (isSelected) {
-                    MaterialTheme.colors.onError // Cambia el color del icono cuando está seleccionado
+                    MaterialTheme.colors.onSecondary // Cambia el color del icono cuando está seleccionado
                 } else {
                     if (isSystemInDarkTheme()) {
                         Color.White

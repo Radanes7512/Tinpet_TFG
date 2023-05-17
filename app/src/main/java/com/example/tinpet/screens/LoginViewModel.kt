@@ -3,20 +3,14 @@ package com.example.tinpet.screens
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.tinpet.AppScreens
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -99,7 +93,6 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
         _signupEnable.value = isValidEmail(email) && isValidName(name) && isValidPassword(password) && password == password2
         }
 
-
     fun onAddpetChanged(petname: String, petage: String, petcategory: String, petimage: Uri){
         _petname.value = petname
         _petage.value = petage
@@ -139,7 +132,9 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                                 "Username" to name.value,
                                 "Email" to email.value,
                                 "Petname" to petname.value,
-                                "Petage" to petage.value
+                                "Petage" to petage.value,
+                                // "Photo" to ByteArray,
+                                "Friends" to ArrayList<String>()
                             )
                             Firestore.collection("users")
                                 .add(userdb)
@@ -191,13 +186,11 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
 
         }
     }
-
     fun writeNewUser(userId: String, name: String, email: String) {
         val user = User(name, email)
         rtdb.child("users").child(userId).setValue(user)
 
     }
-
     fun readUser() {
 
         rtdb.addValueEventListener(object : ValueEventListener {
@@ -215,16 +208,13 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
     }
 
 
-
-
-
-    private fun isValidPassword(password: String): Boolean = password.length >= 6
-    private fun isValidEmail(email: String): Boolean  = email.contains("@gmail.com") || email.contains("@hotmail.com")
-    private fun isValidName(name: String): Boolean = name.length > 1
-    private fun isValidPetName(petname:String): Boolean = petname.length > 1
-    private fun isValidPetCategory(petcategory:String): Boolean = petcategory.length > 1
-    private fun isValidPetAge(petage:String): Boolean = petage.length in 1..2
-    private fun isValidPetImage(petimage: Uri): Boolean = petimage.isRelative
+    fun isValidPassword(password: String): Boolean = password.length >= 6
+    fun isValidEmail(email: String): Boolean  = email.contains("@") && (email.contains(".com") || email.contains(".es"))
+    fun isValidName(name: String): Boolean = name.length > 1
+    fun isValidPetName(petname:String): Boolean = petname.length > 1
+    fun isValidPetCategory(petcategory:String): Boolean = petcategory.length > 1
+    fun isValidPetAge(petage:String): Boolean = petage.toIntOrNull() in 1..30
+    fun isValidPetImage(petimage: Uri): Boolean = petimage.isRelative
 /*{
         val isImageExists = try {
             context.checkUriPermission(petimage, null, null, Intent.FLAG_GRANT_READ_URI_PERMISSION) == PackageManager.PERMISSION_GRANTED

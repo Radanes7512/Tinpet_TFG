@@ -39,6 +39,13 @@
     <string name="mapstate3_ES">Zona poco transcurrida</string>
     <string name="mapstate4_ES">Zona transcurrida</string>
     <string name="todo">TODO</string>
+        <!-- COUNTRIES -->
+    <string name="spain_ES">ES</string>
+    <string name="italy_ES">IT</string>
+    <string name="france_ES">FR</string>
+    <string name="germany_ES">D</string>
+    <string name="uk_ES">UK</string>
+
 
 
 </resources>

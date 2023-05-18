@@ -1,21 +1,18 @@
 package com.example.tinpet.screens.mainMenu
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Bundle
-import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,13 +21,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import com.example.tinpet.R
-import com.example.tinpet.ui.theme.abrilFatface
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
 
@@ -50,23 +42,61 @@ fun PlacesScreen() {
     }
     val uiSettings by remember { mutableStateOf(MapUiSettings(zoomControlsEnabled = false)) }
     val countriesList = listOf(
-        stringResource(R.string.spain_ES) to LatLng(39.53721928672391, -3.416821204546524),
-        stringResource(R.string.italy_ES) to LatLng(42.976648277417304, 12.588910524210682),
-        stringResource(R.string.france_ES) to LatLng(46.61653253544342, 1.7130195434187618),
-        stringResource(R.string.germany_ES) to LatLng(51.14671334331841, 10.289255887839838),
-        stringResource(R.string.uk_ES) to LatLng(54.31979852479028, -2.0524484488028705)
+        //https://www.flaticon.es/packs/european-circular-flags
+        Triple(
+            painterResource(R.drawable.flag_spain),
+            stringResource(R.string.spain_ES),
+            LatLng(39.53721928672391, -3.416821204546524)
+        ),
+        Triple(
+            painterResource(R.drawable.flag_italy),
+            stringResource(R.string.italy_ES),
+            LatLng(42.976648277417304, 12.588910524210682)
+        ),
+        Triple(
+            painterResource(R.drawable.flag_france),
+            stringResource(R.string.france_ES),
+            LatLng(46.61653253544342, 1.7130195434187618)
+        ),
+        Triple(
+            painterResource(R.drawable.flag_germany),
+            stringResource(R.string.germany_ES),
+            LatLng(51.14671334331841, 10.289255887839838)
+        ),
+        Triple(
+            painterResource(R.drawable.flag_uk),
+            stringResource(R.string.uk_ES),
+            LatLng(54.31979852479028, -2.0524484488028705)
+        ),
+        Triple(
+            painterResource(R.drawable.flag_usa),
+            stringResource(R.string.usa_ES),
+            LatLng(40.351174508864545, -101.63479453358795)
+        ),
+        Triple(
+            painterResource(R.drawable.flag_china),
+            stringResource(R.string.china_ES),
+            LatLng(34.94650584858449, 103.52418053419156)
+        ),
+        Triple(
+            painterResource(R.drawable.flag_arg),
+            stringResource(R.string.arg_ES),
+            LatLng(-34.89835307223945, -64.95531286103939)
+        )
     )
-
     val countries = remember {
         mutableStateListOf(*countriesList.toTypedArray())
     }
-    val defaultPosition = countries.first().second
+    val defaultPosition = countries.first().third
     val selectedCountry = remember { mutableStateOf(countries.first()) }
     val expanded = remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
+    var showDialog2 by remember { mutableStateOf(false) }
     var selectedLatLng by remember { mutableStateOf<LatLng?>(null) }
     var title by remember { mutableStateOf("") }
+    var isTitleEmpty by remember { mutableStateOf(false) }
     var snippet by remember { mutableStateOf("") }
+    var isRBEmpty by remember {mutableStateOf(false)}
     val selectedRadioButton = remember { mutableStateOf(0) }
     var cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(defaultPosition, 5.5f)
@@ -99,39 +129,9 @@ fun PlacesScreen() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                //https://www.flaticon.es/packs/european-circular-flags
-                //https://convertio.co/es/
-                //Icon(painter = painterResource(id = R.drawable.icon_pawprint_black), contentDescription = null)
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text("Elegir país")
-                    OutlinedButton(
-                        onClick = { expanded.value = true },
-                        modifier = Modifier.padding(vertical = 16.dp)
-                    ) {
-                        Text(text = selectedCountry.value.first)
-                    }
-                }
-                DropdownMenu(
-                    expanded = expanded.value,
-                    onDismissRequest = { expanded.value = false }
-                ) {
-                    countries.forEach { country ->
-                        DropdownMenuItem(onClick = {
-                            selectedCountry.value = country
-                            cameraPositionState.position =
-                                CameraPosition.fromLatLngZoom(country.second, 5.5f)
-                            expanded.value = false
-                        }) {
-                            Text(text = country.first)
-                        }
-                    }
-                }
                 OutlinedTextField(
                     value = search,
-                    onValueChange = { onSearchChange -> search = onSearchChange},
+                    onValueChange = { onSearchChange -> search = onSearchChange },
                     label = { Text("Buscar") },
                     placeholder = {
                         Text(
@@ -149,50 +149,67 @@ fun PlacesScreen() {
                         }
                     }
                 )
+                Image(
+                    painter = selectedCountry.value.first,
+                    contentDescription = null,
+                    Modifier
+                        .size(25.dp)
+                        .clickable { showDialog2 = if (showDialog2) false else true }
+                )
             }
         },
         content = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 100.dp)
             ) {
                 if (showDialog) {
                     AlertDialog(
                         onDismissRequest = {
                             showDialog = false
                         },
-                        title = { Text("Nueva ubicación\n") },
+                        title = { Text("Añadir ubicación") },
                         text = {
-                            Column (
+                            Column(
                                 Modifier
                                     .fillMaxWidth()
+                                    //.background(MaterialTheme.colors.background)
                                     .padding(16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.SpaceBetween
                             ) {
-                                TextField(
+                                OutlinedTextField(
+                                    modifier=Modifier.padding(top=16.dp),
                                     value = title,
-                                    onValueChange = { newTitle -> title = newTitle },
-                                    label = { Text("Título") },
-                                    keyboardOptions = KeyboardOptions(
-                                        imeAction = ImeAction.Next
-                                    )
+                                    onValueChange = { newTitle ->
+                                        title = newTitle
+                                        isTitleEmpty = newTitle.isEmpty()
+                                    },
+                                    isError = isTitleEmpty,
+                                    label = {
+                                        if(!isTitleEmpty){
+                                            Text("Nombre del parque")
+                                        }else{
+                                            Text(
+                                                "No puede estar vacío",
+                                                color=MaterialTheme.colors.error
+                                            )
+                                        }
+                                    }
                                 )
                                 Column(
                                     Modifier
                                         .fillMaxWidth(),
-                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    horizontalAlignment = Alignment.Start,
                                     verticalArrangement = Arrangement.SpaceBetween
-                                ){
-                                    Row (
+                                ) {
+                                    Row(
                                         Modifier
                                             .fillMaxWidth(),
                                         verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween
-                                    ){
+                                        horizontalArrangement = Arrangement.Start
+                                    ) {
                                         RadioButton(
                                             selected = selectedRadioButton.value == 1,
                                             onClick = {
@@ -202,11 +219,12 @@ fun PlacesScreen() {
                                         )
                                         Text("Muy transcurrido")
                                     }
-                                    Row (
+                                    Row(
                                         Modifier
                                             .fillMaxWidth(),
                                         verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween) {
+                                        horizontalArrangement = Arrangement.Start
+                                    ) {
                                         RadioButton(
                                             selected = selectedRadioButton.value == 2,
                                             onClick = {
@@ -216,11 +234,11 @@ fun PlacesScreen() {
                                         )
                                         Text("Transcurrido")
                                     }
-                                    Row (
+                                    Row(
                                         Modifier
                                             .fillMaxWidth(),
                                         verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.SpaceBetween
+                                        horizontalArrangement = Arrangement.Start
                                     ) {
                                         RadioButton(
                                             selected = selectedRadioButton.value == 3,
@@ -232,29 +250,42 @@ fun PlacesScreen() {
                                         Text("Poco transcurrido")
                                     }
                                 }
+                                if(isRBEmpty){
+                                    Text("Se debe elegir una categoría",color=MaterialTheme.colors.error,modifier=Modifier.padding(bottom=8.dp))
+                                }
+
                             }
                         },
+                        backgroundColor = MaterialTheme.colors.background,
                         confirmButton = {
                             Button(
                                 onClick = {
-                                    val newMarker = MarkerOptions()
-                                        .position(
-                                            selectedLatLng ?: LatLng(
-                                                0.0,
-                                                0.0
-                                            )
-                                        ) // Nueva posición del marcador
-                                        .title(title)
-                                        .snippet(snippet)
-                                    markers = markers + newMarker
-                                    Toast.makeText(
-                                        context,
-                                        "Se ha añadido un nuevo parque",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    showDialog = false
-                                    cameraPositionState.position =
-                                        CameraPosition.fromLatLngZoom(selectedLatLng!!, 50f)
+                                    if (title.isEmpty()) {
+                                        isTitleEmpty = true
+                                    } else {
+                                        if (selectedRadioButton.value != 0) {
+                                            val newMarker = MarkerOptions()
+                                                .position(
+                                                    selectedLatLng ?: LatLng(
+                                                        0.0,
+                                                        0.0
+                                                    )
+                                                ) // Nueva posición del marcador
+                                                .title(title)
+                                                .snippet(snippet)
+                                            markers = markers + newMarker
+                                            Toast.makeText(
+                                                context,
+                                                "Se ha añadido un nuevo parque",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            showDialog = false
+                                            cameraPositionState.position =
+                                                CameraPosition.fromLatLngZoom(selectedLatLng!!, 20f)
+                                        }else{
+                                            isRBEmpty=true
+                                        }
+                                    }
                                 }
                             ) {
                                 Text("Añadir")
@@ -271,11 +302,56 @@ fun PlacesScreen() {
                         }
                     )
                 }
-            }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 100.dp)
-            ) {
+                if (showDialog2) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Text("Seleccionar país")
+                        Spacer(modifier=Modifier.padding(8.dp))
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(2),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                        ) {
+                            countries.forEach { country ->
+                                item {
+                                    Card(
+                                        backgroundColor = MaterialTheme.colors.background,
+                                        elevation = 8.dp,
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                    ) {
+                                        Column(
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            modifier = Modifier
+                                                .clickable {
+                                                    selectedCountry.value = country
+                                                    cameraPositionState.position =
+                                                        CameraPosition.fromLatLngZoom(
+                                                            country.third,
+                                                            5.5f
+                                                        )
+                                                    showDialog2 = false
+                                                }
+                                                .padding(8.dp)
+                                        ) {
+                                            Image(
+                                                painter = country.first,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(25.dp)
+                                            )
+                                            Text(text = country.second)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                Spacer(modifier=Modifier.padding(8.dp))
                 GoogleMap(
                     modifier = Modifier.fillMaxSize(),
                     cameraPositionState = cameraPositionState,

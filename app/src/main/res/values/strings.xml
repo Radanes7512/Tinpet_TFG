@@ -40,11 +40,14 @@
     <string name="mapstate4_ES">Zona transcurrida</string>
     <string name="todo">TODO</string>
         <!-- COUNTRIES -->
-    <string name="spain_ES">ES</string>
-    <string name="italy_ES">IT</string>
-    <string name="france_ES">FR</string>
-    <string name="germany_ES">D</string>
-    <string name="uk_ES">UK</string>
+    <string name="spain_ES">ESPAÑA</string>
+    <string name="italy_ES">ITALIA</string>
+    <string name="france_ES">FRANCIA</string>
+    <string name="germany_ES">ALEMANIA</string>
+    <string name="uk_ES">REINO UNIDO</string>
+    <string name="usa_ES">EEUU</string>
+    <string name="china_ES">CHINA</string>
+    <string name="arg_ES">ARGENTINA</string>
 
 
 

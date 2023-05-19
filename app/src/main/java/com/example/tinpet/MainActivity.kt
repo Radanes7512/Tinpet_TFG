@@ -97,18 +97,13 @@ fun DefaultText(permissionsDenied: List<String>, requestPermissionsCode: Int, sh
     val context = LocalContext.current
     val activity = context as ComponentActivity
     Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            /*horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween,*/
             modifier = Modifier
-                .align(Alignment.Center)
-                .padding(16.dp)
+                .fillMaxSize()
+                .border(2.dp,Color.Magenta)
         ) {
-            Box() {
+            Box(modifier=Modifier.align(Alignment.TopCenter)) {
                 Image(
                     modifier = Modifier
                         .align(Alignment.Center)
@@ -126,8 +121,8 @@ fun DefaultText(permissionsDenied: List<String>, requestPermissionsCode: Int, sh
                     color = MaterialTheme.colors.onBackground
                 )
             }
-            Spacer(modifier = Modifier.padding(vertical = 16.dp))
-            LazyColumn() {
+            Spacer(modifier = Modifier.padding(8.dp))
+            LazyColumn(modifier=Modifier.border(2.dp,Color.Red).align(Alignment.Center).padding(16.dp)) {
                 item {
                     Row {
                         Text(
@@ -166,51 +161,55 @@ fun DefaultText(permissionsDenied: List<String>, requestPermissionsCode: Int, sh
                     )
                 }
             }
-        }
-        if(showSet){
-            Button(
-                onClick = {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri: Uri = Uri.fromParts("package", "com.example.tinpet", null)
-                    intent.data = uri
-                    startActivity(context,intent,Bundle())
-                },
-                modifier = Modifier
-                    .padding(bottom = 36.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = null
-                )
-                Text(
-                    text = "Abrir ajustes"
-                )
-            }            
-        }else{
-            Button(
-                onClick = {
-                    ActivityCompat.requestPermissions(
-                        activity,
-                        permissionsDenied.toTypedArray(),
-                        requestPermissionsCode
-                    )
-                },
-                modifier = Modifier
-                    .padding(bottom = 36.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.CheckCircle,
-                    contentDescription = null
-                )
-                Text(
-                    text = "Aceptar"
-                )
+            Box(modifier=Modifier.align(Alignment.BottomCenter).border(2.dp,Color.Yellow)) {
+                if (showSet) {
+                    Button(
+                        onClick = {
+                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                            val uri: Uri = Uri.fromParts("package", "com.example.tinpet", null)
+                            intent.data = uri
+                            startActivity(context, intent, Bundle())
+                        },
+                        modifier = Modifier
+                            .padding(16.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = "Abrir ajustes"
+                        )
+                    }
+                } else {
+                    Button(
+                        onClick = {
+                            ActivityCompat.requestPermissions(
+                                activity,
+                                permissionsDenied.toTypedArray(),
+                                requestPermissionsCode
+                            )
+                        },
+                        modifier = Modifier
+                            .padding(16.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = "Aceptar"
+                        )
+                    }
+                }
             }
-        }
         Spacer(modifier = Modifier.padding(vertical=16.dp))
         Text(
+            modifier=Modifier.align(Alignment.BottomCenter),
             text = "© 2023",
             color = MaterialTheme.colors.onBackground
         )
-    }
+        }
+
+
 }

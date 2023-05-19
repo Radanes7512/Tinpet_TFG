@@ -169,6 +169,7 @@ fun VEBodyText(modifier: Modifier) {
     ) {
         Text(
             modifier = Modifier.padding(5.dp),
+            color = MaterialTheme.colors.onBackground,
             textAlign = TextAlign.Justify,
             text = "Estimado usuario," +
                     "\n\n" +
@@ -180,12 +181,17 @@ fun VEBodyText(modifier: Modifier) {
                     "Una vez verificado, podrá acceder a TinPet." +
                     " Si tiene alguna duda o problema, no dude en contactarnos." +
                     "\n\n\n" +
-                    "Atentamente," +
-                    "\n" +
-                    "El equipo de soporte técnico de TinPet.",
-            fontSize = 16.sp,
-            fontFamily = abrilFatface,
-            color = MaterialTheme.colors.onBackground
+                    "Atentamente,"
         )
     }
+    Spacer(modifier = Modifier.padding(vertical = 16.dp))
+    Text(
+        text = "El equipo técnico de " + stringResource(
+            R.string.app_name
+        ),
+        fontFamily = abrilFatface,
+        fontSize = 24.sp,
+        color = MaterialTheme.colors.onBackground
+    )
+
 }

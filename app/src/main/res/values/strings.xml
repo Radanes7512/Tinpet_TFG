@@ -32,6 +32,19 @@
     <string name="petage_ES">Edad</string>
     <string name="page_ES">Edad de la mascota</string>
     <string name="categories_ES">Categorías</string>
+        <!-- CATEGORIES -->
+    <string name="peaceful_ES">"Tranquila"</string>
+    <string name="playful_ES">"Juguetona"</string>
+    <string name="eater_ES">"Comilona"</string>
+    <string name="sleepyhead_ES">"Dormilona"</string>
+    <string name="nervous_ES">"Nerviosa"</string>
+    <string name="aggressive_ES">"Agresiva"</string>
+    <string name="protective_ES">"Protectora"</string>
+    <string name="loyal_ES">"Leal"</string>
+    <string name="affectionate_ES">"Cariñosa"</string>
+    <string name="intelligent_ES">"Inteligente"</string>
+    <string name="obedient_ES">"Obediente"</string>
+    <string name="curious_ES">"Curiosa"</string>
 
     <!-- MAPS -->
     <string name="mapstate1_ES">Zona muy transcurrida</string>

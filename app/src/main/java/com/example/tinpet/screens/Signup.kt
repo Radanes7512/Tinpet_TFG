@@ -157,6 +157,7 @@ fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
     val name: String by viewModel.name.observeAsState(initial = "")
     val password: String by viewModel.password.observeAsState(initial = "")
     val password2: String by viewModel.password2.observeAsState(initial = "")
+    val image: String by viewModel.password2.observeAsState(initial = "")
 
     Column(modifier = modifier) {
         STitleText(Modifier.align(Alignment.CenterHorizontally))

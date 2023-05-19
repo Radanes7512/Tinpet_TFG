@@ -141,8 +141,8 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                                 "Email" to email.value,
                                 "Petname" to petname.value,
                                 "Petage" to petage.value,
-                               // "Photo" to ByteArray,
-                                "Friends" to ArrayList<String>()
+                                "Friends" to ArrayList<String>(),
+                                "photo" to petImageUri.value as String
                             )
                             Firestore.collection("users")
                                 .add(userdb)
@@ -156,15 +156,13 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                                     name.value?.let { it2 -> writeNewUser(documentReference.id, it2, email.value!!) }
                                     readUser()
                                     Toast.makeText(context, "Se ha creado su cuenta correctamente",
-                                        Toast.LENGTH_SHORT).show()
+                                         Toast.LENGTH_SHORT).show()
                                 }
                                 .addOnFailureListener { e ->
                                     Log.w(TAG, "Error adding document", e)
                                 }
-
-
                         } else {
-                            // If sign in fails, display a message to the user.
+
                             Log.w(TAG, "createUserWithEmail:failure", task.exception)
                             Toast.makeText(context, "Ha ocurrido un error, en el registro",
                                 Toast.LENGTH_SHORT).show()

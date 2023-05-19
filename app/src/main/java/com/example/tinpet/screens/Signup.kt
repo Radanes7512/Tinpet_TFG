@@ -469,18 +469,18 @@ fun SPetImage(petimage: Uri,validPetImage: Boolean,modifier: Modifier = Modifier
 @Composable
 fun SPetCategory(petcategory: String?, validPetCategory: Boolean, function: (String?) -> Unit) {
     val items = listOf(
-        "Tranquila",
-        "Juguetona",
-        "Comilona",
-        "Dormilona",
-        "Nerviosa",
-        "Agresiva",
-        "Protectora",
-        "Leal",
-        "Cariñosa",
-        "Inteligente",
-        "Obediente",
-        "Curiosa"
+        stringResource(R.string.peaceful_ES),
+        stringResource(R.string.playful_ES),
+        stringResource(R.string.eater_ES),
+        stringResource(R.string.sleepyhead_ES),
+        stringResource(R.string.nervous_ES),
+        stringResource(R.string.aggressive_ES),
+        stringResource(R.string.protective_ES),
+        stringResource(R.string.loyal_ES),
+        stringResource(R.string.affectionate_ES),
+        stringResource(R.string.intelligent_ES),
+        stringResource(R.string.obedient_ES),
+        stringResource(R.string.curious_ES)
     )
     val maxSelected = 1
 
@@ -523,9 +523,11 @@ fun SPetCategory(petcategory: String?, validPetCategory: Boolean, function: (Str
                                 .size(width = 80.dp, height = 40.dp)
                                 .alpha(if (selectedIndex.value == null || selectedIndex.value == itemIndex) 1f else 0.5f)
                                 .clickable(
-                                    enabled = selectedIndex.value == null || selectedIndex.value == itemIndex) {
-                                    selectedIndex.value = if (selectedIndex.value == itemIndex) null else itemIndex
-                                    function(if(selectedIndex.value==null) null else item)
+                                    enabled = selectedIndex.value == null || selectedIndex.value == itemIndex
+                                ) {
+                                    selectedIndex.value =
+                                        if (selectedIndex.value == itemIndex) null else itemIndex
+                                    function(if (selectedIndex.value == null) null else item)
                                 }
                         ) {
                             Box(contentAlignment = Alignment.Center) {

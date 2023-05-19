@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -45,39 +46,36 @@ fun HomeScreen(
     )
 
     val category = listOf(
-        "Travieso",
-        "Pequeño",
-        "Grande",
-        "Tranquilo",
-        "Juguetón",
-        "Serio",
-        "Comilón",
-        "Dormilón",
+        stringResource(R.string.peaceful_ES),
+        stringResource(R.string.playful_ES),
+        stringResource(R.string.eater_ES),
+        stringResource(R.string.sleepyhead_ES),
+        stringResource(R.string.nervous_ES),
+        stringResource(R.string.aggressive_ES),
+        stringResource(R.string.protective_ES),
+        stringResource(R.string.loyal_ES),
+        stringResource(R.string.affectionate_ES),
+        stringResource(R.string.intelligent_ES),
+        stringResource(R.string.obedient_ES),
+        stringResource(R.string.curious_ES)
     )
 
-    //Pendiente de cambiar show endbox a una mutable data
-    var selectedVariable by remember { mutableStateOf(0) }
     var currentIndex by remember { mutableStateOf(0) }
-    var liked by remember { mutableStateOf(false) }
-    var disliked by remember { mutableStateOf(false) }
+    var petLiked by remember { mutableStateOf(false) }
+    var petDisliked by remember { mutableStateOf(false) }
     var showEndBox by remember { mutableStateOf(false) }
     var offsetX by remember { mutableStateOf(0.dp) }
-    if (currentIndex == userPets.size ||currentIndex ==images.size) {
-        showEndBox = true
-    }
 
     // LÓGICA PARA QUE CUANDO NO HAYA MÁS IMÁGENES PARA MOSTAR, SE VEA EL BOX DE FIN
     fun onButtonClick(liked: Boolean) {
-        if (!liked && !disliked) {
-            disliked = !liked
-        } else if (liked && !disliked) {
+        if(liked){
             currentIndex++
-            if (currentIndex == userPets.size ||currentIndex ==images.size) {
+            if (currentIndex == userPets.size || currentIndex ==images.size) {
                 showEndBox = true
             }
-        } else if (!liked && disliked) {
+        }else{
             currentIndex++
-            if (currentIndex == userPets.size ||currentIndex ==images.size ) {
+            if (currentIndex == userPets.size || currentIndex ==images.size) {
                 showEndBox = true
             }
         }
@@ -93,9 +91,31 @@ fun HomeScreen(
                     .padding(16.dp, 16.dp, 16.dp, 100.dp)
             ) {
                 val imageRes = images[currentIndex]
-                val petname = userPets[currentIndex][Constants.PET_NAME]
-                val petage = userPets[currentIndex][Constants.PET_AGE]
-
+                val petname = userPets[currentIndex][Constants.PET_NAME].toString()
+                val petage = userPets[currentIndex][Constants.PET_AGE].toString()
+                if (petLiked) {
+                    LaunchedEffect(Unit) {
+                        animate(
+                            initialValue = 0f,
+                            targetValue = 100f,
+                            animationSpec = tween(durationMillis = 3000)
+                        ) { value, _ ->
+                            offsetX = value.dp
+                        }
+                    }
+                    petLiked = false
+                } else if (petDisliked) {
+                    LaunchedEffect(Unit) {
+                        animate(
+                            initialValue = 0f,
+                            targetValue = -100f,
+                            animationSpec = tween(durationMillis = 3000)
+                        ) { value, _ ->
+                            offsetX = value.dp
+                        }
+                    }
+                    petDisliked = false
+                }
                 Image(
                     painter = painterResource(imageRes),
                     contentDescription = "My Image",
@@ -107,37 +127,6 @@ fun HomeScreen(
                         .fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
-                if (liked) {
-                    LaunchedEffect(Unit) {
-                        animate(
-                            initialValue = 0f,
-                            targetValue = 100f,
-                            animationSpec = tween(durationMillis = 500)
-                        ) { value, _ ->
-                            offsetX = value.dp
-                        }
-                    }
-                } else if (disliked) {
-                    LaunchedEffect(Unit) {
-                        animate(
-                            initialValue = 0f,
-                            targetValue = -100f,
-                            animationSpec = tween(durationMillis = 500)
-                        ) { value, _ ->
-                            offsetX = value.dp
-                        }
-                    }
-                } else {
-                    LaunchedEffect(Unit) {
-                        animate(
-                            initialValue = 0f,
-                            targetValue = 0f,
-                            animationSpec = tween(durationMillis = 500)
-                        ) { value, _ ->
-                            offsetX = value.dp
-                        }
-                    }
-                }
 
                 Column(
                     modifier = Modifier
@@ -168,7 +157,7 @@ fun HomeScreen(
                                     color = Color.DarkGray, offset = Offset(2.0f, 5.0f), blurRadius = 2f
                                 )
                             ),
-                            text = petage,
+                            text = "$petage años",
                             fontSize = 22.sp,
                             fontFamily = abrilFatface,
                             color = MaterialTheme.colors.onBackground
@@ -182,7 +171,7 @@ fun HomeScreen(
                             .padding(16.dp)
 
                     ) {
-                        category.shuffled().take(3).forEach { category ->
+                        category.shuffled().take(1).forEach { category ->
                             Card(
                                 modifier = Modifier.padding(8.dp),
                                 elevation = 10.dp
@@ -203,38 +192,28 @@ fun HomeScreen(
                     ) {
                         // DISLIKE (IZQUIERDA)
                         Image(modifier = Modifier
-                            .clickable { }
+                            .clickable {
+                                petDisliked = true
+                                onButtonClick(false)
+                            }
                             .size(70.dp)
-                            .padding(bottom = 16.dp)
-                            .pointerInput(Unit) {
-                                detectTapGestures(onTap = {
-                                    if (!liked && !disliked) {
-                                        disliked = true
-                                        onButtonClick(false)
-                                    }
-                                })
-                            },
+                            .padding(bottom = 16.dp),
                             painter = painterResource(id = R.drawable.icon_notlike),
                             contentDescription = "Dislike Button",
-                            colorFilter = if (disliked) ColorFilter.tint(Color.Red) else null
+                            colorFilter = if (petDisliked) ColorFilter.tint(Color.Red) else null
                         )
                         // LIKE (DERECHA)
                         Image(modifier = Modifier
-                            .clickable { }
+                            .clickable {
+                                viewModel.SendFriendRequests(userPets[currentIndex][Constants.EMAIL])
+                                petLiked = true
+                                onButtonClick(true)
+                            }
                             .size(70.dp)
-                            .padding(bottom = 16.dp)
-                            .pointerInput(Unit) {
-                                detectTapGestures(onTap = {
-                                    viewModel.SendFriendRequests(userPets[currentIndex][Constants.EMAIL])
-                                    if (!liked && !disliked) {
-                                        liked = true
-                                        onButtonClick(true)
-                                    }
-                                })
-                            },
+                            .padding(bottom = 16.dp),
                             painter = painterResource(id = R.drawable.icon_like),
                             contentDescription = "Like Button",
-                            colorFilter = if (liked) ColorFilter.tint(Color.Green) else null
+                            colorFilter = if (petLiked) ColorFilter.tint(Color.Green) else null
                         )
                     }
                 }
@@ -242,8 +221,7 @@ fun HomeScreen(
         }
     }
 
-    liked = false
-    disliked = false
+
 }
 
 @Composable

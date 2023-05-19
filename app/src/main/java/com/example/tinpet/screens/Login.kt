@@ -102,8 +102,6 @@ fun LoginScreen(
                         Button(
                             onClick = {
                                 viewModel.login(context)
-
-
                             },
                             enabled = true,
                             shape = RoundedCornerShape(25),
@@ -325,7 +323,7 @@ fun LUserField(email: String,validEmail:Boolean, onTextFieldChanged: (String) ->
                 }else{
                     if(email.isEmpty()){
                         Text(
-                            text = stringResource(R.string.username_ES),
+                            text = stringResource(R.string.mail_ES),
                             color = MaterialTheme.colors.onBackground
                         )
                     }else{

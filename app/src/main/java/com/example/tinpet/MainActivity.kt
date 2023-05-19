@@ -101,7 +101,6 @@ fun DefaultText(permissionsDenied: List<String>, requestPermissionsCode: Int, sh
             verticalArrangement = Arrangement.SpaceBetween,*/
             modifier = Modifier
                 .fillMaxSize()
-                .border(2.dp,Color.Magenta)
         ) {
             Box(modifier=Modifier.align(Alignment.TopCenter)) {
                 Image(
@@ -122,7 +121,7 @@ fun DefaultText(permissionsDenied: List<String>, requestPermissionsCode: Int, sh
                 )
             }
             Spacer(modifier = Modifier.padding(8.dp))
-            LazyColumn(modifier=Modifier.border(2.dp,Color.Red).align(Alignment.Center).padding(16.dp)) {
+            LazyColumn(modifier=Modifier.align(Alignment.Center).padding(16.dp)) {
                 item {
                     Row {
                         Text(
@@ -152,7 +151,7 @@ fun DefaultText(permissionsDenied: List<String>, requestPermissionsCode: Int, sh
                     }
                     Spacer(modifier = Modifier.padding(vertical = 16.dp))
                     Text(
-                        text = "El equipo técnico de " + stringResource(
+                        text = "El equipo de " + stringResource(
                             R.string.app_name
                         ),
                         fontFamily = abrilFatface,
@@ -161,7 +160,7 @@ fun DefaultText(permissionsDenied: List<String>, requestPermissionsCode: Int, sh
                     )
                 }
             }
-            Box(modifier=Modifier.align(Alignment.BottomCenter).border(2.dp,Color.Yellow)) {
+            Box(modifier=Modifier.align(Alignment.BottomCenter)) {
                 if (showSet) {
                     Button(
                         onClick = {

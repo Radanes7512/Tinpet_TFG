@@ -186,14 +186,8 @@ fun VEBodyText(modifier: Modifier) {
     }
     Spacer(modifier = Modifier.padding(vertical = 16.dp))
     Text(
-<<<<<<< HEAD
         modifier = Modifier.padding(5.dp),
         text = "El equipo  de " + stringResource(R.string.app_name),
-=======
-        text = "El equipo técnico de " + stringResource(
-            R.string.app_name
-        ),
->>>>>>> 7fc081ee8e68d455c400c2cfc093ecc073b5ac0b
         fontFamily = abrilFatface,
         fontSize = 24.sp,
         color = MaterialTheme.colors.onBackground

@@ -93,6 +93,7 @@ fun HomeScreen(
                 val imageRes = images[currentIndex]
                 val petname = userPets[currentIndex][Constants.PET_NAME].toString()
                 val petage = userPets[currentIndex][Constants.PET_AGE].toString()
+<<<<<<< HEAD
                 if (petLiked) {
                     LaunchedEffect(Unit) {
                         animate(
@@ -116,6 +117,9 @@ fun HomeScreen(
                     }
                     petDisliked = false
                 }
+=======
+
+>>>>>>> 7fc081ee8e68d455c400c2cfc093ecc073b5ac0b
                 Image(
                     painter = painterResource(imageRes),
                     contentDescription = "My Image",
@@ -127,6 +131,40 @@ fun HomeScreen(
                         .fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
+<<<<<<< HEAD
+=======
+                if (petLiked) {
+                    LaunchedEffect(Unit) {
+                        animate(
+                            initialValue = 0f,
+                            targetValue = 100f,
+                            animationSpec = tween(durationMillis = 500)
+                        ) { value, _ ->
+                            offsetX = value.dp
+                        }
+                    }
+                } else if (petDisliked) {
+                    LaunchedEffect(Unit) {
+                        animate(
+                            initialValue = 0f,
+                            targetValue = -100f,
+                            animationSpec = tween(durationMillis = 500)
+                        ) { value, _ ->
+                            offsetX = value.dp
+                        }
+                    }
+                } else {
+                    LaunchedEffect(Unit) {
+                        animate(
+                            initialValue = 0f,
+                            targetValue = 0f,
+                            animationSpec = tween(durationMillis = 500)
+                        ) { value, _ ->
+                            offsetX = value.dp
+                        }
+                    }
+                }
+>>>>>>> 7fc081ee8e68d455c400c2cfc093ecc073b5ac0b
 
                 Column(
                     modifier = Modifier
@@ -197,7 +235,17 @@ fun HomeScreen(
                                 onButtonClick(false)
                             }
                             .size(70.dp)
+<<<<<<< HEAD
                             .padding(bottom = 16.dp),
+=======
+                            .padding(bottom = 16.dp)
+                            .pointerInput(Unit) {
+                                detectTapGestures(onTap = {
+                                        petDisliked = true
+                                        onButtonClick(false)
+                                })
+                            },
+>>>>>>> 7fc081ee8e68d455c400c2cfc093ecc073b5ac0b
                             painter = painterResource(id = R.drawable.icon_notlike),
                             contentDescription = "Dislike Button",
                             colorFilter = if (petDisliked) ColorFilter.tint(Color.Red) else null
@@ -210,7 +258,19 @@ fun HomeScreen(
                                 onButtonClick(true)
                             }
                             .size(70.dp)
+<<<<<<< HEAD
                             .padding(bottom = 16.dp),
+=======
+                            .padding(bottom = 16.dp)
+                            .pointerInput(Unit) {
+                                detectTapGestures(onTap = {
+                                    viewModel.SendFriendRequests(userPets[currentIndex][Constants.EMAIL])
+                                    petLiked = true
+                                    onButtonClick(true)
+
+                                })
+                            },
+>>>>>>> 7fc081ee8e68d455c400c2cfc093ecc073b5ac0b
                             painter = painterResource(id = R.drawable.icon_like),
                             contentDescription = "Like Button",
                             colorFilter = if (petLiked) ColorFilter.tint(Color.Green) else null
@@ -221,7 +281,12 @@ fun HomeScreen(
         }
     }
 
+<<<<<<< HEAD
 
+=======
+    petLiked = false
+    petDisliked = false
+>>>>>>> 7fc081ee8e68d455c400c2cfc093ecc073b5ac0b
 }
 
 @Composable

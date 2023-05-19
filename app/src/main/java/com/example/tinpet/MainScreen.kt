@@ -36,13 +36,11 @@ import com.example.tinpet.ui.theme.abrilFatface
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-
-
 @Composable
 fun MainScreen(navController: NavHostController = rememberNavController()) {
     val screens = listOf(
         AppScreens.Places,
-        AppScreens.Connect,
+        //AppScreens.Connect,
         AppScreens.Home,
         AppScreens.ChatUsers,
         AppScreens.Settings,
@@ -173,7 +171,7 @@ fun BottomBar2(
 ) {
     val screens = listOf(
         AppScreens.Places,
-        AppScreens.Connect,
+        //AppScreens.Connect,
         AppScreens.Home,
         AppScreens.ChatUsers,
         AppScreens.Profile
@@ -212,7 +210,7 @@ fun RowScope.AddItem(
                 imageVector = screen.icon,
                 contentDescription = "Navigation Icon",
                 tint = if (isSelected) {
-                    MaterialTheme.colors.onError // Cambia el color del icono cuando está seleccionado
+                    MaterialTheme.colors.onSecondary // Cambia el color del icono cuando está seleccionado
                 } else {
                     if (isSystemInDarkTheme()) {
                         Color.White

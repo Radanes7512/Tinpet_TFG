@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.AppScreens
 import com.example.tinpet.R
-import com.example.tinpet.screens.mainMenu.TopBar
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
@@ -178,15 +177,19 @@ fun LoginScreen(
 @Composable
 fun Login(modifier: Modifier, viewModel: LoginViewModel,onRegClick: () -> Unit) {
     val email: String by viewModel.email.observeAsState(initial = "")
+    val validEmail: Boolean = email.let { viewModel.isValidEmail(it) } ?: false
+
     val password: String by viewModel.password.observeAsState(initial = "")
+    val validPass: Boolean = password.let { viewModel.isValidPassword(it) } ?: false
+
 
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.padding(15.dp))
         LTitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        LUserField(email) { viewModel.onLoginChanged(it, password) }
+        LUserField(email,validEmail) { viewModel.onLoginChanged(it, password) }
         Spacer(modifier = Modifier.padding(5.dp))
-        LPasswordField(password) { viewModel.onLoginChanged(email, it) }
+        LPasswordField(password,validPass) { viewModel.onLoginChanged(email, it) }
         Spacer(modifier = Modifier.padding(10.dp))
         //ForgotPassword(Modifier.align(Alignment.End),onRegClick={onRegClick()})
         Spacer(modifier = Modifier.padding(15.dp))
@@ -212,32 +215,8 @@ fun LTitleText(modifier: Modifier) {
     }
 }
 
-/*@Composable
-fun ForgotPassword(modifier: Modifier,onRegClick: () -> Unit) {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Text(
-            text = "He olvidado mi contraseña",
-            modifier = modifier
-                .clickable { onRegClick() }
-                .padding(10.dp),
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Bold,
-            color = if (isSystemInDarkTheme()) {
-                Color(0xFFFFFFFF)
-            } else {
-                Color(0xFFFB9600)
-            }
-        )
-    }
-}*/
-
 @Composable
-fun LPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
+fun LPasswordField(password: String,validPass:Boolean, onTextFieldChanged: (String) -> Unit) {
     var showPassword by remember { mutableStateOf(value = false) }
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -248,12 +227,28 @@ fun LPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
         // Contraseña del usuario
         OutlinedTextField(
             value = password,
+            isError=if(password.isEmpty()){false}else{!validPass},
+            singleLine=true,
             onValueChange = { onTextFieldChanged(it) },
             label = {
-                Text(
-                    text = stringResource(R.string.password_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
+                if(validPass) {
+                    Text(
+                        text = "Contraseña válida",
+                        color = MaterialTheme.colors.secondary
+                    )
+                }else{
+                    if(password.isEmpty()){
+                        Text(
+                            text = stringResource(R.string.password_ES),
+                            color = MaterialTheme.colors.onBackground
+                        )
+                    }else{
+                        Text(
+                            text = "${password.length}/6",
+                            color = MaterialTheme.colors.error
+                        )
+                    }
+                }
             },
             placeholder = {
                 Text(
@@ -306,7 +301,7 @@ fun LPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
 }
 
 @Composable
-fun LUserField(email: String, onTextFieldChanged: (String) -> Unit) {
+fun LUserField(email: String,validEmail:Boolean, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -316,14 +311,31 @@ fun LUserField(email: String, onTextFieldChanged: (String) -> Unit) {
         // Nombre del usuario
         OutlinedTextField(
             value = email,
+            isError=if(email.isEmpty()){false}else{!validEmail},
+            singleLine=true,
             onValueChange = {
                 onTextFieldChanged(it)
             },
             label = {
-                Text(
-                    text = stringResource(R.string.username_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
+                if(validEmail){
+                    Text(
+                        text = "Email válido",
+                        color = MaterialTheme.colors.secondary
+                    )
+                }else{
+                    if(email.isEmpty()){
+                        Text(
+                            text = stringResource(R.string.username_ES),
+                            color = MaterialTheme.colors.onBackground
+                        )
+                    }else{
+                        Text(
+                            text = "Se requiere un email válido",
+                            color = MaterialTheme.colors.error
+                        )
+                    }
+                }
+
             },
             placeholder = {
                 Text(

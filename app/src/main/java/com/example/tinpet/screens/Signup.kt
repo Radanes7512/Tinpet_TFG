@@ -7,6 +7,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -18,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -34,9 +36,7 @@ import com.example.tinpet.ui.theme.abrilFatface
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SignupScreen(
-    viewModel: LoginViewModel,
-    onClick: () -> Unit,
-    onBackClick: () -> Unit
+    viewModel: LoginViewModel, onClick: () -> Unit, onBackClick: () -> Unit
 ) {
     val signupEnable: Boolean by viewModel.signupEnable.observeAsState(initial = false)
     val addpetEnable: Boolean by viewModel.addpetEnable.observeAsState(initial = false)
@@ -61,7 +61,7 @@ fun SignupScreen(
             })
         },
         //endregion
-        // region CUERPO DEL CHAT DONDE SE VAN AÑADIENDO LOS MENSAJES ENVIADOS
+        // region CUERPO DEL REGISTRO
         content = {
             LazyColumn(
                 modifier = Modifier
@@ -132,43 +132,47 @@ fun SignupScreen(
                             }
                         }
                         Spacer(modifier = Modifier.padding(10.dp))
-                        /*Text(
-                            text = stringResource(R.string.login_ES),
-                            modifier = Modifier.clickable { onBackClick() },
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = if (isSystemInDarkTheme()) {
-                                Color(0xFFFFFFFF)
-                            } else {
-                                Color(0xFFFB9600)
-                            }
-                        )*/
                     }
                 }
             }
-        }
-    )
+        })
 }
-
 
 @Composable
 fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
     val email: String by viewModel.email.observeAsState(initial = "")
+    val validEmail: Boolean = email.let { viewModel.isValidEmail(it) }
+
     val name: String by viewModel.name.observeAsState(initial = "")
+    val validName: Boolean = name.let { viewModel.isValidName(it) }
+
     val password: String by viewModel.password.observeAsState(initial = "")
+    val validPass: Boolean = password.let { viewModel.isValidPassword(it) }
+
     val password2: String by viewModel.password2.observeAsState(initial = "")
+
+    val validPass2: Boolean = password2 == password
+
     val image: String by viewModel.password2.observeAsState(initial = "")
 
     Column(modifier = modifier) {
         STitleText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        SUserField(email) { viewModel.onSignupChanged(it, name, password, password2) }
+        SUserField(email, validEmail) { viewModel.onSignupChanged(it, name, password, password2) }
         Spacer(modifier = Modifier.padding(5.dp))
-        SUserName(name) { viewModel.onSignupChanged(email, it, password, password2) }
+        SUserName(name, validName) { viewModel.onSignupChanged(email, it, password, password2) }
         Spacer(modifier = Modifier.padding(5.dp))
-        SPasswordField(password) { viewModel.onSignupChanged(email, name, it, password2) }
+        SPasswordField(password, validPass) {
+            viewModel.onSignupChanged(
+                email, name, it, password2
+            )
+        }
         Spacer(modifier = Modifier.padding(5.dp))
-        RepeatPassword(password2) { viewModel.onSignupChanged(email, name, password, it) }
+        RepeatPassword(password2, validPass2) {
+            viewModel.onSignupChanged(
+                email, name, password, it
+            )
+        }
         Spacer(modifier = Modifier.padding(15.dp))
     }
 }
@@ -181,20 +185,43 @@ fun Addpet(
     onImageSelected: (Uri) -> Unit
 ) {
     val petname: String by viewModel.petname.observeAsState(initial = "")
+    val validPetName: Boolean = petname.let { viewModel.isValidPetName(it) }
+
     val petage: String by viewModel.petage.observeAsState(initial = "")
+    val validPetAge: Boolean = petage.let { viewModel.isValidPetAge(it) }
+
     val petimage: Uri by viewModel.petImageUri.observeAsState(initial = Uri.EMPTY)
+    val validPetImage: Boolean = petimage.let { viewModel.isValidPetImage(it) }
+
     var petcategory by remember { mutableStateOf("Option 1") }
+    val validPetCategory: Boolean = petcategory.let { viewModel.isValidPetCategory(it) }
+
 
     Column(modifier = modifier) {
         SAddpetText(Modifier.align(Alignment.CenterHorizontally))
         Spacer(modifier = Modifier.padding(10.dp))
-        SPetName(petname) { viewModel.onAddpetChanged(it, petage, petcategory, petimage) }
+        SPetName(petname, validPetName) {
+            viewModel.onAddpetChanged(
+                it, petage, petcategory, petimage
+            )
+        }
         Spacer(modifier = Modifier.padding(5.dp))
-        SPetAge(petage) { viewModel.onAddpetChanged(petname, it, petcategory, petimage) }
+        SPetAge(petage, validPetAge) {
+            viewModel.onAddpetChanged(
+                petname, it, petcategory, petimage
+            )
+        }
         Spacer(modifier = Modifier.padding(5.dp))
-        SPetCategory(petcategory) { newCategory -> petcategory = newCategory }
+        SPetCategory(petcategory, validPetCategory) { newCategory ->
+            if (newCategory != null) {
+                petcategory = newCategory
+            }
+        }
         Spacer(modifier = Modifier.padding(5.dp))
-        SPetImage(petimage, modifier = Modifier, onImageSelected = { uri -> onImageSelected(uri) })
+        SPetImage(petimage,
+            validPetImage,
+            modifier = Modifier,
+            onImageSelected = { uri -> onImageSelected(uri) })
     }
 }
 
@@ -206,7 +233,6 @@ fun SAddpetText(align: Modifier) {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-
         Text(
             modifier = Modifier.padding(5.dp),
             textAlign = TextAlign.Center,
@@ -219,7 +245,7 @@ fun SAddpetText(align: Modifier) {
 }
 
 @Composable
-fun SPetName(petname: String, onTextFieldChanged: (String) -> Unit) {
+fun SPetName(petname: String, validPetName: Boolean, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -227,13 +253,30 @@ fun SPetName(petname: String, onTextFieldChanged: (String) -> Unit) {
             .padding(16.dp)
     ) {
         // Nombre del usuario
-        OutlinedTextField(value = petname, onValueChange = {
+        OutlinedTextField(value = petname, isError = if (petname.isEmpty()) {
+            false
+        } else {
+            !validPetName
+        }, singleLine = true, onValueChange = {
             onTextFieldChanged(it)
         }, label = {
-            Text(
-                text = stringResource(R.string.petname_ES),
-                color = MaterialTheme.colors.onBackground
-            )
+            if (validPetName) {
+                Text(
+                    text = "Nombre válido", color = MaterialTheme.colors.secondary
+                )
+            } else {
+                if (petname.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.petname_ES),
+                        color = MaterialTheme.colors.onBackground
+                    )
+                } else {
+                    Text(
+                        text = "Debe tener 2 o más caracteres",
+                        color = MaterialTheme.colors.error
+                    )
+                }
+            }
         }, placeholder = {
             Text(
                 text = stringResource(R.string.pname_ES),
@@ -247,17 +290,15 @@ fun SPetName(petname: String, onTextFieldChanged: (String) -> Unit) {
                     contentDescription = null
                 )
             }
-        },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
+        }, keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Next
+        ), colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }
 }
 
 @Composable
-fun SPetAge(petage: String, onTextFieldChanged: (String) -> Unit) {
+fun SPetAge(petage: String, validPetAge: Boolean, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -265,40 +306,52 @@ fun SPetAge(petage: String, onTextFieldChanged: (String) -> Unit) {
             .padding(16.dp)
     ) {
         // Nombre del usuario
-        OutlinedTextField(
-            value = petage,
-            onValueChange = {
-                onTextFieldChanged(it)
-            },
-            label = {
+        OutlinedTextField(value = petage, isError = if (petage.isEmpty()) {
+            false
+        } else {
+            !validPetAge
+        }, singleLine = true, onValueChange = {
+            onTextFieldChanged(it)
+        }, label = {
+            if (validPetAge) {
                 Text(
-                    text = stringResource(R.string.petage_ES),
-                    color = MaterialTheme.colors.onBackground
+                    text = "Edad válida", color = MaterialTheme.colors.secondary
                 )
-            },
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.page_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            leadingIcon = {
-                IconButton(onClick = { }) {
-                    Icon(
-                        imageVector = Icons.Filled.Cake,
-                        tint = MaterialTheme.colors.onBackground,
-                        contentDescription = null
+            } else {
+                if (petage.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.petage_ES),
+                        color = MaterialTheme.colors.onBackground
+                    )
+                } else {
+                    Text(
+                        text = "Debe estar entre 1 y 30 años",
+                        color = MaterialTheme.colors.error
                     )
                 }
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
-            colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
+            }
+        }, placeholder = {
+            Text(
+                text = stringResource(R.string.page_ES),
+                color = MaterialTheme.colors.onBackground
+            )
+        }, leadingIcon = {
+            IconButton(onClick = { }) {
+                Icon(
+                    imageVector = Icons.Filled.Cake,
+                    tint = MaterialTheme.colors.onBackground,
+                    contentDescription = null
+                )
+            }
+        }, keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number, imeAction = ImeAction.Next
+        ), colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }
 }
 
 @Composable
-fun SPetImage(petimage: Uri, modifier: Modifier = Modifier, onImageSelected: (Uri) -> Unit) {
+fun SPetImage(petimage: Uri,validPetImage: Boolean,modifier: Modifier = Modifier,onImageSelected: (Uri) -> Unit) {
     // Agregar un estado composable para almacenar la imagen seleccionada
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val deletePhotoConfirm = remember { mutableStateOf(false) }
@@ -315,6 +368,13 @@ fun SPetImage(petimage: Uri, modifier: Modifier = Modifier, onImageSelected: (Ur
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()
     ) {
+        Text(
+            text = "Añade una foto de tu mascota",
+            modifier = Modifier.padding(16.dp),
+            fontSize = 16.sp,
+            fontFamily = abrilFatface,
+            color = MaterialTheme.colors.onBackground
+        )
         Button(
             onClick = { launcher.launch("image/*") },
             modifier = Modifier.padding(vertical = 16.dp),
@@ -326,7 +386,7 @@ fun SPetImage(petimage: Uri, modifier: Modifier = Modifier, onImageSelected: (Ur
                 disabledContentColor = Color.White
             )
         ) {
-            Text("Añadir foto")
+            Text("Abrir galería")
         }
         if (selectedImageUri != null) {
             Row(
@@ -407,49 +467,71 @@ fun SPetImage(petimage: Uri, modifier: Modifier = Modifier, onImageSelected: (Ur
 }
 
 @Composable
-fun SPetCategory(petcategory: String, function: (String) -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
-    val items = listOf("Tranquilo", "Juguetón", "Comilón", "Dormilón")
-    var selectedIndex by remember { mutableStateOf(0) }
+fun SPetCategory(petcategory: String?, validPetCategory: Boolean, function: (String?) -> Unit) {
+    val items = listOf(
+        "Tranquila",
+        "Juguetona",
+        "Comilona",
+        "Dormilona",
+        "Nerviosa",
+        "Agresiva",
+        "Protectora",
+        "Leal",
+        "Cariñosa",
+        "Inteligente",
+        "Obediente",
+        "Curiosa"
+    )
+    val maxSelected = 1
+
+    val columns = when {
+        items.size > 8 -> 3
+        items.size > 4 -> 2
+        else -> 1
+    }
+    val itemsPerColumn = (items.size + columns - 1) / columns
+    val selectedIndex = remember { mutableStateOf<Int?>(null) }
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()
     ) {
-        Text(text = "Seleccionar categoría:")
-        Box(
-            modifier = Modifier
-                .clickable(onClick = { expanded = true })
-                .border(width = 1.dp, color = Color.Gray)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            content = {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = items[selectedIndex],
-                        modifier = Modifier.padding(8.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Icon(
-                        imageVector = Icons.Filled.ArrowDropDown,
-                        contentDescription = null
-                    )
-                }
-            }
+        Text(
+            text = "Dinos cómo es tu mascota",
+            modifier = Modifier.padding(16.dp),
+            fontSize = 16.sp,
+            fontFamily = abrilFatface,
+            color = MaterialTheme.colors.onBackground
         )
-        Box(
-            modifier=Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-        ) {
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                items.forEachIndexed { index, item ->
-                    DropdownMenuItem(onClick = {
-                        selectedIndex = index
-                        expanded = false
-                        function(item)
-                    }) {
-                        Text(text = item)
+        Row {
+            for (column in 0 until columns) {
+                Column {
+                    val columnItems = items.subList(
+                        column * itemsPerColumn,
+                        minOf((column + 1) * itemsPerColumn, items.size)
+                    )
+                    columnItems.forEachIndexed { index, item ->
+                        val itemIndex = column * itemsPerColumn + index
+                        Card(
+                            elevation = 8.dp,
+                            backgroundColor = when {
+                                selectedIndex.value == itemIndex -> MaterialTheme.colors.secondary
+                                else -> MaterialTheme.colors.primary
+                            },
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .size(width = 80.dp, height = 40.dp)
+                                .alpha(if (selectedIndex.value == null || selectedIndex.value == itemIndex) 1f else 0.5f)
+                                .clickable(
+                                    enabled = selectedIndex.value == null || selectedIndex.value == itemIndex) {
+                                    selectedIndex.value = if (selectedIndex.value == itemIndex) null else itemIndex
+                                    function(if(selectedIndex.value==null) null else item)
+                                }
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Text(text = item)
+                            }
+                        }
                     }
                 }
             }
@@ -458,7 +540,7 @@ fun SPetCategory(petcategory: String, function: (String) -> Unit) {
 }
 
 @Composable
-fun SUserName(name: String, onTextFieldChanged: (String) -> Unit) {
+fun SUserName(name: String, validName: Boolean, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -466,13 +548,30 @@ fun SUserName(name: String, onTextFieldChanged: (String) -> Unit) {
             .padding(16.dp)
     ) {
         // Nombre del usuario
-        OutlinedTextField(value = name, onValueChange = {
+        OutlinedTextField(value = name, isError = if (name.isEmpty()) {
+            false
+        } else {
+            !validName
+        }, singleLine = true, onValueChange = {
             onTextFieldChanged(it)
         }, label = {
-            Text(
-                text = stringResource(R.string.username_ES),
-                color = MaterialTheme.colors.onBackground
-            )
+            if (validName) {
+                Text(
+                    text = "Usuario válido", color = MaterialTheme.colors.secondary
+                )
+            } else {
+                if (name.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.username_ES),
+                        color = MaterialTheme.colors.onBackground
+                    )
+                } else {
+                    Text(
+                        text = "Debe tener 2 o más caracteres",
+                        color = MaterialTheme.colors.error
+                    )
+                }
+            }
         }, placeholder = {
             Text(
                 text = stringResource(R.string.name_ES),
@@ -486,11 +585,9 @@ fun SUserName(name: String, onTextFieldChanged: (String) -> Unit) {
                     contentDescription = null
                 )
             }
-        },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next
-            ),
-            colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
+        }, keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Next
+        ), colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }
 }
@@ -516,7 +613,7 @@ fun STitleText(modifier: Modifier) {
 }
 
 @Composable
-fun RepeatPassword(password2: String, onTextFieldChanged: (String) -> Unit) {
+fun RepeatPassword(password2: String, validPass2: Boolean, onTextFieldChanged: (String) -> Unit) {
     var showPassword by remember { mutableStateOf(value = false) }
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -525,11 +622,29 @@ fun RepeatPassword(password2: String, onTextFieldChanged: (String) -> Unit) {
             .padding(16.dp)
     ) {
         // Contraseña del usuario
-        OutlinedTextField(value = password2, onValueChange = { onTextFieldChanged(it) }, label = {
-            Text(
-                text = stringResource(R.string.repeat_password_ES),
-                color = MaterialTheme.colors.onBackground
-            )
+        OutlinedTextField(value = password2, isError = if (password2.isEmpty()) {
+            false
+        } else {
+            !validPass2
+        }, singleLine = true, onValueChange = { onTextFieldChanged(it) }, label = {
+            if (password2.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.repeat_password_ES),
+                    color = MaterialTheme.colors.onBackground
+                )
+            } else {
+                if (validPass2) {
+                    Text(
+                        text = "Las contraseñas son iguales",
+                        color = MaterialTheme.colors.secondary
+                    )
+                } else {
+                    Text(
+                        text = "Las contraseñas no coinciden",
+                        color = MaterialTheme.colors.error
+                    )
+                }
+            }
         }, placeholder = {
             Text(
                 text = stringResource(R.string.pswd_text_ES),
@@ -566,17 +681,15 @@ fun RepeatPassword(password2: String, onTextFieldChanged: (String) -> Unit) {
             VisualTransformation.None
         } else {
             PasswordVisualTransformation()
-        },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Next
-            )
+        }, keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password, imeAction = ImeAction.Next
+        )
         )
     }
 }
 
 @Composable
-fun SPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
+fun SPasswordField(password: String, validPass: Boolean, onTextFieldChanged: (String) -> Unit) {
     var showPassword by remember { mutableStateOf(value = false) }
     Row(
         horizontalArrangement = Arrangement.Center,
@@ -585,11 +698,27 @@ fun SPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
             .padding(16.dp)
     ) {
         // Contraseña del usuario
-        OutlinedTextField(value = password, onValueChange = { onTextFieldChanged(it) }, label = {
-            Text(
-                text = stringResource(R.string.password_ES),
-                color = MaterialTheme.colors.onBackground
-            )
+        OutlinedTextField(value = password, isError = if (password.isEmpty()) {
+            false
+        } else {
+            !validPass
+        }, singleLine = true, onValueChange = { onTextFieldChanged(it) }, label = {
+            if (validPass) {
+                Text(
+                    text = "Contraseña válida", color = MaterialTheme.colors.secondary
+                )
+            } else {
+                if (password.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.password_ES),
+                        color = MaterialTheme.colors.onBackground
+                    )
+                } else {
+                    Text(
+                        text = "${password.length}/6", color = MaterialTheme.colors.error
+                    )
+                }
+            }
         }, placeholder = {
             Text(
                 text = stringResource(R.string.pswd_text_ES),
@@ -626,17 +755,17 @@ fun SPasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
             VisualTransformation.None
         } else {
             PasswordVisualTransformation()
-        },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Next
-            )
+        }, keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password, imeAction = ImeAction.Next
         )
+        )
+
+
     }
 }
 
 @Composable
-fun SUserField(email: String, onTextFieldChanged: (String) -> Unit) {
+fun SUserField(email: String, validEmail: Boolean, onTextFieldChanged: (String) -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -644,37 +773,45 @@ fun SUserField(email: String, onTextFieldChanged: (String) -> Unit) {
             .padding(16.dp)
     ) {
         // Nombre del usuario
-        OutlinedTextField(
-            value = email,
-            onValueChange = {
-                onTextFieldChanged(it)
-            },
-            label = {
+        OutlinedTextField(value = email, isError = if (email.isEmpty()) {
+            false
+        } else {
+            !validEmail
+        }, singleLine = true, onValueChange = {
+            onTextFieldChanged(it)
+        }, label = {
+            if (validEmail) {
                 Text(
-                    text = stringResource(R.string.user_mail_ES),
-                    color = MaterialTheme.colors.onBackground
+                    text = "Email válido", color = MaterialTheme.colors.secondary
                 )
-            },
-            placeholder = {
-                Text(
-                    text = stringResource(R.string.mail_ES),
-                    color = MaterialTheme.colors.onBackground
-                )
-            },
-            leadingIcon = {
-                IconButton(onClick = { }) {
-                    Icon(
-                        imageVector = Icons.Filled.Email,
-                        tint = MaterialTheme.colors.onBackground,
-                        contentDescription = null
+            } else {
+                if (email.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.user_mail_ES),
+                        color = MaterialTheme.colors.onBackground
+                    )
+                } else {
+                    Text(
+                        text = "Se requiere un email válido", color = MaterialTheme.colors.error
                     )
                 }
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next
-            ),
-            colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
+            }
+        }, placeholder = {
+            Text(
+                text = stringResource(R.string.mail_ES),
+                color = MaterialTheme.colors.onBackground
+            )
+        }, leadingIcon = {
+            IconButton(onClick = { }) {
+                Icon(
+                    imageVector = Icons.Filled.Email,
+                    tint = MaterialTheme.colors.onBackground,
+                    contentDescription = null
+                )
+            }
+        }, keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email, imeAction = ImeAction.Next
+        ), colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }
 }

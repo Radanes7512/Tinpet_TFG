@@ -12,6 +12,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AppRegistration
@@ -96,18 +97,13 @@ fun DefaultText(permissionsDenied: List<String>, requestPermissionsCode: Int, sh
     val context = LocalContext.current
     val activity = context as ComponentActivity
     Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            /*horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween,*/
             modifier = Modifier
-                .align(Alignment.Center)
-                .padding(16.dp)
+                .fillMaxSize()
+                .border(2.dp,Color.Magenta)
         ) {
-            Box() {
+            Box(modifier=Modifier.align(Alignment.TopCenter)) {
                 Image(
                     modifier = Modifier
                         .align(Alignment.Center)
@@ -125,89 +121,95 @@ fun DefaultText(permissionsDenied: List<String>, requestPermissionsCode: Int, sh
                     color = MaterialTheme.colors.onBackground
                 )
             }
-            Spacer(modifier = Modifier.padding(vertical = 16.dp))
-            Row {
-                Text(
-                    textAlign = TextAlign.Justify,
-                    color = MaterialTheme.colors.onBackground,
-                    text =
-                    "Para poder utilizar esta aplicación, es necesario que aceptes" +
-                            " todos los permisos que se soliciten. Sin estos permisos," +
-                            " algunas funcionalidades podrían estar limitadas o no estar disponibles." +
-                            "\n\n" +
-                            "Asegúrate de aceptar todos los permisos necesarios para disfrutar" +
-                            " de una experiencia completa. Si no estás seguro de qué permisos" +
-                            " se están solicitando, revisa la lista y lee las descripciones cuidadosamente." +
-                            "\n\n" +
-                            "Si no otorga los permisos solicitados se le dará la opción de acceder a la configuración" +
-                            " de la aplicación para que otorgue los permisos desde ahí o limpie el almacenamiento de la aplicación" +
-                            " y volver a ejecutarla y así se puedan solicitar los permisos correctamente." +
-                            "\n\n" +
-                            "También puedes modificar los permisos más adelante en la configuración de la aplicación." +
-                            "\n\n" +
-                            "Recuerda que estamos comprometidos con proteger tu privacidad y seguridad," +
-                            " y que estos permisos son necesarios para brindarte la mejor experiencia posible." +
-                            "\n\n" +
-                            "Gracias por confiar en nuestra aplicación." +
-                            "\n\n\n" +
-                            "Atentamente,"
-                )
-            }
-            Spacer(modifier = Modifier.padding(vertical=16.dp))
-            Text(
-                text =  "El equipo técnico de "+ stringResource(
-                    R.string.app_name
-                ),
-                fontFamily = abrilFatface,
-                fontSize = 24.sp,
-                color = MaterialTheme.colors.onBackground
-            )
-        }
-        if(showSet){
-            Button(
-                onClick = {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri: Uri = Uri.fromParts("package", "com.example.tinpet", null)
-                    intent.data = uri
-                    startActivity(context,intent,Bundle())
-                },
-                modifier = Modifier
-                    .padding(bottom = 36.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = null
-                )
-                Text(
-                    text = "Abrir ajustes"
-                )
-            }            
-        }else{
-            Button(
-                onClick = {
-                    ActivityCompat.requestPermissions(
-                        activity,
-                        permissionsDenied.toTypedArray(),
-                        requestPermissionsCode
+            Spacer(modifier = Modifier.padding(8.dp))
+            LazyColumn(modifier=Modifier.border(2.dp,Color.Red).align(Alignment.Center).padding(16.dp)) {
+                item {
+                    Row {
+                        Text(
+                            textAlign = TextAlign.Justify,
+                            color = MaterialTheme.colors.onBackground,
+                            text =
+                            "Para poder utilizar esta aplicación, es necesario que acepte" +
+                                    " todos los permisos que se le soliciten y así disfrute de una experiencia completa." +
+                                    " Sin ellos, algunas funcionalidades podrían estar limitadas o no estar disponibles." +
+                                    "\n\n" +
+                                    "Si no está seguro de qué permisos se están solicitando," +
+                                    " revise la lista y lea las descripciones cuidadosamente." +
+                                    "\n\n" +
+                                    "Si no los otorga se le dará la opción de acceder a la configuración" +
+                                    " de la aplicación para que lo haga desde ahí o limpie el almacenamiento de la aplicación" +
+                                    " y vuelva a ejecutarla y se soliciten correctamente." +
+                                    "\n\n" +
+                                    "También puede modificar los permisos más adelante en la configuración de la aplicación." +
+                                    "\n\n" +
+                                    "Recuerde que estamos comprometidos con proteger su privacidad y seguridad," +
+                                    " y que estos permisos son necesarios para brindarle la mejor experiencia posible." +
+                                    "\n\n" +
+                                    "Gracias por confiar en nuestra aplicación." +
+                                    "\n\n\n" +
+                                    "Atentamente,"
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(vertical = 16.dp))
+                    Text(
+                        text = "El equipo técnico de " + stringResource(
+                            R.string.app_name
+                        ),
+                        fontFamily = abrilFatface,
+                        fontSize = 24.sp,
+                        color = MaterialTheme.colors.onBackground
                     )
-                },
-                modifier = Modifier
-                    .padding(bottom = 36.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.CheckCircle,
-                    contentDescription = null
-                )
-                Text(
-                    text = "Aceptar"
-                )
+                }
             }
-        }
-
+            Box(modifier=Modifier.align(Alignment.BottomCenter).border(2.dp,Color.Yellow)) {
+                if (showSet) {
+                    Button(
+                        onClick = {
+                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                            val uri: Uri = Uri.fromParts("package", "com.example.tinpet", null)
+                            intent.data = uri
+                            startActivity(context, intent, Bundle())
+                        },
+                        modifier = Modifier
+                            .padding(16.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = "Abrir ajustes"
+                        )
+                    }
+                } else {
+                    Button(
+                        onClick = {
+                            ActivityCompat.requestPermissions(
+                                activity,
+                                permissionsDenied.toTypedArray(),
+                                requestPermissionsCode
+                            )
+                        },
+                        modifier = Modifier
+                            .padding(16.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = "Aceptar"
+                        )
+                    }
+                }
+            }
         Spacer(modifier = Modifier.padding(vertical=16.dp))
         Text(
+            modifier=Modifier.align(Alignment.BottomCenter),
             text = "© 2023",
             color = MaterialTheme.colors.onBackground
         )
-    }
+        }
+
+
 }

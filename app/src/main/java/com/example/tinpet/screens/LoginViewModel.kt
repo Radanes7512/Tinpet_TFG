@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.google.protobuf.Empty
 
 
@@ -32,7 +33,8 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
 
     private val Firestore = Firebase.firestore
 
-
+    val storage = Firebase.storage
+    val storageRef = storage.reference.child("images/myImage.jpg")
 
     // USER INFO
 
@@ -135,7 +137,7 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                                 "Petname" to petname.value,
                                 "Petage" to petage.value,
                                 "Friends" to ArrayList<String>(),
-                                "photo" to petImageUri.value as String
+                              //  "photo" to petImageUri.value as String
                             )
                             Firestore.collection("users")
                                 .add(userdb)
@@ -204,6 +206,17 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                 Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
+    }
+   /fun uploadImageToFirebaseStorage(imageUriLiveData: LiveData<Uri>, storageRef: StorageReference) {
+        val imageUri = imageUriLiveData.value
+        if (imageUri != null) {
+            val uploadTask = storageRef.putFile(imageUri)
+            uploadTask.addOnSuccessListener {
+                // Manejar el éxito de la subida
+            }.addOnFailureListener {
+                // Manejar el fracaso de la subida
+            }
+        }
     }
 
 

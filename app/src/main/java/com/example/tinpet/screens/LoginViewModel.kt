@@ -27,7 +27,7 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
     //Context parameter
     private val applicationContext = context.applicationContext
 
-    private val auth = Firebase.auth
+    val auth = Firebase.auth
 
     private val rtdb = Firebase.database.reference
 
@@ -194,7 +194,6 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
 
     }
     fun readUser() {
-
         rtdb.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 

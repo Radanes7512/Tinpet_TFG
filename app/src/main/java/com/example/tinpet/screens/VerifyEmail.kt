@@ -186,7 +186,7 @@ fun VEBodyText(modifier: Modifier) {
     }
     Spacer(modifier = Modifier.padding(vertical = 16.dp))
     Text(
-        modifier = Modifier.padding(5.dp),
+        modifier = Modifier.padding(16.dp),
         text = "El equipo  de " + stringResource(R.string.app_name),
         fontFamily = abrilFatface,
         fontSize = 24.sp,

@@ -50,7 +50,6 @@ fun ChatScreen(
 
     val listState = rememberLazyListState()
 
-
     val users by viewModel.usernames.observeAsState(listOf())
 
     val messages: List<Map<String, String>> by viewModel.messagesState.observeAsState(emptyList<Map<String, String>>().toMutableList())

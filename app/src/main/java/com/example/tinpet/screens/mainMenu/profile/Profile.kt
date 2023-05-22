@@ -13,6 +13,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,6 +43,10 @@ fun ProfileScreen(
     onRqtClick: () -> Unit,
     viewModel: LoginViewModel
 ) {
+    val text = viewModel.auth.currentUser?.email.toString()
+    val splitText = text.split("@")
+    val result = splitText[0]
+
     NavGraph(navController = navController)
     //region PROFILE CONTENT
             Box(
@@ -60,7 +66,7 @@ fun ProfileScreen(
                             // Nombre del usuario
                             Text(
                                 modifier = Modifier.padding(5.dp),
-                                text = viewModel.username, //stringResource(R.string.user_name).uppercase(),
+                                text = result, //stringResource(R.string.user_name).uppercase(),
                                 fontSize = 32.sp,
                                 fontFamily = abrilFatface,
                                 color = MaterialTheme.colors.onBackground

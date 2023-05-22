@@ -1,6 +1,6 @@
 # TinPet - Walk Out App 
 ## Aplicación de salidas para mascotas
-### Copyright Tinpet© 2023 
+### 2023
 
 == == == == == == == == == == == == == == == == ==
 

@@ -1,6 +1,7 @@
 package com.example.tinpet.screens.mainMenu
 
 import android.content.ContentValues
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,17 +11,21 @@ import com.example.tinpet.screens.Constants
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.launch
 
 class HomeViewModel() : ViewModel() {
 
     val auth = Firebase.auth
 
-    private val _UserPets = MutableLiveData<List<Map<String, String>>>()
-    val UserPets: LiveData<List<Map<String, String>>> = _UserPets
+    private val _UserPets = MutableLiveData<List<MutableMap<String, String>>>()
+    val UserPets: LiveData<List<MutableMap<String, String>>> = _UserPets
 
     private val _loggedUserName = MutableLiveData<String>()
     val loggedUserName: LiveData<String> = _loggedUserName
+
+    private val _loggedUserImage = MutableLiveData<Uri>()
+    val loggedUserImage: LiveData<Uri> = _loggedUserImage
 
 
     fun getUserPets(){
@@ -36,14 +41,15 @@ class HomeViewModel() : ViewModel() {
                         return@addSnapshotListener
                     }
                     if (value != null) {
-                        var userList = mutableListOf<Map<String,String>>()
+                        var userList = mutableListOf<MutableMap<String,String>>()
                         for (doc in value) {
-                            var userData = doc.data as Map<String,String>
+                            var userData = doc.data as MutableMap<String,String>
+
                             userList.add(userData)
 
                         }
+
                         _UserPets.value = userList
-                        //showendbox false
 
                     }
 

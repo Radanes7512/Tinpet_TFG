@@ -175,8 +175,11 @@ fun NavGraph(
                     navController.popBackStack()
                     navController.navigate(Graph.AUTHENTICATION)
                 },
+
                 viewModel = LoginViewModel(LocalContext.current, navController)
+
             )
+
         }
 
         composable(AppScreens.Verify.route){

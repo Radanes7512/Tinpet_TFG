@@ -19,8 +19,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import com.google.protobuf.Empty
 
 
 class LoginViewModel(context: Context, navController: NavController) : ViewModel() {
@@ -34,7 +34,8 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
     private val Firestore = Firebase.firestore
 
     val storage = Firebase.storage
-    val storageRef = storage.reference.child("images/myImage.jpg")
+
+    val storageRef = storage.reference
 
     // USER INFO
 
@@ -59,8 +60,8 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
     private val _petage = MutableLiveData<String>()
     val petage: LiveData<String> = _petage
 
-    private val _petImageUri = MutableLiveData<Uri>()
-    val petImageUri: LiveData<Uri> = _petImageUri
+    private val _petImageUri = MutableLiveData<String>()
+    val petImageUri: LiveData<String> = _petImageUri
 
     private val _petcategory = MutableLiveData<String>()
     val petcategory: LiveData<String> = _petcategory
@@ -96,7 +97,7 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
         _signupEnable.value = isValidEmail(email) && isValidName(name) && isValidPassword(password) && password == password2
         }
 
-    fun onAddpetChanged(petname: String, petage: String, petcategory: String, petimage: Uri){
+    fun onAddpetChanged(petname: String, petage: String, petcategory: String, petimage: String){
         _petname.value = petname
         _petage.value = petage
         _petcategory.value = petcategory
@@ -137,18 +138,18 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                                 "Petname" to petname.value,
                                 "Petage" to petage.value,
                                 "Friends" to ArrayList<String>(),
-                              //  "photo" to petImageUri.value as String
                             )
                             Firestore.collection("users")
                                 .add(userdb)
                                 .addOnSuccessListener { documentReference ->
                                     Log.d(TAG, "DocumentSnapshot written with ID: ${documentReference.id}")
-
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success")
-                                    val user = auth.currentUser
                                     sendVerificationEmail()
                                     name.value?.let { it2 -> writeNewUser(documentReference.id, it2, email.value!!) }
+                                    _petImageUri.value?.let { it2 -> uploadUserImage(it2,
+                                        email.value!!
+                                    ) }
                                     readUser()
                                     Toast.makeText(context, "Se ha creado su cuenta correctamente",
                                          Toast.LENGTH_SHORT).show()
@@ -207,18 +208,36 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
             }
         })
     }
-   /fun uploadImageToFirebaseStorage(imageUriLiveData: LiveData<Uri>, storageRef: StorageReference) {
-        val imageUri = imageUriLiveData.value
-        if (imageUri != null) {
-            val uploadTask = storageRef.putFile(imageUri)
-            uploadTask.addOnSuccessListener {
-                // Manejar el éxito de la subida
-            }.addOnFailureListener {
-                // Manejar el fracaso de la subida
+    fun uploadUserImage(imageUri: String, email : String) {
+        // Obtener una referencia a Firebase Storage
+        val storage = Firebase.storage
+        val storageRef = storage.reference
+
+        // Crear una referencia a la imagen del usuario
+        val userImageRef = storageRef.child("images/$email/profile.jpg")
+
+        // Subir la imagen
+        val uploadTask = userImageRef.putFile(Uri.parse(imageUri))
+        uploadTask.addOnSuccessListener {
+            // Obtener la URL de descarga
+            userImageRef.downloadUrl.addOnSuccessListener { uri ->
+                Firebase.firestore.collection(Constants.USERS)
+                    .whereEqualTo(Constants.EMAIL, email)
+                    .addSnapshotListener { value, error ->
+                        if (value != null) {
+                            for (doc in value) {
+                                Firebase.firestore.collection(Constants.USERS).document(doc.id).update(Constants.PHOTO, uri.toString())
+
+
+                            }
+                        }
+                    }
             }
         }
     }
-
+    fun setImage (imageUri: Uri){
+        _petImageUri.value = imageUri.toString()
+    }
 
     fun isValidPassword(password: String): Boolean = password.length >= 6
     fun isValidEmail(email: String): Boolean  = email.contains("@") && (email.contains(".com") || email.contains(".es"))
@@ -226,7 +245,7 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
     fun isValidPetName(petname:String): Boolean = petname.length > 1
     fun isValidPetCategory(petcategory:String): Boolean = petcategory.length > 1
     fun isValidPetAge(petage:String): Boolean = petage.toIntOrNull() in 1..30
-    fun isValidPetImage(petimage: Uri): Boolean = petimage.isRelative
+    fun isValidPetImage(petimage: String): Boolean = Uri.parse(petimage).isRelative
 /*{
         val isImageExists = try {
             context.checkUriPermission(petimage, null, null, Intent.FLAG_GRANT_READ_URI_PERMISSION) == PackageManager.PERMISSION_GRANTED

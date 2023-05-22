@@ -1,5 +1,6 @@
 package com.example.tinpet.screens.mainMenu
 
+import android.net.Uri
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.tinpet.R
 import com.example.tinpet.screens.Constants
 import com.example.tinpet.ui.theme.abrilFatface
@@ -34,7 +36,9 @@ fun HomeScreen(
     viewModel.getUserPets()
     viewModel.getLoggedUser()
 
-    val userPets: List<Map<String, String>> by viewModel.UserPets.observeAsState(emptyList<Map<String, String>>().toMutableList())
+
+    val userPets: List<MutableMap<String, String>> by viewModel.UserPets.observeAsState(emptyList<MutableMap<String, String>>().toMutableList())
+
 
     // LISTA DE FOTOS DE PERROS ( DE MOMENTO LAS ALMACENAMOS ASÍ)
     val images = listOf(
@@ -90,7 +94,7 @@ fun HomeScreen(
                     .fillMaxSize()
                     .padding(16.dp, 16.dp, 16.dp, 100.dp)
             ) {
-                val imageRes = images[currentIndex]
+                val imageUri = userPets[currentIndex].getOrDefault(Constants.PHOTO,null)
                 val petname = userPets[currentIndex][Constants.PET_NAME].toString()
                 val petage = userPets[currentIndex][Constants.PET_AGE].toString()
                 if (petLiked) {
@@ -116,9 +120,9 @@ fun HomeScreen(
                     }
                     petDisliked = false
                 }
-
-                Image(
-                    painter = painterResource(imageRes),
+            if(imageUri != null) {
+                AsyncImage(
+                    model = imageUri,
                     contentDescription = "My Image",
                     modifier = Modifier
                         .offset(
@@ -128,6 +132,20 @@ fun HomeScreen(
                         .fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
+            }else{
+                var image =  images.elementAt((0..4).random())
+                Image(
+                   painter = painterResource(id = image) ,
+                    contentDescription = "My Image",
+                    modifier = Modifier
+                        .offset(
+                            x = offsetX,
+                            y = 0.dp
+                        )
+                        .fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
                 if (petLiked) {
                     LaunchedEffect(Unit) {
                         animate(

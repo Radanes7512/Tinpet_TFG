@@ -1,6 +1,7 @@
 package com.example.tinpet.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.tinpet.R
@@ -153,7 +155,6 @@ fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
 
     val validPass2: Boolean = password2 == password
 
-    val image: String by viewModel.password2.observeAsState(initial = "")
 
     Column(modifier = modifier) {
         STitleText(Modifier.align(Alignment.CenterHorizontally))
@@ -190,7 +191,8 @@ fun Addpet(
     val petage: String by viewModel.petage.observeAsState(initial = "")
     val validPetAge: Boolean = petage.let { viewModel.isValidPetAge(it) }
 
-    val petimage: Uri by viewModel.petImageUri.observeAsState(initial = Uri.EMPTY)
+    val petimage: String by viewModel.petImageUri.observeAsState(initial = "")
+
     val validPetImage: Boolean = petimage.let { viewModel.isValidPetImage(it) }
 
     var petcategory by remember { mutableStateOf("Option 1") }
@@ -221,7 +223,8 @@ fun Addpet(
         SPetImage(petimage,
             validPetImage,
             modifier = Modifier,
-            onImageSelected = { uri -> onImageSelected(uri) })
+            onImageSelected = { uri -> onImageSelected(uri) },
+        viewModel = viewModel)
     }
 }
 
@@ -351,10 +354,11 @@ fun SPetAge(petage: String, validPetAge: Boolean, onTextFieldChanged: (String) -
 }
 
 @Composable
-fun SPetImage(petimage: Uri,validPetImage: Boolean,modifier: Modifier = Modifier,onImageSelected: (Uri) -> Unit) {
+fun SPetImage(petimage: String,validPetImage: Boolean,modifier: Modifier = Modifier,onImageSelected: (Uri) -> Unit,  viewModel: LoginViewModel) {
     // Agregar un estado composable para almacenar la imagen seleccionada
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val deletePhotoConfirm = remember { mutableStateOf(false) }
+
 
     // Llamar a rememberLauncherForActivityResult para obtener el resultado de la selección de la imagen
     val launcher = rememberLauncherForActivityResult(
@@ -363,6 +367,7 @@ fun SPetImage(petimage: Uri,validPetImage: Boolean,modifier: Modifier = Modifier
         uri?.let {
             selectedImageUri = it
             onImageSelected(it)
+            viewModel.setImage(it)
         }
     }
     Column(

@@ -3,14 +3,12 @@ package com.example.tinpet.screens
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -29,7 +27,6 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.tinpet.R
@@ -43,9 +40,9 @@ fun SignupScreen(
     val signupEnable: Boolean by viewModel.signupEnable.observeAsState(initial = false)
     val addpetEnable: Boolean by viewModel.addpetEnable.observeAsState(initial = false)
 
+    val context = LocalContext.current
     // Agregar un estado composable para almacenar la imagen seleccionada
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    val context = LocalContext.current
     val navController = rememberNavController()
     Scaffold(
         //region BARRA SUPERIOR CON NOMBRE DE MASCOTA Y FELCHA PARA IR ATRÁS
@@ -89,6 +86,7 @@ fun SignupScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         if (signupEnable && addpetEnable) {
+
                             Button(
                                 onClick = {
                                     onClick()
@@ -115,6 +113,8 @@ fun SignupScreen(
                                 )
                             }
                         } else {
+                            Log.d(addpetEnable.toString(),"MASCOTA VALIDA???")
+                            Log.d(signupEnable.toString(),"USUARIO VALIDO???")
                             Button(
                                 onClick = {},
                                 enabled = false,
@@ -183,8 +183,9 @@ fun Addpet(
     modifier: Modifier,
     viewModel: LoginViewModel,
     selectedImageUri: Uri?,
-    onImageSelected: (Uri) -> Unit
+    onImageSelected: (Uri) -> Unit,
 ) {
+    val context = LocalContext.current
     val petname: String by viewModel.petname.observeAsState(initial = "")
     val validPetName: Boolean = petname.let { viewModel.isValidPetName(it) }
 
@@ -192,12 +193,10 @@ fun Addpet(
     val validPetAge: Boolean = petage.let { viewModel.isValidPetAge(it) }
 
     val petimage: String by viewModel.petImageUri.observeAsState(initial = "")
-
     val validPetImage: Boolean = petimage.let { viewModel.isValidPetImage(it) }
 
-    var petcategory by remember { mutableStateOf("Option 1") }
+    val petcategory:String by viewModel.petcategory.observeAsState(initial="")
     val validPetCategory: Boolean = petcategory.let { viewModel.isValidPetCategory(it) }
-
 
     Column(modifier = modifier) {
         SAddpetText(Modifier.align(Alignment.CenterHorizontally))
@@ -214,17 +213,24 @@ fun Addpet(
             )
         }
         Spacer(modifier = Modifier.padding(5.dp))
-        SPetCategory(petcategory, validPetCategory) { newCategory ->
-            if (newCategory != null) {
-                petcategory = newCategory
-            }
+        SPetCategory(
+            petcategory,
+            validPetCategory
+        ) {
+            viewModel.onAddpetChanged(
+                petname,petage,it,petimage
+            )
         }
         Spacer(modifier = Modifier.padding(5.dp))
-        SPetImage(petimage,
+        SPetImage(
+            petimage,
             validPetImage,
-            modifier = Modifier,
-            onImageSelected = { uri -> onImageSelected(uri) },
-        viewModel = viewModel)
+            viewModel
+        ){
+            viewModel.onAddpetChanged(
+                petname,petage,petcategory,it.toString()
+            )
+        }
     }
 }
 
@@ -260,7 +266,8 @@ fun SPetName(petname: String, validPetName: Boolean, onTextFieldChanged: (String
             false
         } else {
             !validPetName
-        }, singleLine = true, onValueChange = {
+        }, singleLine = true,
+            onValueChange = {
             onTextFieldChanged(it)
         }, label = {
             if (validPetName) {
@@ -354,12 +361,10 @@ fun SPetAge(petage: String, validPetAge: Boolean, onTextFieldChanged: (String) -
 }
 
 @Composable
-fun SPetImage(petimage: String,validPetImage: Boolean,modifier: Modifier = Modifier,onImageSelected: (Uri) -> Unit,  viewModel: LoginViewModel) {
+fun SPetImage(petimage: String,validPetImage: Boolean, viewModel: LoginViewModel, onImageSelected: (Uri) -> Unit) {
     // Agregar un estado composable para almacenar la imagen seleccionada
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val deletePhotoConfirm = remember { mutableStateOf(false) }
-
-
     // Llamar a rememberLauncherForActivityResult para obtener el resultado de la selección de la imagen
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -380,19 +385,6 @@ fun SPetImage(petimage: String,validPetImage: Boolean,modifier: Modifier = Modif
             fontFamily = abrilFatface,
             color = MaterialTheme.colors.onBackground
         )
-        Button(
-            onClick = { launcher.launch("image/*") },
-            modifier = Modifier.padding(vertical = 16.dp),
-            shape = RoundedCornerShape(25),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = MaterialTheme.colors.secondaryVariant,
-                disabledBackgroundColor = MaterialTheme.colors.onSurface,
-                contentColor = Color.Black,
-                disabledContentColor = Color.White
-            )
-        ) {
-            Text("Abrir galería")
-        }
         if (selectedImageUri != null) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -419,6 +411,20 @@ fun SPetImage(petimage: String,validPetImage: Boolean,modifier: Modifier = Modif
                         Icon(Icons.Filled.Delete, contentDescription = null, tint = Color.Red)
                     }
                 }
+            }
+        }else{
+            Button(
+                onClick = { launcher.launch("image/*") },
+                modifier = Modifier.padding(vertical = 16.dp),
+                shape = RoundedCornerShape(25),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.secondaryVariant,
+                    disabledBackgroundColor = MaterialTheme.colors.onSurface,
+                    contentColor = Color.Black,
+                    disabledContentColor = Color.White
+                )
+            ) {
+                Text("Abrir galería")
             }
         }
     }
@@ -453,13 +459,16 @@ fun SPetImage(petimage: String,validPetImage: Boolean,modifier: Modifier = Modif
                             color = MaterialTheme.colors.onBackground
                         )
                     }
-                    TextButton(modifier = Modifier.padding(10.dp),
+                    TextButton(
+                        modifier = Modifier.padding(10.dp),
                         border = BorderStroke(2.dp, MaterialTheme.colors.onBackground),
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.error),
                         shape = RoundedCornerShape(size = 30.dp),
                         //elevation = 10,
                         onClick = {
                             selectedImageUri = null
+                            onImageSelected(Uri.EMPTY)
+                            viewModel.setImage(Uri.EMPTY)
                             deletePhotoConfirm.value = false
                         }) {
                         Text(
@@ -470,9 +479,8 @@ fun SPetImage(petimage: String,validPetImage: Boolean,modifier: Modifier = Modif
             })
     }
 }
-
 @Composable
-fun SPetCategory(petcategory: String?, validPetCategory: Boolean, function: (String?) -> Unit) {
+fun SPetCategory(petcategory: String, validPetCategory: Boolean, onCategorySelected: (String) -> Unit) {
     val items = listOf(
         stringResource(R.string.peaceful_ES),
         stringResource(R.string.playful_ES),
@@ -488,7 +496,6 @@ fun SPetCategory(petcategory: String?, validPetCategory: Boolean, function: (Str
         stringResource(R.string.curious_ES)
     )
     val maxSelected = 1
-
     val columns = when {
         items.size > 8 -> 3
         items.size > 4 -> 2
@@ -496,8 +503,6 @@ fun SPetCategory(petcategory: String?, validPetCategory: Boolean, function: (Str
     }
     val itemsPerColumn = (items.size + columns - 1) / columns
     val selectedIndex = remember { mutableStateOf<Int?>(null) }
-
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()
     ) {
@@ -530,9 +535,9 @@ fun SPetCategory(petcategory: String?, validPetCategory: Boolean, function: (Str
                                 .clickable(
                                     enabled = selectedIndex.value == null || selectedIndex.value == itemIndex
                                 ) {
-                                    selectedIndex.value =
-                                        if (selectedIndex.value == itemIndex) null else itemIndex
-                                    function(if (selectedIndex.value == null) null else item)
+                                    selectedIndex.value = if (selectedIndex.value == itemIndex) null else itemIndex
+                                    val category = if (selectedIndex.value == null) "" else item
+                                    onCategorySelected(category)
                                 }
                         ) {
                             Box(contentAlignment = Alignment.Center) {

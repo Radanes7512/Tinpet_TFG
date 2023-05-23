@@ -1,12 +1,15 @@
 package com.example.tinpet.screens
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Application
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,6 +24,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import java.io.FileNotFoundException
 
 
 class LoginViewModel(context: Context, navController: NavController) : ViewModel() {
@@ -88,7 +92,6 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
         _password.value = password
         _loginEnable.value = isValidEmail(email) && isValidPassword(password)
     }
-
     fun onSignupChanged(email: String,name: String,password: String, password2:String){
         _name.value = name
         _email.value= email
@@ -96,7 +99,6 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
         _password2.value = password2
         _signupEnable.value = isValidEmail(email) && isValidName(name) && isValidPassword(password) && password == password2
         }
-
     fun onAddpetChanged(petname: String, petage: String, petcategory: String, petimage: String){
         _petname.value = petname
         _petage.value = petage
@@ -104,7 +106,6 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
         _petImageUri.value = petimage
         _addpetEnable.value = isValidPetCategory(petcategory) && isValidPetName(petname) && isValidPetAge(petage) && isValidPetImage(petimage)
     }
-
     fun login(context: Context){
         email.value?.let {
             password.value?.let { it1 ->
@@ -114,17 +115,16 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                             // Si es correcto el login sale un mensaje al usuario y se envia el email
                             Log.d(TAG, "signInWithEmail:success")
                             checkIfEmailVerified()
+                            saveUserInfo(context, email.value!!, password.value!!)
                         } else {
                             // Si el login falla sale un mensaje al usuario
                             Log.w(TAG, "signInWithEmail:failure", task.exception)
                             Toast.makeText(context, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show()
-
                         }
                     }
             }
         }
-
     }
     fun register(context:Context){
         email.value?.let {
@@ -137,6 +137,7 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                                 "Email" to email.value,
                                 "Petname" to petname.value,
                                 "Petage" to petage.value,
+                                "Category" to petcategory.value,
                                 "Friends" to ArrayList<String>(),
                             )
                             Firestore.collection("users")
@@ -146,11 +147,11 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success")
                                     sendVerificationEmail()
-                                    name.value?.let { it2 -> writeNewUser(documentReference.id, it2, email.value!!) }
+                                    /*name.value?.let { it2 -> writeNewUser(documentReference.id, it2, email.value!!) }*/
                                     _petImageUri.value?.let { it2 -> uploadUserImage(it2,
                                         email.value!!
                                     ) }
-                                    readUser()
+                                    /*readUser()*/
                                     Toast.makeText(context, "Se ha creado su cuenta correctamente",
                                          Toast.LENGTH_SHORT).show()
                                 }
@@ -181,31 +182,17 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
         val user = auth.currentUser
         if (user!!.isEmailVerified()) {
             uiState.value = UiState.SignIn
-
         } else {
-
             FirebaseAuth.getInstance().signOut()
-
         }
     }
-    fun writeNewUser(userId: String, name: String, email: String) {
-        val user = User(name, email)
-        rtdb.child("users").child(userId).setValue(user)
-
-    }
-    fun readUser() {
-        rtdb.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-
-                val value = dataSnapshot.value as Map<String, Any>?
-                Log.d(TAG, "Value is: $value")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-
-                Log.w(TAG, "Failed to read value.", error.toException())
-            }
-        })
+    fun saveUserInfo(context: Context, username: String, password: String) {
+        val sharedPreferences = context.getSharedPreferences("user_info", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putString("username", username)
+            putString("password", password)
+            apply()
+        }
     }
     fun uploadUserImage(imageUri: String, email : String) {
         // Obtener una referencia a Firebase Storage
@@ -237,21 +224,42 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
     fun setImage (imageUri: Uri){
         _petImageUri.value = imageUri.toString()
     }
-
     fun isValidPassword(password: String): Boolean = password.length >= 6
     fun isValidEmail(email: String): Boolean  = email.contains("@") && (email.contains(".com") || email.contains(".es"))
     fun isValidName(name: String): Boolean = name.length > 1
     fun isValidPetName(petname:String): Boolean = petname.length > 1
-    fun isValidPetCategory(petcategory:String): Boolean = petcategory.length > 1
+    fun isValidPetCategory(petcategory:String): Boolean = petcategory.isNotEmpty()
     fun isValidPetAge(petage:String): Boolean = petage.toIntOrNull() in 1..30
-    fun isValidPetImage(petimage: String): Boolean = Uri.parse(petimage).isRelative
-/*{
+    fun isValidPetImage(petimage: String): Boolean = petimage.isNotEmpty()
+
+
+/*
         val isImageExists = try {
             context.checkUriPermission(petimage, null, null, Intent.FLAG_GRANT_READ_URI_PERMISSION) == PackageManager.PERMISSION_GRANTED
         } catch (e: Exception) {
             false
         }
         return isImageExists && petimage.isAbsolute
-    }*/
+    }
+    fun writeNewUser(userId: String, name: String, email: String) {
+        val user = User(name, email)
+        rtdb.child("users").child(userId).setValue(user)
+
+    }
+    fun readUser() {
+        rtdb.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                val value = dataSnapshot.value as Map<String, Any>?
+                Log.d(TAG, "Value is: $value")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+                Log.w(TAG, "Failed to read value.", error.toException())
+            }
+        })
+    }
+ */
 
 }

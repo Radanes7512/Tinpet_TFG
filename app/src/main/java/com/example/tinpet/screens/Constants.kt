@@ -15,6 +15,7 @@ object Constants {
         const val USERS = "users"
         const val PET_NAME = "Petname"
         const val PET_AGE = "Petage"
+        const val PET_CATEGORY = "Category"
         const val PENDING_REQUESTS = "pending_requests"
         const val PHOTO = "photo"
         const val USER1_ID = "user1_id"

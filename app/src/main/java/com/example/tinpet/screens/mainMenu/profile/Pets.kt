@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
+import com.example.tinpet.screens.mainMenu.HomeViewModel
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
@@ -28,9 +29,9 @@ import com.example.tinpet.ui.theme.abrilFatface
 fun PetsScreen(
     onBackClick: () -> Unit,
     onAddClick:()->Unit,
-    onPetClick: () -> Unit
+    onPetClick: () -> Unit,
+    homeViewModel: HomeViewModel
 ){
-    var nombreMascota by remember { mutableStateOf("Max") }
 
     Scaffold(
         //region BARRA SUPERIOR CON NOMBRE Y FLECHA PARA IR ATRÁS
@@ -52,26 +53,6 @@ fun PetsScreen(
                 }
             )
         },
-        /*floatingActionButton = {
-           ExtendedFloatingActionButton(
-                text={
-                     Text(
-                         text = "Añadir mascota",
-                         fontFamily = abrilFatface
-                     )
-                },
-               icon = {
-                   Icon(
-                       imageVector = Icons.Default.Add,
-                       contentDescription = "Añadir"
-                   )
-               },
-                onClick = {
-                    onAddClick()
-                }
-            )
-        },*/
-        //floatingActionButtonPosition = FabPosition.End
     )
     //endregion
     // region CUERPO
@@ -106,7 +87,7 @@ fun PetsScreen(
                         )
                         Text(
                             modifier = Modifier.align(alignment = Alignment.CenterVertically),
-                            text = nombreMascota,
+                            text = homeViewModel.loggedUserName.toString(),
                             fontSize = 20.sp,
                             fontFamily = abrilFatface,
                             color = MaterialTheme.colors.onPrimary

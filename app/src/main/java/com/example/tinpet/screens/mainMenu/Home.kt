@@ -1,12 +1,15 @@
 package com.example.tinpet.screens.mainMenu
 
-import android.net.Uri
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -15,7 +18,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -36,9 +38,7 @@ fun HomeScreen(
     viewModel.getUserPets()
     viewModel.getLoggedUser()
 
-
     val userPets: List<MutableMap<String, String>> by viewModel.UserPets.observeAsState(emptyList<MutableMap<String, String>>().toMutableList())
-
 
     // LISTA DE FOTOS DE PERROS ( DE MOMENTO LAS ALMACENAMOS ASÍ)
     val images = listOf(
@@ -72,14 +72,14 @@ fun HomeScreen(
 
     // LÓGICA PARA QUE CUANDO NO HAYA MÁS IMÁGENES PARA MOSTAR, SE VEA EL BOX DE FIN
     fun onButtonClick(liked: Boolean) {
-        if(liked){
+        if (liked) {
             currentIndex++
-            if (currentIndex == userPets.size || currentIndex ==images.size) {
+            if (currentIndex == userPets.size || currentIndex == images.size) {
                 showEndBox = true
             }
-        }else{
+        } else {
             currentIndex++
-            if (currentIndex == userPets.size || currentIndex ==images.size) {
+            if (currentIndex == userPets.size || currentIndex == images.size) {
                 showEndBox = true
             }
         }
@@ -94,9 +94,10 @@ fun HomeScreen(
                     .fillMaxSize()
                     .padding(16.dp, 16.dp, 16.dp, 100.dp)
             ) {
-                val imageUri = userPets[currentIndex].getOrDefault(Constants.PHOTO,null)
+                val imageUri = userPets[currentIndex].getOrDefault(Constants.PHOTO, null)
                 val petname = userPets[currentIndex][Constants.PET_NAME].toString()
                 val petage = userPets[currentIndex][Constants.PET_AGE].toString()
+                val petcategory = userPets[currentIndex][Constants.PET_CATEGORY].toString()
                 if (petLiked) {
                     LaunchedEffect(Unit) {
                         animate(
@@ -120,32 +121,32 @@ fun HomeScreen(
                     }
                     petDisliked = false
                 }
-            if(imageUri != null) {
-                AsyncImage(
-                    model = imageUri,
-                    contentDescription = "My Image",
-                    modifier = Modifier
-                        .offset(
-                            x = offsetX,
-                            y = 0.dp
-                        )
-                        .fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-            }else{
-                var image =  images.elementAt((0..4).random())
-                Image(
-                   painter = painterResource(id = image) ,
-                    contentDescription = "My Image",
-                    modifier = Modifier
-                        .offset(
-                            x = offsetX,
-                            y = 0.dp
-                        )
-                        .fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-            }
+                if (imageUri != null) {
+                    AsyncImage(
+                        model = imageUri,
+                        contentDescription = "My Image",
+                        modifier = Modifier
+                            .offset(
+                                x = offsetX,
+                                y = 0.dp
+                            )
+                            .fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    var image = images.elementAt((0..4).random())
+                    Image(
+                        painter = painterResource(id = image),
+                        contentDescription = "My Image",
+                        modifier = Modifier
+                            .offset(
+                                x = offsetX,
+                                y = 0.dp
+                            )
+                            .fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
                 if (petLiked) {
                     LaunchedEffect(Unit) {
                         animate(
@@ -181,11 +182,12 @@ fun HomeScreen(
                 Column(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                    //  .background(Color(0x80000000))
+                        .background(Color(0x80000000))
                 ) {
+                    //NOMBRE
                     if (petname != null) {
                         Text(
-                            modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 5.dp),
+                            modifier = Modifier.padding(8.dp),
                             style = TextStyle(
                                 shadow = Shadow(
                                     color = Color.DarkGray,
@@ -196,39 +198,42 @@ fun HomeScreen(
                             text = petname.uppercase(),
                             fontSize = 32.sp,
                             fontFamily = abrilFatface,
-                            color = MaterialTheme.colors.onBackground
+                            color = if(isSystemInDarkTheme())MaterialTheme.colors.onBackground else MaterialTheme.colors.background
                         )
                     }
+                    // EDAD
                     if (petage != null) {
                         Text(
-                            modifier = Modifier.padding(16.dp, 0.dp, 16.dp, 16.dp),
+                            modifier = Modifier.padding(8.dp),
                             style = TextStyle(
                                 shadow = Shadow(
-                                    color = Color.DarkGray, offset = Offset(2.0f, 5.0f), blurRadius = 2f
+                                    color = Color.DarkGray,
+                                    offset = Offset(2.0f, 5.0f),
+                                    blurRadius = 2f
                                 )
                             ),
                             text = "$petage años",
                             fontSize = 22.sp,
                             fontFamily = abrilFatface,
-                            color = MaterialTheme.colors.onBackground
+                            color = if(isSystemInDarkTheme())MaterialTheme.colors.onBackground else MaterialTheme.colors.background
+
                         )
                     }
                     // CATEGORÍAS
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-
-                    ) {
-                        category.shuffled().take(1).forEach { category ->
+                    if (petcategory != null) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                        ) {
                             Card(
                                 modifier = Modifier.padding(8.dp),
                                 elevation = 10.dp
                             ) {
                                 Text(
                                     modifier = Modifier.padding(8.dp),
-                                    text = category,
+                                    text = petcategory,
                                     fontSize = 16.sp,
                                     fontFamily = abrilFatface
                                 )
@@ -270,8 +275,6 @@ fun HomeScreen(
             }
         }
     }
-
-
     petLiked = false
     petDisliked = false
 }

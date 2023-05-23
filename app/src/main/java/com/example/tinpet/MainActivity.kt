@@ -1,14 +1,17 @@
 package com.example.tinpet
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -33,6 +36,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.compose.rememberNavController
 import com.example.tinpet.graphs.MainNavigationGraph
+import com.example.tinpet.graphs.NavGraph
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 
@@ -40,27 +44,47 @@ class MainActivity : ComponentActivity() {
     private val requestPermissionsCode = 100
     private var showSet:Boolean  = false;
     private val permissionsToRequest = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+    fun checkIfUserIsLoggedIn(context: Context): Boolean {
+        val sharedPreferences = context.getSharedPreferences("user_info", Context.MODE_PRIVATE)
+        val username = sharedPreferences.getString("username", null)
+        val password = sharedPreferences.getString("password", null)
+        return username != null && password != null
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val permissionsDenied = permissionsToRequest.filter {
-            ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_DENIED
-        }
-        val permissionsGranted = permissionsToRequest.filter {
-            ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
-        }
-
-        if (permissionsDenied.isEmpty() && permissionsGranted.size == permissionsToRequest.size) {
-            // Todos los permisos fueron otorgados
+        if (checkIfUserIsLoggedIn(this)) {
             setContent {
                 TinPetTheme {
-                    MainNavigationGraph(navController = rememberNavController())
+                    MainNavigationGraph(
+                        navController = rememberNavController(),
+                        isLoggedIn = checkIfUserIsLoggedIn(this)
+                    )
                 }
             }
-        } else {
-            setContent {
-                TinPetTheme {
-                    DefaultText(permissionsDenied, requestPermissionsCode, showSet)
+        }else{
+            val permissionsDenied = permissionsToRequest.filter {
+                ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_DENIED
+            }
+            val permissionsGranted = permissionsToRequest.filter {
+                ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
+            }
+
+            if (permissionsDenied.isEmpty() && permissionsGranted.size == permissionsToRequest.size) {
+                // Todos los permisos fueron otorgados
+                setContent {
+                    TinPetTheme {
+                        MainNavigationGraph(
+                            navController = rememberNavController(),
+                            isLoggedIn = checkIfUserIsLoggedIn(this)
+                        )
+                    }
+                }
+            } else {
+                setContent {
+                    TinPetTheme {
+                        DefaultText(permissionsDenied, requestPermissionsCode, showSet)
+                    }
                 }
             }
         }
@@ -77,7 +101,10 @@ class MainActivity : ComponentActivity() {
                 // Todos los permisos fueron otorgados
                 setContent {
                     TinPetTheme {
-                        MainNavigationGraph(navController = rememberNavController())
+                        MainNavigationGraph(
+                            navController = rememberNavController(),
+                            isLoggedIn = checkIfUserIsLoggedIn(this)
+                        )
                     }
                 }
             } else {
@@ -121,7 +148,9 @@ fun DefaultText(permissionsDenied: List<String>, requestPermissionsCode: Int, sh
                 )
             }
             Spacer(modifier = Modifier.padding(8.dp))
-            LazyColumn(modifier=Modifier.align(Alignment.Center).padding(16.dp)) {
+            LazyColumn(modifier= Modifier
+                .align(Alignment.Center)
+                .padding(16.dp)) {
                 item {
                     Row {
                         Text(

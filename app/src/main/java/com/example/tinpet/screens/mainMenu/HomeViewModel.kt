@@ -27,12 +27,9 @@ class HomeViewModel() : ViewModel() {
     private val _loggedUserImage = MutableLiveData<Uri>()
     val loggedUserImage: LiveData<Uri> = _loggedUserImage
 
-
     fun getUserPets(){
-
         val currentUser = auth.currentUser
         if (currentUser != null) {
-
             Firebase.firestore.collection(Constants.USERS)
                 .whereNotEqualTo(Constants.EMAIL, currentUser.email)
                 .addSnapshotListener { value, error ->
@@ -44,11 +41,8 @@ class HomeViewModel() : ViewModel() {
                         var userList = mutableListOf<MutableMap<String,String>>()
                         for (doc in value) {
                             var userData = doc.data as MutableMap<String,String>
-
                             userList.add(userData)
-
                         }
-
                         _UserPets.value = userList
 
                     }
@@ -88,29 +82,19 @@ class HomeViewModel() : ViewModel() {
         }
 
     }
-
-    public fun getLoggedUser(){
-
-
+    fun getLoggedUser(){
         val currentUser = auth.currentUser
-
         if (currentUser != null) {
-
             Firebase.firestore.collection(Constants.USERS)
                 .whereEqualTo(Constants.EMAIL, currentUser.email)
                 .addSnapshotListener { value, error ->
                     if (value != null) {
                         for (doc in value) {
                             var userData = doc.data
-
                           _loggedUserName.value= userData[Constants.PET_NAME] as String?
-
                         }
                     }
                 }
         }
     }
-
-
-
 }

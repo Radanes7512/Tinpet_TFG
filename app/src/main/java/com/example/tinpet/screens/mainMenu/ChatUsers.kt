@@ -1,5 +1,6 @@
 package com.example.tinpet.screens.mainMenu
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,7 +23,7 @@ import com.example.tinpet.screens.LoginViewModel
 import com.example.tinpet.ui.theme.abrilFatface
 
 
-@OptIn(ExperimentalMaterialApi::class)
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChatUsersScreen(
     navController: NavHostController,
@@ -37,68 +38,69 @@ fun ChatUsersScreen(
         R.drawable.default_pet_5
     )
     val firstImage: Int = images.toIntArray()[0]
-//endregion
-    //region LISTA DE NOMBRE  ( DE MOMENTO ASÍ)
-
-
+    //endregion
     val users by viewModel.usernames.observeAsState(listOf())
 
-    //val names = listOf(
-
-    //viewModel.usernames.value
-    //)
-    //endregion
-    //region CUERPO DE LA PANTALLA
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colors.background),
-        contentAlignment = Alignment.Center
-    ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize()
+Scaffold(
+    content={
+        //region CUERPO DE LA PANTALLA
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colors.background),
+            contentAlignment = Alignment.Center
         ) {
-            item {
-                //region FUNCION PARA CREAR ENTRADAS AL CHAT DEPENDIENDO DEL NUMERO DE PERROS
-                users.forEach { user ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(15.dp),
-                        elevation = 10.dp
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                item {
+                    //region FUNCION PARA CREAR ENTRADAS AL CHAT DEPENDIENDO DEL NUMERO DE PERROS
+                    users.forEach { user ->
+                        Card(
                             modifier = Modifier
-                                .clickable { val chatUserId = user.get("id")
-                                    navController.navigate(AppScreens.Chat.route + "/${chatUserId}")}
                                 .fillMaxWidth()
-                                .background(MaterialTheme.colors.primary)
-                                .padding(10.dp)
+                                .padding(15.dp),
+                            elevation = 10.dp
                         ) {
-                            Image(
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
-                                    .clip(CircleShape)
-                                    .size(50.dp),
-                                painter = painterResource(firstImage),
-                                contentDescription = "profilePhoto"
-                            )
-                            user.get("name")?.let {
-                                Text(
-                                    modifier = Modifier.padding(8.dp),
-                                    text = it,
-                                    fontSize = 16.sp,
-                                    fontFamily = abrilFatface
+                                    .clickable {
+                                        val chatUserId = user.get("id")
+                                        navController.navigate(AppScreens.Chat.route + "/${chatUserId}")
+                                    }
+                                    .fillMaxWidth()
+                                    .background(MaterialTheme.colors.primary)
+                                    .padding(10.dp)
+                            ) {
+                                Image(
+                                    modifier = Modifier
+                                        .clip(CircleShape)
+                                        .size(50.dp),
+                                    painter = painterResource(firstImage),
+                                    contentDescription = "profilePhoto"
                                 )
+                                user.get("name")?.let {
+                                    Text(
+                                        modifier = Modifier.padding(8.dp),
+                                        text = it,
+                                        fontSize = 16.sp,
+                                        fontFamily = abrilFatface
+                                    )
+                                }
                             }
-                        }
 
+                        }
                     }
+                    //endregion
                 }
-                //endregion
             }
         }
+        //endregion
     }
-    //endregion
+)
+
+
+
 }
 

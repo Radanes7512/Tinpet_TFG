@@ -15,7 +15,7 @@ import com.example.tinpet.screens.mainMenu.HomeViewModel
 
 
 @Composable
-fun MainNavigationGraph(navController: NavHostController,isLoggedIn:Boolean) {
+fun MainNavigationGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
         route = Graph.ROOT,

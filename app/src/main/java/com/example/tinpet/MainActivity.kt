@@ -44,26 +44,16 @@ class MainActivity : ComponentActivity() {
     private val requestPermissionsCode = 100
     private var showSet:Boolean  = false;
     private val permissionsToRequest = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-    fun checkIfUserIsLoggedIn(context: Context): Boolean {
+    /*fun checkIfUserIsLoggedIn(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences("user_info", Context.MODE_PRIVATE)
         val username = sharedPreferences.getString("username", null)
         val password = sharedPreferences.getString("password", null)
         return username != null && password != null
-    }
+    }*/
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (checkIfUserIsLoggedIn(this)) {
-            setContent {
-                TinPetTheme {
-                    MainNavigationGraph(
-                        navController = rememberNavController(),
-                        isLoggedIn = checkIfUserIsLoggedIn(this)
-                    )
-                }
-            }
-        }else{
-            val permissionsDenied = permissionsToRequest.filter {
+        val permissionsDenied = permissionsToRequest.filter {
                 ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_DENIED
             }
             val permissionsGranted = permissionsToRequest.filter {
@@ -75,8 +65,7 @@ class MainActivity : ComponentActivity() {
                 setContent {
                     TinPetTheme {
                         MainNavigationGraph(
-                            navController = rememberNavController(),
-                            isLoggedIn = checkIfUserIsLoggedIn(this)
+                            navController = rememberNavController()
                         )
                     }
                 }
@@ -87,7 +76,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-        }
     }
     override fun onRequestPermissionsResult(requestCode: Int,permissions: Array<out String>,grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -102,8 +90,7 @@ class MainActivity : ComponentActivity() {
                 setContent {
                     TinPetTheme {
                         MainNavigationGraph(
-                            navController = rememberNavController(),
-                            isLoggedIn = checkIfUserIsLoggedIn(this)
+                            navController = rememberNavController()
                         )
                     }
                 }

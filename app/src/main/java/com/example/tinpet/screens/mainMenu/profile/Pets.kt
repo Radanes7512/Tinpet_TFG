@@ -87,7 +87,7 @@ fun PetsScreen(
                         )
                         Text(
                             modifier = Modifier.align(alignment = Alignment.CenterVertically),
-                            text = homeViewModel.loggedUserName.toString(),
+                            text = homeViewModel.loggedUserName.value.toString(),
                             fontSize = 20.sp,
                             fontFamily = abrilFatface,
                             color = MaterialTheme.colors.onPrimary

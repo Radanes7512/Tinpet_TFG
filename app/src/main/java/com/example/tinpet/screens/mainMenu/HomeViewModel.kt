@@ -27,11 +27,11 @@ class HomeViewModel() : ViewModel() {
     private val _loggedUserImage = MutableLiveData<Uri>()
     val loggedUserImage: LiveData<Uri> = _loggedUserImage
 
-    fun getUserPets(){
+    fun getUserPets(emails: List<String>){
         val currentUser = auth.currentUser
         if (currentUser != null) {
             Firebase.firestore.collection(Constants.USERS)
-                .whereNotEqualTo(Constants.EMAIL, currentUser.email)
+                .whereNotIn(Constants.EMAIL, emails)
                 .addSnapshotListener { value, error ->
                     if (error != null) {
                         Log.w(Constants.TAG, "Error al obtener los datos de las mascotas", error)
@@ -70,6 +70,8 @@ class HomeViewModel() : ViewModel() {
                 Constants.PET_NAME to _loggedUserName.value,
                 Constants.SENT_TO to Email,
                 Constants.SENT_BY to currentUser.email,
+                Constants.STATE to Constants.PENDING,
+                Constants.EMAILS to listOf<String>(Email.toString(),currentUser.email.toString())
             )
             Firebase.firestore.collection(Constants.PENDING_REQUESTS)
             .add(PendingRequest)
@@ -95,6 +97,43 @@ class HomeViewModel() : ViewModel() {
                         }
                     }
                 }
+        }
+    }
+    fun getNonFriends (){
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            var email = auth.currentUser?.email
+            email?.let {
+                Firebase.firestore.collection(Constants.PENDING_REQUESTS)
+                    .whereArrayContains(Constants.EMAILS, it)
+                    .whereEqualTo(Constants.STATE, Constants.ACCEPTED)
+                    .addSnapshotListener { value, error ->
+
+                        if (value != null) {
+                            var userList = mutableListOf<String>()
+                            userList.add(email)
+                            for (doc in value) {
+                                val requestData = doc.data as MutableMap<String, String>
+                                val sentTo  = requestData[Constants.SENT_TO]
+                                val sentBy  = requestData[Constants.SENT_BY]
+                                if (!sentTo.equals(auth.currentUser!!.email)){
+                                    if (sentTo != null && !userList.contains(sentTo)) {
+                                        userList.add(sentTo)
+                                    }
+                                }else {
+                                    if (sentBy != null &&  !userList.contains(sentBy)) {
+                                        userList.add(sentBy)
+                                    }
+                                }
+                            }
+                            if (!userList.isEmpty()) {
+                                getUserPets(userList)
+                            }
+                        }
+
+
+                    }
+            }
         }
     }
 }

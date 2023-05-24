@@ -35,7 +35,7 @@ import com.example.tinpet.ui.theme.abrilFatface
 fun HomeScreen(
     viewModel: HomeViewModel
 ) {
-    viewModel.getUserPets()
+    viewModel.getNonFriends()
     viewModel.getLoggedUser()
 
     val userPets: List<MutableMap<String, String>> by viewModel.UserPets.observeAsState(emptyList<MutableMap<String, String>>().toMutableList())

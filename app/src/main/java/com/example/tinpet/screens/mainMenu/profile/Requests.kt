@@ -110,7 +110,7 @@ fun RequestScreen(
                                 modifier = Modifier
                                     .align(alignment = Alignment.CenterVertically)
                                     .size(ButtonDefaults.IconSize)
-                                    .clickable { }
+                                    .clickable { viewModel.onFriendRequestUpdate(fr, Constants.DECLINED)}
                             )
                             Text(
                                 modifier = Modifier.align(alignment = Alignment.CenterVertically),
@@ -125,7 +125,7 @@ fun RequestScreen(
                                 modifier = Modifier
                                     .align(alignment = Alignment.CenterVertically)
                                     .size(ButtonDefaults.IconSize)
-                                    .clickable { }
+                                    .clickable { viewModel.onFriendRequestUpdate(fr, Constants.ACCEPTED)}
                             )
                         }
                     }

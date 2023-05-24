@@ -141,7 +141,7 @@ fun ProfileScreen(
                                 )
                             }
                         }
-                        // AMISTADES
+                        /*//region AMISTADES
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -172,6 +172,7 @@ fun ProfileScreen(
                                 )
                             }
                         }
+                        //endregion*/
                     }
                 }
             }

@@ -13,7 +13,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -56,40 +61,44 @@ Scaffold(
                 item {
                     //region FUNCION PARA CREAR ENTRADAS AL CHAT DEPENDIENDO DEL NUMERO DE PERROS
                     users.forEach { user ->
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(15.dp),
-                            elevation = 10.dp
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
+                        if(users.isEmpty()){
+                            EmptyChat()
+                        }else {
+                            Card(
                                 modifier = Modifier
-                                    .clickable {
-                                        val chatUserId = user.get("id")
-                                        navController.navigate(AppScreens.Chat.route + "/${chatUserId}")
-                                    }
                                     .fillMaxWidth()
-                                    .background(MaterialTheme.colors.primary)
-                                    .padding(10.dp)
+                                    .padding(15.dp),
+                                elevation = 10.dp
                             ) {
-                                Image(
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier
-                                        .clip(CircleShape)
-                                        .size(50.dp),
-                                    painter = painterResource(firstImage),
-                                    contentDescription = "profilePhoto"
-                                )
-                                user.get("name")?.let {
-                                    Text(
-                                        modifier = Modifier.padding(8.dp),
-                                        text = it,
-                                        fontSize = 16.sp,
-                                        fontFamily = abrilFatface
+                                        .clickable {
+                                            val chatUserId = user.get("id")
+                                            navController.navigate(AppScreens.Chat.route + "/${chatUserId}")
+                                        }
+                                        .fillMaxWidth()
+                                        .background(MaterialTheme.colors.primary)
+                                        .padding(10.dp)
+                                ) {
+                                    Image(
+                                        modifier = Modifier
+                                            .clip(CircleShape)
+                                            .size(50.dp),
+                                        painter = painterResource(firstImage),
+                                        contentDescription = "profilePhoto"
                                     )
+                                    user.get("name")?.let {
+                                        Text(
+                                            modifier = Modifier.padding(8.dp),
+                                            text = it,
+                                            fontSize = 16.sp,
+                                            fontFamily = abrilFatface
+                                        )
+                                    }
                                 }
-                            }
 
+                            }
                         }
                     }
                     //endregion
@@ -99,8 +108,51 @@ Scaffold(
         //endregion
     }
 )
+}
 
-
-
+@Composable
+fun EmptyChat() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Image(
+            modifier = Modifier
+                .align(Alignment.Center),
+            painter = painterResource(id = R.drawable.icon_pawprint),
+            contentDescription = null
+        )
+        Column(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = Color.DarkGray,
+                        offset = Offset(2.0f, 5.0f),
+                        blurRadius = 2f
+                    )
+                ),
+                text = "¡Ups!",
+                fontWeight = FontWeight.Bold,
+                fontSize = 50.sp
+            )
+            Text(
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = Color.DarkGray,
+                        offset = Offset(2.0f, 5.0f),
+                        blurRadius = 2f
+                    )
+                ),
+                text = "No hay ningún chat por el momento...",
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
 }
 

@@ -58,12 +58,9 @@ fun ChatScreen(
     val message: String by viewModel.message.observeAsState("")
 
 
-
     // Agregar un mensaje
     @Composable
     fun addMessage() {
-        // Tu código para agregar el mensaje
-
         // Después de agregar el mensaje, animar el scroll hasta el último elemento de la lista
         LaunchedEffect(Unit) {
             listState.animateScrollToItem(messages.lastIndex)
@@ -75,14 +72,10 @@ fun ChatScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    users.forEach { user ->
-                        user.get("name")?.let {
                             Text(
-                                text = it,
+                                text = "Chat",
                                 fontFamily = abrilFatface
                             )
-                        }
-                    }
                 },
                 navigationIcon = {
                     IconButton(onClick = { onBackClick() }) {
@@ -112,6 +105,9 @@ fun ChatScreen(
                     verticalArrangement = Arrangement.Bottom
                 ) {
                     itemsIndexed(messages) { index, msg ->
+                        LaunchedEffect(Unit) {
+                            listState.animateScrollToItem(messages.lastIndex)
+                        }
                         Card(
                             modifier = Modifier
                                 .padding(

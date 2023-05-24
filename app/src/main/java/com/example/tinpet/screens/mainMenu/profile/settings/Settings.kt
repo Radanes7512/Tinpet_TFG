@@ -1,6 +1,8 @@
 package com.example.tinpet.screens.mainMenu.profile.settings
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Bundle
 import android.widget.Button
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -15,10 +17,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import com.example.tinpet.R
 import com.example.tinpet.ui.theme.abrilFatface
 import org.w3c.dom.Text
@@ -32,7 +36,7 @@ fun SettingsScreen(
     onAboutClick: () -> Unit,
 ) {
     val logoutConfirm = remember { mutableStateOf(false) }
-
+    val context= LocalContext.current
     Scaffold(
         //region BARRA SUPERIOR CON NOMBRE Y FLECHA PARA IR ATRÁS
         topBar = {
@@ -53,21 +57,20 @@ fun SettingsScreen(
                 }
 
             )
-        }
-        ,
+        }/*,
         bottomBar = {
             BottomSBar()
-        }
+        }*/
     )
     //endregion
-    // region CUERPO
+    //region CUERPO
     {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
         ) {
             item {
-                // NOTIFICACIONES
+                //region NOTIFICACIONES
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -77,8 +80,14 @@ fun SettingsScreen(
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
-                            .clickable { onNotifyClick() }
-                            //.border(1.dp, MaterialTheme.colors.onBackground)
+                            .clickable {
+                                val intent = Intent()
+                                intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
+                                intent.putExtra("android.provider.extra.APP_PACKAGE", "com.example.tinpet")
+                                if (intent.resolveActivity(context.packageManager) != null) {
+                                    ContextCompat.startActivity(context, intent, Bundle())
+                                }
+                            }
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
                             .padding(10.dp)
@@ -100,13 +109,13 @@ fun SettingsScreen(
                         )
                     }
                 }
-                // SOBRE NOSOTROS
+                //endregion
+                //region SOBRE NOSOTROS
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(15.dp),
                     elevation = 10.dp
-
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -135,13 +144,13 @@ fun SettingsScreen(
                         )
                     }
                 }
-                // CERRAR SESIÓN
+                //endregion
+                //region CERRAR SESIÓN
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(15.dp),
                     elevation = 10.dp
-
                 ) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -170,6 +179,7 @@ fun SettingsScreen(
                         )
                     }
                 }
+                //endregion
             }
         }
     }

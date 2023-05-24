@@ -79,10 +79,6 @@ fun NavGraph(
                     navController.popBackStack()
                     navController.navigate(AppScreens.Profile.route)
                 },
-                onAddClick = {
-                    navController.popBackStack()
-                    navController.navigate(AppScreens.Addpet.route)
-                },
                 onPetClick = {
                     navController.navigate(AppScreens.PetProfile.route)
                 },

@@ -154,7 +154,7 @@ fun LoginScreen(
                             Color(0xFFFB9600)
                         }
                     )
-                    Spacer(modifier = Modifier.padding(10.dp))
+                    /*Spacer(modifier = Modifier.padding(10.dp))
                     Text(
                         text = "He olvidado mi contraseña",
                         modifier = Modifier.clickable {  },
@@ -165,7 +165,7 @@ fun LoginScreen(
                         } else {
                             Color(0xFFFB9600)
                         }
-                    )
+                    )*/
                 }
             }
         }

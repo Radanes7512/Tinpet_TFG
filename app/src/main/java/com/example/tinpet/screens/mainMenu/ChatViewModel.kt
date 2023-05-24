@@ -128,7 +128,6 @@ class ChatViewModel() : ViewModel() {
         }
     }
 
-
     fun getMessages(chatId: String) {
         val currentUser = auth.currentUser
         val userData = chatUserDocument.value?.data
@@ -212,7 +211,6 @@ class ChatViewModel() : ViewModel() {
     }
 
     fun getUsers(friendList: List<String>) {
-
         Firebase.firestore.collection("users")
             .whereIn(Constants.EMAIL, friendList)
             .addSnapshotListener { value, e ->
@@ -230,7 +228,8 @@ class ChatViewModel() : ViewModel() {
                         val data = doc.data
                         val userMap = mapOf<String, String>(
                             "id" to doc.id,
-                            "name" to data.get("Username").toString()
+                            "name" to data["Username"].toString(),
+                            "pic" to data["photo"].toString()
                         )
                         //Añadimos info de si los mensajes son nuestros o no
                         list.add(userMap)

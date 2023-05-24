@@ -25,8 +25,6 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import java.io.FileNotFoundException
-
-
 class LoginViewModel(context: Context, navController: NavController) : ViewModel() {
     //Context parameter
     private val applicationContext = context.applicationContext
@@ -115,7 +113,7 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                             // Si es correcto el login sale un mensaje al usuario y se envia el email
                             Log.d(TAG, "signInWithEmail:success")
                             checkIfEmailVerified()
-                            saveUserInfo(context, email.value!!, password.value!!)
+                            /*saveUserInfo(context, email.value!!, password.value!!)*/
                         } else {
                             // Si el login falla sale un mensaje al usuario
                             Log.w(TAG, "signInWithEmail:failure", task.exception)
@@ -186,14 +184,14 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
             FirebaseAuth.getInstance().signOut()
         }
     }
-    fun saveUserInfo(context: Context, username: String, password: String) {
+    /*fun saveUserInfo(context: Context, username: String, password: String) {
         val sharedPreferences = context.getSharedPreferences("user_info", Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {
             putString("username", username)
             putString("password", password)
             apply()
         }
-    }
+    }*/
     fun uploadUserImage(imageUri: String, email : String) {
         // Obtener una referencia a Firebase Storage
         val storage = Firebase.storage

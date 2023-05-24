@@ -142,10 +142,8 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                                 .add(userdb)
                                 .addOnSuccessListener { documentReference ->
                                     Log.d(TAG, "DocumentSnapshot written with ID: ${documentReference.id}")
-                                    // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success")
                                     sendVerificationEmail()
-                                    /*name.value?.let { it2 -> writeNewUser(documentReference.id, it2, email.value!!) }*/
                                     _petImageUri.value?.let { it2 -> uploadUserImage(it2,
                                         email.value!!
                                     ) }

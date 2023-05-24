@@ -58,7 +58,7 @@ class ChatViewModel() : ViewModel() {
 
     init {
 
-        getUsers()
+        getFriendList()
 
     }
 
@@ -66,25 +66,6 @@ class ChatViewModel() : ViewModel() {
     fun updateMessage(message: String) {
         _message.value = message
     }
-
-
-    fun addMessage() {
-        val message: String = _message.value ?: throw IllegalArgumentException("message empty")
-        if (message.isNotEmpty()) {
-            Firebase.firestore.collection(Constants.MESSAGES).document().set(
-                hashMapOf(
-                    Constants.MESSAGE to message,
-                    Constants.SENT_BY to Firebase.auth.currentUser?.uid,
-                    Constants.SENT_TO to System.currentTimeMillis()
-                )
-            ).addOnSuccessListener {
-                _message.value = ""
-            }
-        }
-    }
-
-
-
 
     fun sendMessage(message: String) {
         val currentUser = auth.currentUser
@@ -147,11 +128,6 @@ class ChatViewModel() : ViewModel() {
         }
     }
 
-    public fun callGetMessages(message: String) {
-        viewModelScope.launch {
-            sendMessage(message)
-        }
-    }
 
     fun getMessages(chatId: String) {
         val currentUser = auth.currentUser
@@ -198,9 +174,47 @@ class ChatViewModel() : ViewModel() {
         _messages.value = messageList.asReversed()
     }
 
+    fun  getFriendList(){
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            var email = auth.currentUser?.email
+            email?.let {
+                Firebase.firestore.collection(Constants.PENDING_REQUESTS)
+                    .whereArrayContains(Constants.EMAILS, it)
+                    .whereEqualTo(Constants.STATE, Constants.ACCEPTED)
+                    .addSnapshotListener { value, error ->
 
-    fun getUsers() {
+                        if (value != null) {
+                            var userList = mutableListOf<String>()
+                            for (doc in value) {
+                                val requestData = doc.data as MutableMap<String, String>
+                                val sentTo  = requestData[Constants.SENT_TO]
+                                val sentBy  = requestData[Constants.SENT_BY]
+                                if (!sentTo.equals(auth.currentUser!!.email)){
+                                    if (sentTo != null && !userList.contains(sentTo)) {
+                                        userList.add(sentTo)
+                                    }
+                                }else {
+                                    if (sentBy != null &&  !userList.contains(sentBy)) {
+                                        userList.add(sentBy)
+                                    }
+                                }
+                            }
+                            if (!userList.isEmpty()) {
+                                getUsers(userList)
+                            }
+                        }
+
+
+                    }
+            }
+        }
+    }
+
+    fun getUsers(friendList: List<String>) {
+
         Firebase.firestore.collection("users")
+            .whereIn(Constants.EMAIL, friendList)
             .addSnapshotListener { value, e ->
                 if (e != null) {
                     Log.w(Constants.TAG, "Listen failed.", e)

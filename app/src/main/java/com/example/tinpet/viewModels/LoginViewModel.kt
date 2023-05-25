@@ -1,31 +1,26 @@
-package com.example.tinpet.screens
+package com.example.tinpet.viewModels
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Application
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
+import com.example.tinpet.screens.Constants
+import com.example.tinpet.screens.UiState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.StorageReference
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.ktx.storage
-import java.io.FileNotFoundException
-class LoginViewModel(context: Context, navController: NavController) : ViewModel() {
+
+class LoginViewModel(context: Context) : ViewModel() {
     //Context parameter
     private val applicationContext = context.applicationContext
 
@@ -84,6 +79,7 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
     val addpetEnable: LiveData<Boolean> = _addpetEnable
 
     var uiState = mutableStateOf<UiState>(UiState.SignedOut)
+    private var token = ""
 
     fun onLoginChanged(email: String, password: String) {
         _email.value= email
@@ -104,6 +100,7 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
         _petImageUri.value = petimage
         _addpetEnable.value = isValidPetCategory(petcategory) && isValidPetName(petname) && isValidPetAge(petage) && isValidPetImage(petimage)
     }
+
     fun login(context: Context){
         email.value?.let {
             password.value?.let { it1 ->
@@ -112,8 +109,33 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                         if (task.isSuccessful) {
                             // Si es correcto el login sale un mensaje al usuario y se envia el email
                             Log.d(TAG, "signInWithEmail:success")
+                            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                                if (!task.isSuccessful) {
+                                    // maneja el error aquí
+                                    return@addOnCompleteListener
+                                }
+                                token = task.result
+                                Log.d("FCM", "Token: $token") // agrega esta línea
+
+                                val userEmail = auth.currentUser?.email
+                                Log.d("Firestore", "EMAIL: $userEmail")
+                                if (userEmail != null) {
+                                    Firebase.firestore.collection("users")
+                                        .whereEqualTo("Email", userEmail)
+                                        .get()
+                                        .addOnSuccessListener { documents ->
+                                            for (document in documents) {
+                                                document.reference.update("fcmToken", token)
+                                            }
+                                            Log.d("Firestore", "Documento actualizado correctamente")
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.w("Firestore", "Error al actualizar el documento", e)
+                                        }
+                                }
+                            }
                             checkIfEmailVerified()
-                            /*saveUserInfo(context, email.value!!, password.value!!)*/
+                            saveUserInfo(context, email.value!!)
                         } else {
                             // Si el login falla sale un mensaje al usuario
                             Log.w(TAG, "signInWithEmail:failure", task.exception)
@@ -137,8 +159,10 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                                 "Petage" to petage.value,
                                 "Category" to petcategory.value,
                                 "Friends" to ArrayList<String>(),
+                                "fcmToken" to token
                             )
                             Firestore.collection("users")
+
                                 .add(userdb)
                                 .addOnSuccessListener { documentReference ->
                                     Log.d(TAG, "DocumentSnapshot written with ID: ${documentReference.id}")
@@ -151,6 +175,7 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
                                     Toast.makeText(context, "Se ha creado su cuenta correctamente",
                                          Toast.LENGTH_SHORT).show()
                                 }
+
                                 .addOnFailureListener { e ->
                                     Log.w(TAG, "Error adding document", e)
                                 }
@@ -182,15 +207,21 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
             FirebaseAuth.getInstance().signOut()
         }
     }
-    /*fun saveUserInfo(context: Context, username: String, password: String) {
+    private fun saveUserInfo(context: Context, username: String) {
         val sharedPreferences = context.getSharedPreferences("user_info", Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {
             putString("username", username)
-            putString("password", password)
             apply()
         }
-    }*/
-    fun uploadUserImage(imageUri: String, email : String) {
+    }
+    fun clearUserInfo(context: Context) {
+        val sharedPreferences = context.getSharedPreferences("user_info", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            clear()
+            apply()
+        }
+    }
+    private fun uploadUserImage(imageUri: String, email : String) {
         // Obtener una referencia a Firebase Storage
         val storage = Firebase.storage
         val storageRef = storage.reference
@@ -205,10 +236,11 @@ class LoginViewModel(context: Context, navController: NavController) : ViewModel
             userImageRef.downloadUrl.addOnSuccessListener { uri ->
                 Firebase.firestore.collection(Constants.USERS)
                     .whereEqualTo(Constants.EMAIL, email)
-                    .addSnapshotListener { value, error ->
+                    .addSnapshotListener { value, _ ->
                         if (value != null) {
                             for (doc in value) {
-                                Firebase.firestore.collection(Constants.USERS).document(doc.id).update(Constants.PHOTO, uri.toString())
+                                Firebase.firestore.collection(Constants.USERS).document(doc.id).update(
+                                    Constants.PHOTO, uri.toString())
 
 
                             }

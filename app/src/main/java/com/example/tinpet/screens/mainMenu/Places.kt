@@ -1,6 +1,9 @@
 package com.example.tinpet.screens.mainMenu
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.location.Location
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,6 +17,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,15 +26,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import com.example.tinpet.R
+import com.example.tinpet.viewModels.PlacesViewModel
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun PlacesScreen() {
-    val spain = stringResource(R.string.spain_ES)
+fun PlacesScreen(
+    viewModel: PlacesViewModel
+) {
+    viewModel.loadPlaces()
     val context = LocalContext.current
+
+    val title: String by viewModel.title.observeAsState(initial = "")
+    val markers:List<MarkerOptions> by viewModel.markers.observeAsState(initial = listOf())
+
     var search by remember { mutableStateOf("") }
     val properties by remember {
         mutableStateOf(
@@ -89,37 +102,16 @@ fun PlacesScreen() {
     }
     val defaultPosition = countries.first().third
     val selectedCountry = remember { mutableStateOf(countries.first()) }
-    val expanded = remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
     var showDialog2 by remember { mutableStateOf(false) }
     var selectedLatLng by remember { mutableStateOf<LatLng?>(null) }
-    var title by remember { mutableStateOf("") }
     var isTitleEmpty by remember { mutableStateOf(false) }
-    var snippet by remember { mutableStateOf("") }
     var isRBEmpty by remember {mutableStateOf(false)}
     val selectedRadioButton = remember { mutableStateOf(0) }
-    var cameraPositionState = rememberCameraPositionState {
+    val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(defaultPosition, 5.5f)
     }
-    val defaultMarkers = listOf(
-        MarkerOptions()
-            .position(LatLng(40.421290016336684, -3.543930244461727))
-            .title("Parque la Colina")
-            .snippet("Muy transcurrido"),
-        MarkerOptions()
-            .position(LatLng(40.46036862008319, -3.450723624671722))
-            .title("Parque de la Mancha Amarilla")
-            .snippet("Transcurrido"),
-        MarkerOptions()
-            .position(LatLng(40.42373493132333, -3.53992243227222))
-            .title("Parque canino")
-            .snippet("Poco transcurrido"),
-        MarkerOptions()
-            .position(LatLng(22.678290518593332, -73.82836630373427))
-            .title("Avión hundido")
-            .snippet("Triángulo de las Bermudas")
-    )
-    var markers by remember { mutableStateOf(defaultMarkers) }
+
     Scaffold(
         topBar = {
             Row(
@@ -154,7 +146,7 @@ fun PlacesScreen() {
                     contentDescription = null,
                     Modifier
                         .size(25.dp)
-                        .clickable { showDialog2 = if (showDialog2) false else true }
+                        .clickable { showDialog2 = !showDialog2 }
                 )
             }
         },
@@ -182,9 +174,8 @@ fun PlacesScreen() {
                                 OutlinedTextField(
                                     modifier=Modifier.padding(top=16.dp),
                                     value = title,
-                                    onValueChange = { newTitle ->
-                                        title = newTitle
-                                        isTitleEmpty = newTitle.isEmpty()
+                                    onValueChange = {newTitle ->
+                                        viewModel.setTitle(newTitle)
                                     },
                                     isError = isTitleEmpty,
                                     label = {
@@ -214,7 +205,7 @@ fun PlacesScreen() {
                                             selected = selectedRadioButton.value == 1,
                                             onClick = {
                                                 selectedRadioButton.value = 1
-                                                snippet = "Muy transcurrido"
+                                                viewModel.setSnippet("Muy transcurrido")
                                             }
                                         )
                                         Text("Muy transcurrido")
@@ -229,7 +220,7 @@ fun PlacesScreen() {
                                             selected = selectedRadioButton.value == 2,
                                             onClick = {
                                                 selectedRadioButton.value = 2
-                                                snippet = "Transcurrido"
+                                                viewModel.setSnippet("Transcurrido")
                                             }
                                         )
                                         Text("Transcurrido")
@@ -244,14 +235,14 @@ fun PlacesScreen() {
                                             selected = selectedRadioButton.value == 3,
                                             onClick = {
                                                 selectedRadioButton.value = 3
-                                                snippet = "Poco transcurrido"
+                                                viewModel.setSnippet("Poco transcurrido")
                                             }
                                         )
                                         Text("Poco transcurrido")
                                     }
                                 }
                                 if(isRBEmpty){
-                                    Text("Se debe elegir una categoría",color=MaterialTheme.colors.error,modifier=Modifier.padding(bottom=8.dp))
+                                    Text("Se debe elegir una categoría", color=MaterialTheme.colors.error,modifier=Modifier.padding(8.dp))
                                 }
 
                             }
@@ -264,7 +255,7 @@ fun PlacesScreen() {
                                         isTitleEmpty = true
                                     } else {
                                         if (selectedRadioButton.value != 0) {
-                                            val newMarker = MarkerOptions()
+                                            /*val newMarker = MarkerOptions()
                                                 .position(
                                                     selectedLatLng ?: LatLng(
                                                         0.0,
@@ -272,8 +263,8 @@ fun PlacesScreen() {
                                                     )
                                                 ) // Nueva posición del marcador
                                                 .title(title)
-                                                .snippet(snippet)
-                                            markers = markers + newMarker
+                                                .snippet(snippet)*/
+                                            //markers = markers + newMarker
                                             Toast.makeText(
                                                 context,
                                                 "Se ha añadido un nuevo parque",
@@ -282,6 +273,10 @@ fun PlacesScreen() {
                                             showDialog = false
                                             cameraPositionState.position =
                                                 CameraPosition.fromLatLngZoom(selectedLatLng!!, 20f)
+
+                                            // Llamada a la función places del ViewModel
+                                            viewModel.places()
+                                            viewModel.loadPlaces()
                                         }else{
                                             isRBEmpty=true
                                         }
@@ -359,6 +354,8 @@ fun PlacesScreen() {
                     uiSettings = uiSettings,
                     onMapLongClick = { latLng ->
                         selectedLatLng = latLng
+                        viewModel.setLatitude(latLng.latitude)
+                        viewModel.setLongitude(latLng.longitude)
                         showDialog = true
                     }
                 ) {

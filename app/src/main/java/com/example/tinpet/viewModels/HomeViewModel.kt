@@ -1,4 +1,4 @@
-package com.example.tinpet.screens.mainMenu
+package com.example.tinpet.viewModels
 
 import android.content.ContentValues
 import android.net.Uri
@@ -6,13 +6,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.tinpet.screens.Constants
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import kotlinx.coroutines.launch
 
 class HomeViewModel() : ViewModel() {
 

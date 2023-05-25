@@ -4,16 +4,15 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.tinpet.AppScreens
-import com.example.tinpet.MainScreen
 import com.example.tinpet.screens.*
 import com.example.tinpet.screens.mainMenu.*
 import com.example.tinpet.screens.mainMenu.profile.*
 import com.example.tinpet.screens.mainMenu.profile.settings.*
+import com.example.tinpet.viewModels.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -26,10 +25,9 @@ fun NavGraph(
         startDestination = AppScreens.Home.route
     ){
         composable(route=AppScreens.Places.route){
-            PlacesScreen()
-        }
-        composable(route=AppScreens.Connect.route){
-            ConnectScreen()
+            PlacesScreen(
+                viewModel = PlacesViewModel()
+            )
         }
         composable(route=AppScreens.Home.route){
             HomeScreen(
@@ -64,13 +62,10 @@ fun NavGraph(
                 onPetClick = {
                     navController.navigate(AppScreens.Pets.route)
                 },
-                onFrdClick = {
-                    navController.navigate(AppScreens.Friends.route)
-                },
                 onRqtClick ={
                     navController.navigate(AppScreens.Requests.route)
                 },
-                viewModel = LoginViewModel(LocalContext.current, navController)
+                viewModel = LoginViewModel(LocalContext.current)
             )
         }
         composable(route = AppScreens.Pets.route){
@@ -108,29 +103,7 @@ fun NavGraph(
                 onChatClick = {
                     navController.navigate(AppScreens.Chat.route)
                 },
-                        viewModel = RequestsViewModel()
-            )
-        }
-        composable(route = AppScreens.Friends.route){
-            FriendsScreen(
-                onBackClick = {
-                    navController.popBackStack()
-                    navController.navigate(AppScreens.Profile.route)
-                },
-                onPetClick = {
-                    navController.navigate(AppScreens.PetProfile.route)
-                },
-                onChatClick = {
-                    navController.navigate(AppScreens.Chat.route)
-                }
-            )
-        }
-        composable(route = AppScreens.Notifications.route){
-            NotificationsScreen(
-                onBackClick = {
-                    navController.popBackStack()
-                    navController.navigate(AppScreens.Settings.route)
-                }
+                viewModel = RequestsViewModel(LocalContext.current)
             )
         }
         composable(route = AppScreens.AboutUs.route){
@@ -141,7 +114,14 @@ fun NavGraph(
                 }
             )
         }
-        composable(route = AuthScreen.Login.route,deepLinks = listOf(navDeepLink {uriPattern = "android-app://androidx.navigation/auth_graph"})        ){
+        composable(
+            route = AuthScreen.Login.route,
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "android-app://androidx.navigation/auth_graph"
+                }
+            )
+        ){
             LoginScreen (
                 onClick = {
                     navController.popBackStack()
@@ -151,7 +131,7 @@ fun NavGraph(
                     navController.popBackStack()
                     navController.navigate(AppScreens.Signup.route)
                 },
-                viewModel = LoginViewModel(LocalContext.current, navController)
+                viewModel = LoginViewModel(LocalContext.current)
             )
         }
         composable(AppScreens.Signup.route){
@@ -165,27 +145,18 @@ fun NavGraph(
                     navController.navigate(Graph.AUTHENTICATION)
                 },
 
-                viewModel = LoginViewModel(LocalContext.current, navController)
+                viewModel = LoginViewModel(LocalContext.current)
 
             )
 
         }
         composable(AppScreens.Verify.route){
             VerifyEmailScreen(
-                viewModel = LoginViewModel(LocalContext.current, navController),
+                viewModel = LoginViewModel(LocalContext.current),
                 onClick = {
                     navController.popBackStack()
                     navController.navigate(Graph.AUTHENTICATION)
                 }
-            )
-        }
-        composable(AppScreens.Addpet.route){
-            AddPetScreen(
-                onClick = {
-                    navController.popBackStack()
-                    navController.navigate(Graph.AUTHENTICATION)
-                },
-                viewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
         composable(route = AppScreens.Settings.route){
@@ -210,12 +181,11 @@ fun NavGraph(
                     //navController.navigate(NavDeepLinkRequest(Uri.parse("android-app://androidx.navigation/auth_graph")))
                     //navController.navigate(NavDeepLinkRequest.Builder.fromUri("android-app://androidx.navigation/auth_graph".toUri()).build())
                 },
-                onNotifyClick = {
-                    navController.navigate(AppScreens.Notifications.route)
-                },
+                viewModel = LoginViewModel(LocalContext.current),
                 onAboutClick = {
                     navController.navigate(AppScreens.AboutUs.route)
                 }
+
             )
         }
     }

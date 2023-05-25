@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +23,8 @@ import androidx.compose.material.icons.filled.AppRegistration
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,24 +38,28 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.compose.rememberNavController
+import com.example.tinpet.graphs.Graph
 import com.example.tinpet.graphs.MainNavigationGraph
 import com.example.tinpet.graphs.NavGraph
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
-
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
+@RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : ComponentActivity() {
+
     private val requestPermissionsCode = 100
     private var showSet:Boolean  = false;
     private val permissionsToRequest = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-    /*fun checkIfUserIsLoggedIn(context: Context): Boolean {
+    fun checkIfUserIsLoggedIn(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences("user_info", Context.MODE_PRIVATE)
         val username = sharedPreferences.getString("username", null)
-        val password = sharedPreferences.getString("password", null)
-        return username != null && password != null
-    }*/
-    @RequiresApi(Build.VERSION_CODES.O)
+        return username != null
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        /*val intent = Intent(this, FirebaseMessaging::class.java)
+        startService(intent)*/
         val permissionsDenied = permissionsToRequest.filter {
                 ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_DENIED
             }
@@ -64,9 +71,17 @@ class MainActivity : ComponentActivity() {
                 // Todos los permisos fueron otorgados
                 setContent {
                     TinPetTheme {
-                        MainNavigationGraph(
-                            navController = rememberNavController()
-                        )
+                        if (checkIfUserIsLoggedIn(this)) {
+                            // Navega directamente al gráfico Graph.MAIN
+                            MainNavigationGraph(navController = rememberNavController(),
+                                isLoggedIn=checkIfUserIsLoggedIn(this)
+                            )
+                        } else {
+                            // Muestra el gráfico de autenticación
+                            MainNavigationGraph(navController = rememberNavController(),
+                                isLoggedIn=checkIfUserIsLoggedIn(this)
+                            )
+                        }
                     }
                 }
             } else {
@@ -77,7 +92,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
     }
-    override fun onRequestPermissionsResult(requestCode: Int,permissions: Array<out String>,grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == requestPermissionsCode) {
@@ -89,9 +104,18 @@ class MainActivity : ComponentActivity() {
                 // Todos los permisos fueron otorgados
                 setContent {
                     TinPetTheme {
-                        MainNavigationGraph(
-                            navController = rememberNavController()
-                        )
+                        if (checkIfUserIsLoggedIn(this)) {
+                            // Navega directamente al gráfico Graph.MAIN
+                            MainNavigationGraph(navController = rememberNavController(),
+                                isLoggedIn=checkIfUserIsLoggedIn(this)
+                            )
+
+                        } else {
+                            // Muestra el gráfico de autenticación
+                            MainNavigationGraph(navController = rememberNavController(),
+                                isLoggedIn=checkIfUserIsLoggedIn(this)
+                            )
+                        }
                     }
                 }
             } else {
@@ -148,9 +172,6 @@ fun DefaultText(permissionsDenied: List<String>, requestPermissionsCode: Int, sh
                                     " todos los permisos que se le soliciten y así disfrute de una experiencia completa." +
                                     " Sin ellos, algunas funcionalidades podrían estar limitadas o no estar disponibles." +
                                     "\n\n" +
-                                    "Si no está seguro de qué permisos se están solicitando," +
-                                    " revise la lista y lea las descripciones cuidadosamente." +
-                                    "\n\n" +
                                     "Si no los otorga se le dará la opción de acceder a la configuración" +
                                     " de la aplicación para que lo haga desde ahí o limpie el almacenamiento de la aplicación" +
                                     " y vuelva a ejecutarla y se soliciten correctamente." +
@@ -180,6 +201,7 @@ fun DefaultText(permissionsDenied: List<String>, requestPermissionsCode: Int, sh
                 if (showSet) {
                     Button(
                         onClick = {
+                            Firebase.messaging.subscribeToTopic("Prueba")
                             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                             val uri: Uri = Uri.fromParts("package", "com.example.tinpet", null)
                             intent.data = uri
@@ -228,3 +250,5 @@ fun DefaultText(permissionsDenied: List<String>, requestPermissionsCode: Int, sh
 
 
 }
+
+

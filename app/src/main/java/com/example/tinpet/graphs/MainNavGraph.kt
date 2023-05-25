@@ -5,21 +5,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navDeepLink
 import com.example.tinpet.AppScreens
 import com.example.tinpet.MainScreen
 import com.example.tinpet.screens.*
-import com.example.tinpet.screens.AddPetScreen
 import com.example.tinpet.screens.mainMenu.HomeScreen
-import com.example.tinpet.screens.mainMenu.HomeViewModel
+import com.example.tinpet.viewModels.HomeViewModel
+import com.example.tinpet.viewModels.LoginViewModel
 
 
 @Composable
-fun MainNavigationGraph(navController: NavHostController) {
+fun MainNavigationGraph(navController: NavHostController, isLoggedIn:Boolean) {
     NavHost(
         navController = navController,
         route = Graph.ROOT,
-        startDestination = /*if(isLoggedIn) AppScreens.Home.route else*/ AppScreens.Splash.route
+        startDestination = if (isLoggedIn) Graph.MAIN else AppScreens.Splash.route
     ) {
         authNavGraph(navController)
         composable(Graph.MAIN) {
@@ -43,25 +42,16 @@ fun MainNavigationGraph(navController: NavHostController) {
                     navController.popBackStack()
                     navController.navigate(Graph.AUTHENTICATION)
                 },
-                viewModel = LoginViewModel(LocalContext.current, navController)
+                viewModel = LoginViewModel(LocalContext.current)
             )
         }
         composable(AppScreens.Verify.route){
             VerifyEmailScreen(
-                viewModel = LoginViewModel(LocalContext.current, navController),
+                viewModel = LoginViewModel(LocalContext.current),
                 onClick = {
                     navController.popBackStack()
                     navController.navigate(Graph.AUTHENTICATION)
                 }
-            )
-        }
-        composable(AppScreens.Addpet.route){
-            AddPetScreen(
-                onClick = {
-                    navController.popBackStack()
-                    navController.navigate(Graph.MAIN)
-                },
-                viewModel = LoginViewModel(LocalContext.current, navController)
             )
         }
         composable(AppScreens.Index.route){

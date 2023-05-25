@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tinpet.AppScreens
 import com.example.tinpet.R
-import com.example.tinpet.screens.LoginViewModel
 import com.example.tinpet.ui.theme.abrilFatface
+import com.example.tinpet.viewModels.ChatViewModel
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

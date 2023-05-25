@@ -14,10 +14,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
 
-class ChatViewModel() : ViewModel() {
+class ChatViewModel : ViewModel() {
     //region VARIABLES
 
     var selectedUserName: String? = null
@@ -45,6 +44,7 @@ class ChatViewModel() : ViewModel() {
     private val _usernames = MutableLiveData(emptyList<Map<String, String>>().toMutableList())
     val usernames: LiveData<MutableList<Map<String, String>>> = _usernames
 
+    val chatTimes = MutableLiveData<List<Date>>()
 
     //endregion
 
@@ -61,6 +61,21 @@ class ChatViewModel() : ViewModel() {
         _message.value = message
     }
 
+    fun getChatTimes() {
+        val times = mutableListOf<Date>()
+        Firebase.firestore.collection(Constants.CHATS)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val sentAt = document.getTimestamp(Constants.SENT_AT)
+                    if (sentAt != null) {
+                        times.add(sentAt.toDate())
+                    }
+                }
+                chatTimes.value = times
+            }
+    }
+
     fun sendMessage(message: String) {
         val currentUser = auth.currentUser
         //Variable temporal
@@ -74,31 +89,31 @@ class ChatViewModel() : ViewModel() {
                     it
                 )
             }
-           if(chatRef == null) {
-               val userData = _chatUserDocument.value?.data
-               val chat = hashMapOf(
-                   Constants.USERS to userData?.let {
-                       listOf(
-                           currentUser.email,
-                           it[Constants.EMAIL]
-                       )
-                   },
-                 Constants.MESSAGES to kotlin.collections.listOf(
-                      hashMapOf(
-                           Constants.SENT_BY to currentUser.email.toString(),
-                           Constants.MESSAGE to message,
-                           Constants.SENT_AT to java.util.Date()
-                       )
-                   )
-               )
-               Firebase.firestore.collection(Constants.CHATS)
-                   .add(chat)
-                   .addOnSuccessListener { documentReference ->
-                       Log.w(ContentValues.TAG, "Success adding document" )
-                   }
-                   .addOnFailureListener { e ->
-                       Log.w(ContentValues.TAG, "Error adding document", e)
-                   }
+            if (chatRef == null) {
+                val userData = _chatUserDocument.value?.data
+                val chat = hashMapOf(
+                    Constants.USERS to userData?.let {
+                        listOf(
+                            currentUser.email,
+                            it[Constants.EMAIL]
+                        )
+                    },
+                    Constants.MESSAGES to listOf(
+                        hashMapOf(
+                            Constants.SENT_BY to currentUser.email.toString(),
+                            Constants.MESSAGE to message,
+                            Constants.SENT_AT to Date()
+                        )
+                    )
+                )
+                Firebase.firestore.collection(Constants.CHATS)
+                    .add(chat)
+                    .addOnSuccessListener { documentReference ->
+                        Log.w(ContentValues.TAG, "Success adding document")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(ContentValues.TAG, "Error adding document", e)
+                    }
             }
             chatRef?.get()?.addOnSuccessListener { document ->
                 if (document.exists()) {
@@ -121,7 +136,6 @@ class ChatViewModel() : ViewModel() {
             }
         }
     }
-
     fun getMessages(chatId: String) {
         val currentUser = auth.currentUser
         val userData = chatUserDocument.value?.data
@@ -139,13 +153,19 @@ class ChatViewModel() : ViewModel() {
                                 var chatData = doc.data
 
                                 val users = chatData[Constants.USERS] as ArrayList<*>
-                                val contieneTodos = users.all { valor -> listOf(it,userData.get(Constants.EMAIL)).contains(valor) }
-                                if (contieneTodos){
+                                val contieneTodos = users.all { valor ->
+                                    listOf(
+                                        it,
+                                        userData.get(Constants.EMAIL)
+                                    ).contains(valor)
+                                }
+                                if (contieneTodos) {
                                     _chatId.value = doc.id
                                     val messages = chatData[Constants.MESSAGES] as ArrayList<*>
                                     val reversedMessages = messages.reversed()
                                     viewModelScope.launch {
-                                        _messagesState.value = reversedMessages as List<Map<String, String>>
+                                        _messagesState.value =
+                                            reversedMessages as List<Map<String, String>>
 
                                     }
                                 }
@@ -167,7 +187,7 @@ class ChatViewModel() : ViewModel() {
         _messages.value = messageList.asReversed()
     }
 
-    fun  getFriendList(){
+    fun getFriendList() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             var email = auth.currentUser?.email
@@ -181,14 +201,14 @@ class ChatViewModel() : ViewModel() {
                             var userList = mutableListOf<String>()
                             for (doc in value) {
                                 val requestData = doc.data as MutableMap<String, String>
-                                val sentTo  = requestData[Constants.SENT_TO]
-                                val sentBy  = requestData[Constants.SENT_BY]
-                                if (!sentTo.equals(auth.currentUser!!.email)){
+                                val sentTo = requestData[Constants.SENT_TO]
+                                val sentBy = requestData[Constants.SENT_BY]
+                                if (!sentTo.equals(auth.currentUser!!.email)) {
                                     if (sentTo != null && !userList.contains(sentTo)) {
                                         userList.add(sentTo)
                                     }
-                                }else {
-                                    if (sentBy != null &&  !userList.contains(sentBy)) {
+                                } else {
+                                    if (sentBy != null && !userList.contains(sentBy)) {
                                         userList.add(sentBy)
                                     }
                                 }
@@ -244,7 +264,6 @@ class ChatViewModel() : ViewModel() {
     }
 
 
-
     fun getChat(chatUserId: String) {
         val userRef = Firebase.firestore.collection(Constants.USERS).document(chatUserId)
         userRef.get()
@@ -267,11 +286,18 @@ class ChatViewModel() : ViewModel() {
                                             var chatData = doc.data
 
                                             val users = chatData[Constants.USERS] as ArrayList<*>
-                                            val contieneTodos = users.all { valor -> listOf(it,userData.get(Constants.EMAIL)).contains(valor) }
-                                            if (contieneTodos){
+                                            val contieneTodos = users.all { valor ->
+                                                listOf(
+                                                    it,
+                                                    userData.get(Constants.EMAIL)
+                                                ).contains(valor)
+                                            }
+                                            if (contieneTodos) {
                                                 _chatId.value = doc.id
-                                                val messages = chatData[Constants.MESSAGES] as ArrayList<*>
-                                                _messagesState.value = messages as List<Map<String, String>>
+                                                val messages =
+                                                    chatData[Constants.MESSAGES] as ArrayList<*>
+                                                _messagesState.value =
+                                                    messages as List<Map<String, String>>
 
                                             }
                                             println("El array contiene todos los valores especificados: $contieneTodos")
@@ -286,12 +312,12 @@ class ChatViewModel() : ViewModel() {
 
             }
             .addOnFailureListener { e ->
-                Log.w(Constants.TAG, "Error al obtener el usuario existente",)
+                Log.w(Constants.TAG, "Error al obtener el usuario existente")
             }
     }
 
 
-    fun isCurrentUserMessage(message : Map<String, String> ): Boolean {
+    fun isCurrentUserMessage(message: Map<String, String>): Boolean {
 
         return message[Constants.SENT_BY] == auth.currentUser?.email
     }

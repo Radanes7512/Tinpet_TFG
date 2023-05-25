@@ -33,33 +33,45 @@ import androidx.core.app.NotificationCompat
 import com.example.tinpet.MainActivity
 //import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.tinpet.R
+import com.example.tinpet.viewModels.LoginViewModel
 import com.example.tinpet.ui.theme.abrilFatface
 import com.example.tinpet.viewModels.ChatViewModel
 import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnspecifiedImmutableFlag")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ChatScreen(
+
     chatUserId: String,
     message: String = "",
     viewModel: ChatViewModel,
     onBackClick: () -> Unit,
     onPetClick: () -> Unit
 ) {
-    val context = LocalContext.current
 
     viewModel.getChat(chatUserId)
     viewModel.chatId.value?.let { viewModel.getMessages(it) }
+    val context = LocalContext.current
 
     // Guardar el estado de la lista
+
     val listState = rememberLazyListState()
+
+    val users by viewModel.usernames.observeAsState(listOf())
+
     val messages: List<Map<String, String>> by viewModel.messagesState.observeAsState(emptyList<Map<String, String>>().toMutableList())
+
+
     val message: String by viewModel.message.observeAsState("")
+
+
 
     // Agregar un mensaje
     @Composable
     fun addMessage() {
+        // Tu código para agregar el mensaje
+
         // Después de agregar el mensaje, animar el scroll hasta el último elemento de la lista
         LaunchedEffect(Unit) {
             listState.animateScrollToItem(messages.lastIndex)
@@ -71,10 +83,14 @@ fun ChatScreen(
         topBar = {
             TopAppBar(
                 title = {
+                    users.forEach { user ->
+                        user.get("name")?.let {
                             Text(
-                                text = "Chat",
+                                text = it,
                                 fontFamily = abrilFatface
                             )
+                        }
+                    }
                 },
                 navigationIcon = {
                     IconButton(onClick = { onBackClick() }) {
@@ -141,7 +157,7 @@ fun ChatScreen(
                                     // IMAGEN DEL USUARIO
                                     Image(
                                         modifier = Modifier
-                                            .clickable { /*onPetClick()*/ }
+                                            .clickable { onPetClick()}
                                             .clip(CircleShape)
                                             .size(25.dp)
                                             .align(alignment = Alignment.CenterVertically),
@@ -151,11 +167,12 @@ fun ChatScreen(
                                     // MENSAJE
                                     msg.get("message")?.let { it1 ->
                                         addMessage()
-                                        if(!viewModel.isCurrentUserMessage(msg)){
+                                        /*if(!viewModel.isCurrentUserMessage(msg)){
                                             //region NOTIFICACION
                                             val intent = Intent(context, MainActivity::class.java)
                                             val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-                                            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                                            val notificationManager = context.getSystemService(
+                                                Context.NOTIFICATION_SERVICE) as NotificationManager
                                             val channelId = "Chat Notifications"
                                             val channelName = "Chat Notifications"
                                             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
@@ -171,8 +188,7 @@ fun ChatScreen(
                                                 .setAutoCancel(true)
                                                 .build()
                                             notificationManager.notify(0,notification)
-                                            //endregion
-                                        }
+                                            //endregion*/
                                         Text(
                                             text = it1,
                                             color = MaterialTheme.colors.onBackground,
@@ -180,7 +196,7 @@ fun ChatScreen(
                                         )
                                     }
                                 }
-                                //region FECHA Y HORA DEL MENSAJE
+                                // FECHA Y HORA DEL MENSAJE
                                 Row(
                                     horizontalArrangement = Arrangement.End,
                                     modifier = Modifier
@@ -218,7 +234,6 @@ fun ChatScreen(
                                      )
                                      */
                                 }
-                                //endregion
                             }
                         }
                     }
@@ -267,3 +282,9 @@ fun ChatScreen(
         //endregion
     )
 }
+
+/*i
+
+    val chatTimes by viewModel.chatTimes.observeAsState(emptyList())
+    val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+                                        }*/

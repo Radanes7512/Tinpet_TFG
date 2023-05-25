@@ -1,6 +1,8 @@
 package com.example.tinpet
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -58,8 +60,17 @@ class MainActivity : ComponentActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*val intent = Intent(this, FirebaseMessaging::class.java)
-        startService(intent)*/
+
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (!notificationManager.areNotificationsEnabled()) {
+                val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                startActivity(intent)
+            }
+
+        }*/
+
         val permissionsDenied = permissionsToRequest.filter {
                 ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_DENIED
             }

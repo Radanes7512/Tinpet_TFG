@@ -1,5 +1,7 @@
 package com.example.tinpet.graphs
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
@@ -13,6 +15,7 @@ import com.example.tinpet.viewModels.HomeViewModel
 import com.example.tinpet.viewModels.LoginViewModel
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainNavigationGraph(navController: NavHostController, isLoggedIn:Boolean) {
     NavHost(

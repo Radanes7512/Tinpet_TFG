@@ -108,47 +108,7 @@ class LoginViewModel(context: Context) : ViewModel() {
             )
     }
 
-    init {
-        Firebase.firestore.collection(Constants.PENDING_REQUESTS)
-            .addSnapshotListener { snapshot, e ->
-                Log.d("Firestore", "Escuchando...")
-                if (e != null) {
-                    Log.d("Firestore", "ERROR")
-                    return@addSnapshotListener
-                }
-                if (snapshot != null && !snapshot.isEmpty) {
-                    Log.d("Firestore", "NOTIFICACION ENTRADA")
-                    for (document in snapshot.documents) {
-                        val email = document.getString(Constants.SENT_TO)
-                        Log.d("Firestore", "EMAIL: $email")
 
-                        if (email != null) {
-                            Firebase.firestore.collection(Constants.USERS)
-                                .whereEqualTo(Constants.EMAIL, email).get()
-                                .addOnSuccessListener { result ->
-                                    Log.d("Firestore", "Cogiendo TOKEN")
-                                    for (userDocument in result) {
-                                        val token = userDocument.getString("fcmToken")
-                                        Log.d("Firestore", "TOKEN: $token")
-                                        if (token != null) {
-                                            val title = "Nueva solicitud de amistad"
-                                            val body =
-                                                "Tienes una nueva solicitud de amistad pendiente"
-                                            sendNotification(title, body, token)
-                                        }
-                                    }
-                                }
-                        }
-                    }
-                }
-            }
-    }
-
-    private fun sendNotification(title: String, body: String, token: String) {
-        val message =
-            RemoteMessage.Builder(token).addData("title", title).addData("body", body).build()
-        FirebaseMessaging.getInstance().send(message)
-    }
 
     fun login(context: Context) {
         email.value?.let {

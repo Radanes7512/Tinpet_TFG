@@ -1,5 +1,6 @@
 package com.example.tinpet.viewModels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tinpet.screens.Constants
@@ -14,6 +15,7 @@ class PlacesViewModel: ViewModel() {
     private val _latitude = MutableLiveData<Double>()
     private val _longitude = MutableLiveData<Double>()
     private val _title = MutableLiveData<String>()
+    val title : LiveData<String> = _title
     private val _snippet = MutableLiveData<String>()
     val markers = MutableLiveData<List<MarkerOptions>>()
 

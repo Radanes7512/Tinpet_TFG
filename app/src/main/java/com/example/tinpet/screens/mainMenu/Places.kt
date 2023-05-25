@@ -41,7 +41,7 @@ fun PlacesScreen(
     viewModel.loadPlaces()
     val context = LocalContext.current
 
-    val title: String  = ""
+    val title: String  by viewModel.title.observeAsState(initial = "")
     val markers:List<MarkerOptions> by viewModel.markers.observeAsState(initial = listOf())
 
     var search by remember { mutableStateOf("") }

@@ -51,15 +51,12 @@ class PlacesViewModel: ViewModel() {
     fun setTitle(newTitle:String){
         _title.value=newTitle
     }
-
     fun setSnippet(newSnippet:String){
         _snippet.value = newSnippet
     }
-
     fun setLatitude(newLatitude: Double) {
         _latitude.value = newLatitude
     }
-
     fun setLongitude(newLongitude: Double) {
         _longitude.value = newLongitude
     }

@@ -74,60 +74,66 @@ class LoginViewModel(context: Context) : ViewModel() {
     private val _emailVerified = MutableLiveData<Boolean>()
     val emailVerified: LiveData<Boolean> = _emailVerified
 
-    var regState : Boolean = false
+    var regState: Boolean = false
 
     private val _addpetEnable = MutableLiveData<Boolean>()
     val addpetEnable: LiveData<Boolean> = _addpetEnable
 
     var uiState = mutableStateOf<UiState>(UiState.SignedOut)
-    var token = ""
+    private var token = ""
 
     fun onLoginChanged(email: String, password: String) {
-        _email.value= email
+        _email.value = email
         _password.value = password
         _loginEnable.value = isValidEmail(email) && isValidPassword(password)
     }
-    fun onSignupChanged(email: String,name: String,password: String, password2:String){
+
+    fun onSignupChanged(email: String, name: String, password: String, password2: String) {
         _name.value = name
-        _email.value= email
+        _email.value = email
         _password.value = password
         _password2.value = password2
-        _signupEnable.value = isValidEmail(email) && isValidName(name) && isValidPassword(password) && password == password2
-        }
-    fun onAddpetChanged(petname: String, petage: String, petcategory: String, petimage: String){
+        _signupEnable.value =
+            isValidEmail(email) && isValidName(name) && isValidPassword(password) && password == password2
+    }
+
+    fun onAddpetChanged(petname: String, petage: String, petcategory: String, petimage: String) {
         _petname.value = petname
         _petage.value = petage
         _petcategory.value = petcategory
         _petImageUri.value = petimage
-        _addpetEnable.value = isValidPetCategory(petcategory) && isValidPetName(petname) && isValidPetAge(petage) && isValidPetImage(petimage)
+        _addpetEnable.value =
+            isValidPetCategory(petcategory) && isValidPetName(petname) && isValidPetAge(petage) && isValidPetImage(
+                petimage
+            )
     }
 
     init {
         Firebase.firestore.collection(Constants.PENDING_REQUESTS)
             .addSnapshotListener { snapshot, e ->
-                Log.d("Firestore","Escuchando...")
+                Log.d("Firestore", "Escuchando...")
                 if (e != null) {
-                    Log.d("Firestore","ERROR")
+                    Log.d("Firestore", "ERROR")
                     return@addSnapshotListener
                 }
                 if (snapshot != null && !snapshot.isEmpty) {
-                    Log.d("Firestore","NOTIFICACION ENTRADA")
+                    Log.d("Firestore", "NOTIFICACION ENTRADA")
                     for (document in snapshot.documents) {
                         val email = document.getString(Constants.SENT_TO)
-                        Log.d("Firestore","EMAIL: $email")
+                        Log.d("Firestore", "EMAIL: $email")
 
                         if (email != null) {
                             Firebase.firestore.collection(Constants.USERS)
-                                .whereEqualTo(Constants.EMAIL, email)
-                                .get()
+                                .whereEqualTo(Constants.EMAIL, email).get()
                                 .addOnSuccessListener { result ->
-                                    Log.d("Firestore","Cogiendo TOKEN")
+                                    Log.d("Firestore", "Cogiendo TOKEN")
                                     for (userDocument in result) {
                                         val token = userDocument.getString("fcmToken")
-                                        Log.d("Firestore","TOKEN: $token")
+                                        Log.d("Firestore", "TOKEN: $token")
                                         if (token != null) {
                                             val title = "Nueva solicitud de amistad"
-                                            val body = "Tienes una nueva solicitud de amistad pendiente"
+                                            val body =
+                                                "Tienes una nueva solicitud de amistad pendiente"
                                             sendNotification(title, body, token)
                                         }
                                     }
@@ -139,13 +145,12 @@ class LoginViewModel(context: Context) : ViewModel() {
     }
 
     private fun sendNotification(title: String, body: String, token: String) {
-        val message = RemoteMessage.Builder(token)
-            .addData("title", title)
-            .addData("body", body)
-            .build()
+        val message =
+            RemoteMessage.Builder(token).addData("title", title).addData("body", body).build()
         FirebaseMessaging.getInstance().send(message)
     }
-    fun login(context: Context){
+
+    fun login(context: Context) {
         email.value?.let {
             password.value?.let { it1 ->
                 auth.signInWithEmailAndPassword(it, it1)
@@ -162,28 +167,30 @@ class LoginViewModel(context: Context) : ViewModel() {
                                 val userEmail = auth.currentUser?.email
                                 if (userEmail != null) {
                                     Firebase.firestore.collection("users")
-                                        .whereEqualTo("Email", userEmail)
-                                        .get()
+                                        .whereEqualTo("Email", userEmail).get()
                                         .addOnSuccessListener { documents ->
                                             for (document in documents) {
                                                 document.reference.update("fcmToken", token)
                                             }
                                         }
+
+                                    checkIfEmailVerified()
+                                    saveUserInfo(context, email.value!!)
+                                } else {
+                                    // Si el login falla sale un mensaje al usuario
+                                    Log.w(TAG, "signInWithEmail:failure", task.exception)
+                                    Toast.makeText(
+                                        context, "Authentication failed.", Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
-                            checkIfEmailVerified()
-                            saveUserInfo(context, email.value!!)
-                        } else {
-                            // Si el login falla sale un mensaje al usuario
-                            Log.w(TAG, "signInWithEmail:failure", task.exception)
-                            Toast.makeText(context, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show()
                         }
                     }
             }
         }
     }
-    fun register(context:Context){
+
+    fun register(context: Context) {
         email.value?.let {
             password.value?.let { it1 ->
                 auth.createUserWithEmailAndPassword(it, it1)
@@ -200,17 +207,24 @@ class LoginViewModel(context: Context) : ViewModel() {
                             )
                             Firestore.collection("users")
 
-                                .add(userdb)
-                                .addOnSuccessListener { documentReference ->
-                                    Log.d(TAG, "DocumentSnapshot written with ID: ${documentReference.id}")
+                                .add(userdb).addOnSuccessListener { documentReference ->
+                                    Log.d(
+                                        TAG,
+                                        "DocumentSnapshot written with ID: ${documentReference.id}"
+                                    )
                                     Log.d(TAG, "createUserWithEmail:success")
                                     sendVerificationEmail()
-                                    _petImageUri.value?.let { it2 -> uploadUserImage(it2,
-                                        email.value!!
-                                    ) }
+                                    _petImageUri.value?.let { it2 ->
+                                        uploadUserImage(
+                                            it2, email.value!!
+                                        )
+                                    }
                                     /*readUser()*/
-                                    Toast.makeText(context, "Se ha creado su cuenta correctamente",
-                                         Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        "Se ha creado su cuenta correctamente",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
 
                                 .addOnFailureListener { e ->
@@ -219,31 +233,34 @@ class LoginViewModel(context: Context) : ViewModel() {
                         } else {
 
                             Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                            Toast.makeText(context, "Ha ocurrido un error, en el registro",
-                                Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context, "Ha ocurrido un error, en el registro", Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
             }
         }
 
     }
+
     private fun sendVerificationEmail() {
         val user = auth.currentUser
-        user!!.sendEmailVerification()
-            .addOnCompleteListener { task ->
+        user!!.sendEmailVerification().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "Email sent.")
                 }
             }
     }
+
     private fun checkIfEmailVerified() {
         val user = auth.currentUser
-        if (user!!.isEmailVerified()) {
+        if (user!!.isEmailVerified) {
             uiState.value = UiState.SignIn
         } else {
             FirebaseAuth.getInstance().signOut()
         }
     }
+
     private fun saveUserInfo(context: Context, username: String) {
         val sharedPreferences = context.getSharedPreferences("user_info", Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {
@@ -251,6 +268,7 @@ class LoginViewModel(context: Context) : ViewModel() {
             apply()
         }
     }
+
     fun clearUserInfo(context: Context) {
         val sharedPreferences = context.getSharedPreferences("user_info", Context.MODE_PRIVATE)
         with(sharedPreferences.edit()) {
@@ -258,7 +276,8 @@ class LoginViewModel(context: Context) : ViewModel() {
             apply()
         }
     }
-    private fun uploadUserImage(imageUri: String, email : String) {
+
+    private fun uploadUserImage(imageUri: String, email: String) {
         // Obtener una referencia a Firebase Storage
         val storage = Firebase.storage
         val storageRef = storage.reference
@@ -271,13 +290,14 @@ class LoginViewModel(context: Context) : ViewModel() {
         uploadTask.addOnSuccessListener {
             // Obtener la URL de descarga
             userImageRef.downloadUrl.addOnSuccessListener { uri ->
-                Firebase.firestore.collection(Constants.USERS)
-                    .whereEqualTo(Constants.EMAIL, email)
+                Firebase.firestore.collection(Constants.USERS).whereEqualTo(Constants.EMAIL, email)
                     .addSnapshotListener { value, _ ->
                         if (value != null) {
                             for (doc in value) {
-                                Firebase.firestore.collection(Constants.USERS).document(doc.id).update(
-                                    Constants.PHOTO, uri.toString())
+                                Firebase.firestore.collection(Constants.USERS).document(doc.id)
+                                    .update(
+                                        Constants.PHOTO, uri.toString()
+                                    )
 
 
                             }
@@ -286,45 +306,20 @@ class LoginViewModel(context: Context) : ViewModel() {
             }
         }
     }
-    fun setImage (imageUri: Uri){
+
+    fun setImage(imageUri: Uri) {
         _petImageUri.value = imageUri.toString()
     }
+
     fun isValidPassword(password: String): Boolean = password.length >= 6
-    fun isValidEmail(email: String): Boolean  = email.contains("@") && (email.contains(".com") || email.contains(".es"))
+    fun isValidEmail(email: String): Boolean =
+        email.contains("@") && (email.contains(".com") || email.contains(".es"))
+
     fun isValidName(name: String): Boolean = name.length > 1
-    fun isValidPetName(petname:String): Boolean = petname.length > 1
-    fun isValidPetCategory(petcategory:String): Boolean = petcategory.isNotEmpty()
-    fun isValidPetAge(petage:String): Boolean = petage.toIntOrNull() in 1..30
+    fun isValidPetName(petname: String): Boolean = petname.length > 1
+    fun isValidPetCategory(petcategory: String): Boolean = petcategory.isNotEmpty()
+    fun isValidPetAge(petage: String): Boolean = petage.toIntOrNull() in 1..30
     fun isValidPetImage(petimage: String): Boolean = petimage.isNotEmpty()
 
-
-/*
-        val isImageExists = try {
-            context.checkUriPermission(petimage, null, null, Intent.FLAG_GRANT_READ_URI_PERMISSION) == PackageManager.PERMISSION_GRANTED
-        } catch (e: Exception) {
-            false
-        }
-        return isImageExists && petimage.isAbsolute
-    }
-    fun writeNewUser(userId: String, name: String, email: String) {
-        val user = User(name, email)
-        rtdb.child("users").child(userId).setValue(user)
-
-    }
-    fun readUser() {
-        rtdb.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-
-                val value = dataSnapshot.value as Map<String, Any>?
-                Log.d(TAG, "Value is: $value")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-
-                Log.w(TAG, "Failed to read value.", error.toException())
-            }
-        })
-    }
- */
 
 }

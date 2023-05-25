@@ -1,5 +1,12 @@
 package com.example.tinpet.screens.mainMenu
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -19,22 +26,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.NotificationCompat
 import coil.compose.AsyncImage
+import com.example.tinpet.MainActivity
 import com.example.tinpet.R
 import com.example.tinpet.screens.Constants
 import com.example.tinpet.ui.theme.abrilFatface
+import com.example.tinpet.viewModels.HomeViewModel
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel
 ) {
+    val context = LocalContext.current
     viewModel.getNonFriends()
     viewModel.getLoggedUser()
 
@@ -263,6 +276,26 @@ fun HomeScreen(
                                 viewModel.SendFriendRequests(userPets[currentIndex][Constants.EMAIL])
                                 petLiked = true
                                 onButtonClick(true)
+                                //region NOTIFICACION
+                                val intent = Intent(context, MainActivity::class.java)
+                                val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+                                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                                val channelId = "Home Notifications"
+                                val channelName = "Home Notifications"
+                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                                    notificationManager.createNotificationChannel(
+                                        NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+                                    )
+                                }
+                                val notification = NotificationCompat.Builder(context, channelId)
+                                    .setContentTitle("Solicitud enviada")
+                                    .setContentText("¡Has enviado una solicitud de amistad a $petname!")
+                                    .setSmallIcon(R.drawable.icon_pawprint)
+                                    /*.addAction(R.drawable.icon_pawprint,"Abrir aplicación",pendingIntent)*/
+                                    .setAutoCancel(true)
+                                    .build()
+                                notificationManager.notify(0,notification)
+                                //endregion
                             }
                             .size(70.dp)
                             .padding(bottom = 16.dp),

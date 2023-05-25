@@ -3,7 +3,6 @@ package com.example.tinpet.screens.mainMenu.profile.settings
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,20 +18,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.example.tinpet.R
+import com.example.tinpet.viewModels.LoginViewModel
 import com.example.tinpet.ui.theme.abrilFatface
-import org.w3c.dom.Text
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SettingsScreen(
     onBackClick: () -> Unit,
     onCloseClick: () -> Unit,
-    onNotifyClick: () -> Unit,
+    viewModel: LoginViewModel,
     onAboutClick: () -> Unit,
 ) {
     val logoutConfirm = remember { mutableStateOf(false) }
@@ -225,7 +223,10 @@ fun SettingsScreen(
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colors.error),
                         shape = RoundedCornerShape(size = 30.dp),
                         //elevation = 10,
-                        onClick = { onCloseClick() }
+                        onClick = {
+                            onCloseClick()
+                            viewModel.clearUserInfo(context)
+                        }
                     ) {
                         Text(
                             text = "Cerrar sesión",

@@ -28,10 +28,6 @@ sealed class AppScreens(
         route = "verify",
         icon = Icons.Filled.Verified
     )
-    object  Addpet : AppScreens(
-        route = "addpet",
-        icon = Icons.Filled.Pets
-    )
     // MENÚ INFERIOR
 
         // PLACES
@@ -39,12 +35,6 @@ sealed class AppScreens(
         route = "places",
         //title = "Places",
         icon = Icons.Filled.Forest
-    )
-        // CONNECT
-    object Connect : AppScreens(
-        route = "connect",
-        //title = "Connect",
-        icon = Icons.Filled.Search
     )
         // HOME
     object Home : AppScreens(
@@ -91,18 +81,8 @@ sealed class AppScreens(
             route = "requests",
             icon = Icons.Filled.ChildFriendly
     )
-        // AMISTADES
-    object  Friends : AppScreens(
-            route = "friends",
-            icon = Icons.Filled.MobileFriendly
-    )
     // DENTRO DE AJUSTES
 
-    // NOTIFICACIONES
-    object  Notifications : AppScreens(
-        route = "notifications",
-        icon = Icons.Filled.Notifications
-    )
     // SOBRE NOSOTROS
     object AboutUs : AppScreens(
         route = "aboutus",

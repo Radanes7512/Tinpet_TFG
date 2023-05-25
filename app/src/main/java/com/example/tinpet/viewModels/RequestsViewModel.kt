@@ -1,27 +1,38 @@
-package com.example.tinpet.screens.mainMenu.profile
+package com.example.tinpet.viewModels
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.tinpet.MainActivity
+import com.example.tinpet.R
 import com.example.tinpet.screens.Constants
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.RemoteMessage
 
-class RequestsViewModel(): ViewModel() {
+@RequiresApi(Build.VERSION_CODES.O)
+class RequestsViewModel(context: Context,loginViewModel : LoginViewModel): ViewModel() {
 
     private val _FriendList = MutableLiveData<List<Map<String, String>>>()
     val FriendList: LiveData<List<Map<String, String>>> = _FriendList
 
-    val _sendedRequest = MutableLiveData<String?>()
-     val sendedRequest: LiveData<String?> = _sendedRequest
+    private val _sendedRequest = MutableLiveData<String?>()
+    val sendedRequest: LiveData<String?> = _sendedRequest
 
-    val auth = Firebase.auth
-
+    private val auth = Firebase.auth
+    private val currentUser = auth.currentUser
     fun CheckFriendRequests() {
-        val currentUser = auth.currentUser
         if (currentUser != null) {
 
             Firebase.firestore.collection(Constants.PENDING_REQUESTS)

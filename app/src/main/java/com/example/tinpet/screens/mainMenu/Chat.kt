@@ -1,6 +1,11 @@
 package com.example.tinpet.screens.mainMenu
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -24,39 +29,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.app.NotificationCompat
+import com.example.tinpet.MainActivity
 //import androidx.core.content.ContentProviderCompat.requireContext
 import com.example.tinpet.R
-import com.example.tinpet.screens.LoginViewModel
 import com.example.tinpet.ui.theme.abrilFatface
+import com.example.tinpet.viewModels.ChatViewModel
 import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnspecifiedImmutableFlag")
 @Composable
 fun ChatScreen(
-
     chatUserId: String,
     message: String = "",
     viewModel: ChatViewModel,
     onBackClick: () -> Unit,
     onPetClick: () -> Unit
 ) {
+    val context = LocalContext.current
 
     viewModel.getChat(chatUserId)
     viewModel.chatId.value?.let { viewModel.getMessages(it) }
-    val context = LocalContext.current
 
     // Guardar el estado de la lista
-
     val listState = rememberLazyListState()
-
-    val users by viewModel.usernames.observeAsState(listOf())
-
     val messages: List<Map<String, String>> by viewModel.messagesState.observeAsState(emptyList<Map<String, String>>().toMutableList())
-
-
     val message: String by viewModel.message.observeAsState("")
-
 
     // Agregar un mensaje
     @Composable
@@ -105,9 +104,6 @@ fun ChatScreen(
                     verticalArrangement = Arrangement.Bottom
                 ) {
                     itemsIndexed(messages) { index, msg ->
-                        LaunchedEffect(Unit) {
-                            listState.animateScrollToItem(messages.lastIndex)
-                        }
                         Card(
                             modifier = Modifier
                                 .padding(
@@ -145,7 +141,7 @@ fun ChatScreen(
                                     // IMAGEN DEL USUARIO
                                     Image(
                                         modifier = Modifier
-                                            .clickable { onPetClick()}
+                                            .clickable { /*onPetClick()*/ }
                                             .clip(CircleShape)
                                             .size(25.dp)
                                             .align(alignment = Alignment.CenterVertically),
@@ -154,6 +150,29 @@ fun ChatScreen(
                                     )
                                     // MENSAJE
                                     msg.get("message")?.let { it1 ->
+                                        addMessage()
+                                        if(!viewModel.isCurrentUserMessage(msg)){
+                                            //region NOTIFICACION
+                                            val intent = Intent(context, MainActivity::class.java)
+                                            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+                                            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                                            val channelId = "Chat Notifications"
+                                            val channelName = "Chat Notifications"
+                                            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                                                notificationManager.createNotificationChannel(
+                                                    NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+                                                )
+                                            }
+                                            val notification = NotificationCompat.Builder(context, channelId)
+                                                .setContentTitle("Nuevo mensaje")
+                                                .setContentText("Tienes un nuevo mensaje en el chat")
+                                                .setSmallIcon(R.drawable.icon_pawprint)
+                                                .addAction(R.drawable.icon_pawprint,"Abrir aplicación",pendingIntent)
+                                                .setAutoCancel(true)
+                                                .build()
+                                            notificationManager.notify(0,notification)
+                                            //endregion
+                                        }
                                         Text(
                                             text = it1,
                                             color = MaterialTheme.colors.onBackground,
@@ -161,7 +180,7 @@ fun ChatScreen(
                                         )
                                     }
                                 }
-                                // FECHA Y HORA DEL MENSAJE
+                                //region FECHA Y HORA DEL MENSAJE
                                 Row(
                                     horizontalArrangement = Arrangement.End,
                                     modifier = Modifier
@@ -199,6 +218,7 @@ fun ChatScreen(
                                      )
                                      */
                                 }
+                                //endregion
                             }
                         }
                     }

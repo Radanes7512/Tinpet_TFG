@@ -18,6 +18,7 @@ object Constants {
         const val PET_AGE = "Petage"
         const val PET_CATEGORY = "Category"
         const val PENDING_REQUESTS = "pending_requests"
+        const val PLACES = "places"
         const val PENDING = "pending"
         const val STATE = "state"
         const val PHOTO = "photo"

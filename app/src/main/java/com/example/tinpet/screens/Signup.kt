@@ -1,7 +1,6 @@
 package com.example.tinpet.screens
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -31,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.tinpet.R
 import com.example.tinpet.ui.theme.abrilFatface
+import com.example.tinpet.viewModels.LoginViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -361,7 +361,7 @@ fun SPetAge(petage: String, validPetAge: Boolean, onTextFieldChanged: (String) -
 }
 
 @Composable
-fun SPetImage(petimage: String,validPetImage: Boolean, viewModel: LoginViewModel, onImageSelected: (Uri) -> Unit) {
+fun SPetImage(petimage: String, validPetImage: Boolean, viewModel: LoginViewModel, onImageSelected: (Uri) -> Unit) {
     // Agregar un estado composable para almacenar la imagen seleccionada
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val deletePhotoConfirm = remember { mutableStateOf(false) }

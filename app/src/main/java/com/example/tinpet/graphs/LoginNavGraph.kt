@@ -1,7 +1,5 @@
 package com.example.tinpet.graphs
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AppRegistration
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -9,8 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.tinpet.AppScreens
 import com.example.tinpet.screens.LoginScreen
-import com.example.tinpet.screens.LoginViewModel
-import com.example.tinpet.screens.SignupScreen
+import com.example.tinpet.viewModels.LoginViewModel
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     navigation(
@@ -29,12 +26,11 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
                     navController.popBackStack()
                     navController.navigate(AppScreens.Signup.route)
                 },
-                viewModel = LoginViewModel(LocalContext.current, navController)
+                viewModel = LoginViewModel(LocalContext.current)
             )
         }
     }
 }
-
 sealed class AuthScreen(val route: String) {
     object Login : AuthScreen(route = "LOGIN")
 }

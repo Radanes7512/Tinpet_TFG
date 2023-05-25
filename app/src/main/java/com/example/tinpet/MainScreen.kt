@@ -45,8 +45,6 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         AppScreens.Settings,
         AppScreens.Requests,
         AppScreens.AboutUs,
-        AppScreens.Notifications,
-        AppScreens.Friends,
         AppScreens.Pets
     )
     val profileScreens = listOf(AppScreens.Profile)

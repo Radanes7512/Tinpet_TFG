@@ -1,10 +1,7 @@
-package com.example.tinpet.screens.mainMenu
+package com.example.tinpet.viewModels
 
 import android.content.ContentValues
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,11 +10,9 @@ import com.example.tinpet.screens.Constants
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -37,7 +32,6 @@ class ChatViewModel() : ViewModel() {
 
     private val _loggedUserId = MutableLiveData<String>()
     val loggedUserId: LiveData<String> = _loggedUserId
-
 
     private val _chatId = MutableLiveData<String>()
     val chatId: LiveData<String> = _chatId

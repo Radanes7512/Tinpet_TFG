@@ -13,7 +13,6 @@ import com.google.firebase.ktx.Firebase
 
 @RequiresApi(Build.VERSION_CODES.O)
 class RequestsViewModel(context: Context) : ViewModel() {
-
     private val _FriendList = MutableLiveData<List<Map<String, String>>>()
     val FriendList: LiveData<List<Map<String, String>>> = _FriendList
 
@@ -54,11 +53,9 @@ class RequestsViewModel(context: Context) : ViewModel() {
                         frRef.update(Constants.STATE, state)
                     }
                 }
-
             }
         }
-
     }
-
 }
+
 

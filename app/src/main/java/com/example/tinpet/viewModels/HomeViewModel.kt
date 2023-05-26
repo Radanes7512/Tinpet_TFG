@@ -26,42 +26,6 @@ class HomeViewModel() : ViewModel() {
     private val _loggedUserImage = MutableLiveData<Uri>()
     val loggedUserImage: LiveData<Uri> = _loggedUserImage
 
-/*
-    init {
-        Firebase.firestore.collection(Constants.PENDING_REQUESTS)
-            .addSnapshotListener { snapshot, e ->
-                if (e != null) {
-                    return@addSnapshotListener
-                }
-                if (snapshot != null && !snapshot.isEmpty) {
-                    for (document in snapshot.documents) {
-                        val email = document.getString(Constants.SENT_TO)
-
-                        if (email != null) {
-                            Firebase.firestore.collection(Constants.USERS)
-                                .whereEqualTo(Constants.EMAIL, email).get()
-                                .addOnSuccessListener { result ->
-                                    for (userDocument in result) {
-                                        val token = userDocument.getString("fcmToken")
-                                        if (token != null) {
-                                            val title = "Nueva solicitud de amistad"
-                                            val body =
-                                                "Tienes una nueva solicitud de amistad pendiente"
-                                            sendNotification(title, body, token)
-                                        }
-                                    }
-                                }
-                        }
-                    }
-                }
-            }
-    }
-
-    private fun sendNotification(title: String, body: String, token: String) {
-        val message =
-            RemoteMessage.Builder(token).addData("title", title).addData("body", body).build()
-        FirebaseMessaging.getInstance().send(message)
-    }*/
     fun getUserPets(emails: List<String>){
         val currentUser = auth.currentUser
         if (currentUser != null) {

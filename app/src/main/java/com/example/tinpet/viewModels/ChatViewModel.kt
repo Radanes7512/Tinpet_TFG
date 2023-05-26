@@ -78,9 +78,6 @@ class ChatViewModel : ViewModel() {
 
     fun sendMessage(message: String) {
         val currentUser = auth.currentUser
-        //Variable temporal
-        val currentUserEmail = auth.currentUser?.email
-
 
         if (currentUser != null) {
             // Crear o actualizar un documento en la colección "Chats"
@@ -178,15 +175,6 @@ class ChatViewModel : ViewModel() {
         }
     }
 
-    private fun updateMessages(list: MutableList<Map<String, Any>>) {
-
-        val messageList = emptyList<String>().toMutableList()
-        for (message in list) {
-            messageList.add(message.get("message").toString())
-        }
-        _messages.value = messageList.asReversed()
-    }
-
     fun getFriendList() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
@@ -197,8 +185,7 @@ class ChatViewModel : ViewModel() {
                     .whereEqualTo(Constants.STATE, Constants.ACCEPTED)
                     .addSnapshotListener { value, error ->
 
-                        if (value != null) {
-                            var userList = mutableListOf<String>()
+                        if (value != null) {                            var userList = mutableListOf<String>()
                             for (doc in value) {
                                 val requestData = doc.data as MutableMap<String, String>
                                 val sentTo = requestData[Constants.SENT_TO]

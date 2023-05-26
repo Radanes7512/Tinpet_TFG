@@ -69,10 +69,9 @@ fun NavGraph(
         composable(AppScreens.PetProfile.route) {
             PetProfileScreen(onBackClick = {
                 navController.popBackStack()
-            }, onChatClick = {
-                navController.popBackStack()
-                navController.navigate(AppScreens.Chat.route)
-            })
+            },
+                viewModel = ProfileViewModel()
+            )
         }
         composable(route = AppScreens.Requests.route) {
             RequestScreen(onBackClick = {
@@ -134,10 +133,6 @@ fun NavGraph(
                     }
                     launchSingleTop = true
                 })
-                //navOptions { popUpTo(Graph.AUTHENTICATION) }
-                //navController.navigate(URLEncoder.encode(Graph.AUTHENTICATION, StandardCharsets.UTF_8.toString()))
-                //navController.navigate(NavDeepLinkRequest(Uri.parse("android-app://androidx.navigation/auth_graph")))
-                //navController.navigate(NavDeepLinkRequest.Builder.fromUri("android-app://androidx.navigation/auth_graph".toUri()).build())
             }, viewModel = LoginViewModel(LocalContext.current), onAboutClick = {
                 navController.navigate(AppScreens.AboutUs.route)
             }

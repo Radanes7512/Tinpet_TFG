@@ -205,7 +205,7 @@ fun LPasswordField(password: String, validPass: Boolean, onTextFieldChanged: (St
         }, singleLine = true, onValueChange = { onTextFieldChanged(it) }, label = {
             if (validPass) {
                 Text(
-                    text = "Contraseña válida", color = MaterialTheme.colors.secondary
+                    text = "${password.length}/20 | Contraseña válida", color = MaterialTheme.colors.secondary
                 )
             } else {
                 if (password.isEmpty()) {
@@ -215,7 +215,7 @@ fun LPasswordField(password: String, validPass: Boolean, onTextFieldChanged: (St
                     )
                 } else {
                     Text(
-                        text = "${password.length}/6", color = MaterialTheme.colors.error
+                        text = "${password.length}/20 | Contraseña no válida", color = MaterialTheme.colors.error
                     )
                 }
             }

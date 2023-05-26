@@ -265,7 +265,7 @@ fun SPetName(petname: String, validPetName: Boolean, onTextFieldChanged: (String
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        // Nombre del usuario
+        // Nombre de la mascota
         OutlinedTextField(value = petname, isError = if (petname.isEmpty()) {
             false
         } else {
@@ -276,7 +276,7 @@ fun SPetName(petname: String, validPetName: Boolean, onTextFieldChanged: (String
             }, label = {
                 if (validPetName) {
                     Text(
-                        text = "Nombre válido", color = MaterialTheme.colors.secondary
+                        text = "${petname.length}/10 | Nombre válido ", color = MaterialTheme.colors.secondary
                     )
                 } else {
                     if (petname.isEmpty()) {
@@ -286,7 +286,7 @@ fun SPetName(petname: String, validPetName: Boolean, onTextFieldChanged: (String
                         )
                     } else {
                         Text(
-                            text = "Debe tener 2 o más caracteres",
+                            text = "${petname.length}/10 | Debe tener entre 2 y 10 caracteres ",
                             color = MaterialTheme.colors.error
                         )
                     }
@@ -653,7 +653,7 @@ fun SUserName(name: String, validName: Boolean, onTextFieldChanged: (String) -> 
         }, label = {
             if (validName) {
                 Text(
-                    text = "Usuario válido", color = MaterialTheme.colors.secondary
+                    text = "${name.length}/20 | Usuario válido", color = MaterialTheme.colors.secondary
                 )
             } else {
                 if (name.isEmpty()) {
@@ -663,7 +663,7 @@ fun SUserName(name: String, validName: Boolean, onTextFieldChanged: (String) -> 
                     )
                 } else {
                     Text(
-                        text = "Debe tener 2 o más caracteres",
+                        text = "${name.length}/20 | Debe tener entre 2 y 20 caracteres",
                         color = MaterialTheme.colors.error
                     )
                 }
@@ -801,7 +801,7 @@ fun SPasswordField(password: String, validPass: Boolean, onTextFieldChanged: (St
         }, singleLine = true, onValueChange = { onTextFieldChanged(it) }, label = {
             if (validPass) {
                 Text(
-                    text = "Contraseña válida", color = MaterialTheme.colors.secondary
+                    text = "${password.length}/20 | Contraseña válida", color = MaterialTheme.colors.secondary
                 )
             } else {
                 if (password.isEmpty()) {
@@ -811,7 +811,7 @@ fun SPasswordField(password: String, validPass: Boolean, onTextFieldChanged: (St
                     )
                 } else {
                     Text(
-                        text = "${password.length}/6", color = MaterialTheme.colors.error
+                        text = "${password.length}/20 | Contraseña no válida", color = MaterialTheme.colors.error
                     )
                 }
             }

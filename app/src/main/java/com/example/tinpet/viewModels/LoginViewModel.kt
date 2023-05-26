@@ -267,12 +267,12 @@ class LoginViewModel(context: Context) : ViewModel() {
         _petImageUri.value = imageUri.toString()
     }
 
-    fun isValidPassword(password: String): Boolean = password.length >= 6
+    fun isValidPassword(password: String): Boolean = password.length in 6..20
     fun isValidEmail(email: String): Boolean =
-        email.contains("@") && (email.contains(".com") || email.contains(".es"))
+        email.contains("@") && (email.contains(".com") || email.contains(".es")) && email.length in 7..30
 
-    fun isValidName(name: String): Boolean = name.length > 1
-    fun isValidPetName(petname: String): Boolean = petname.length > 1
+    fun isValidName(name: String): Boolean = name.length in 2..20
+    fun isValidPetName(petname: String): Boolean = petname.length in 2..10
     fun isValidPetCategory(petcategory: String): Boolean = petcategory.isNotEmpty()
     fun isValidPetAge(petage: String): Boolean = petage.toIntOrNull() in 1..30
     fun isValidPetImage(petimage: String): Boolean = petimage.isNotEmpty()

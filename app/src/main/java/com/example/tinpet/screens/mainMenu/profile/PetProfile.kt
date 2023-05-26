@@ -14,9 +14,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,27 +24,17 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.example.tinpet.AppScreens
 import com.example.tinpet.R
 import com.example.tinpet.graphs.NavGraph
 import com.example.tinpet.ui.theme.abrilFatface
-import com.example.tinpet.viewModels.ProfileViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun PetProfileScreen(
     onBackClick: () -> Unit,
-    viewModel: ProfileViewModel
+    onChatClick: () -> Unit,
 ) {
-    viewModel.getName()
-    viewModel.getAge()
-    viewModel.getCategory()
-
-
-
-
-
     // LISTA DE FOTOS DE PERROS ( DE MOMENTO LAS ALMACENAMOS ASÍ)
     val images = listOf(
         R.drawable.default_pet,
@@ -82,7 +69,7 @@ fun PetProfileScreen(
                     title = {
 
                         Text(
-                            text = "Perfil de ${viewModel.profileName.value}",
+                            text = "Perfil de $name",
                             fontFamily = abrilFatface
                         )
 
@@ -117,16 +104,12 @@ fun PetProfileScreen(
                             .fillMaxWidth()
                             .size(350.dp)
                     ) {
-                    //en vez de asyn era image a secas
-                        AsyncImage(
-                            model = "",
-                            contentDescription = "My Image",
-                            modifier =  Modifier
-                                .align(Alignment.BottomCenter)
-                                .padding(16.dp)
-                                .border(1.dp, Color.Yellow, CircleShape)
-                                .fillMaxSize(),
-                            contentScale = ContentScale.Crop
+                        Image(
+                            painter = painterResource(R.drawable.default_pet),
+                            alpha = 0.8f,
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            contentDescription = "profilePhoto"
                         )
                         //region IMAGEN
                         Row(
@@ -157,7 +140,7 @@ fun PetProfileScreen(
                         // Nombre de la mascota
                         Text(
                             modifier = Modifier.padding(5.dp),
-                            text = "${viewModel.profileName.value}",
+                            text = "Nombre: $name",
                             fontSize = 20.sp,
                             fontFamily = abrilFatface,
                             color = MaterialTheme.colors.onBackground
@@ -168,7 +151,7 @@ fun PetProfileScreen(
                                 // Edad de la mascota
                                 Text(
                                     modifier = Modifier.padding(5.dp),
-                                    text = "Edad:  ${viewModel.profileAge.value}",
+                                    text = "Edad: $age",
                                     fontSize = 20.sp,
                                     fontFamily = abrilFatface,
                                     color = MaterialTheme.colors.onBackground
@@ -188,14 +171,14 @@ fun PetProfileScreen(
                             .padding(16.dp)
 
                     ) {
-                        category.shuffled().take(1).forEach { category ->
+                        category.shuffled().take(3).forEach { category ->
                             Card(
                                 modifier = Modifier.padding(8.dp),
                                 elevation = 10.dp
                             ) {
                                 Text(
                                     modifier = Modifier.padding(8.dp),
-                                    text = "${viewModel.profileCategory.value}",
+                                    text = category,
                                     fontSize = 16.sp,
                                     fontFamily = abrilFatface
                                 )

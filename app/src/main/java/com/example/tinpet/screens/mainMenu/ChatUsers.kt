@@ -150,7 +150,7 @@ fun EmptyChat() {
                         blurRadius = 2f
                     )
                 ),
-                text = "No has aceptado peticiones de amistad o han aceptado las tuyas",
+                text = "No hay ningún chat por el momento...",
                 fontWeight = FontWeight.Bold
             )
         }

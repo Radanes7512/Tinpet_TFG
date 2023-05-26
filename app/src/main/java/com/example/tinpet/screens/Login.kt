@@ -133,6 +133,10 @@ fun LoginScreen(
                                 contentDescription = null,
                                 modifier = Modifier.size(ButtonDefaults.IconSize)
                             )
+                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                            Text(
+                                text = stringResource(R.string.login_access_ES)
+                            )
                         }
                     }
                     Spacer(modifier = Modifier.padding(10.dp))

@@ -46,13 +46,15 @@ import com.example.tinpet.graphs.NavGraph
 import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.ktx.messaging
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : ComponentActivity() {
 
     private val requestPermissionsCode = 100
     private var showSet:Boolean  = false;
-    private val permissionsToRequest = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+    private val permissionsToRequest = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.CAMERA
+    )
     fun checkIfUserIsLoggedIn(context: Context): Boolean {
         val sharedPreferences = context.getSharedPreferences("user_info", Context.MODE_PRIVATE)
         val username = sharedPreferences.getString("username", null)
@@ -212,7 +214,7 @@ fun DefaultText(permissionsDenied: List<String>, requestPermissionsCode: Int, sh
                 if (showSet) {
                     Button(
                         onClick = {
-                            Firebase.messaging.subscribeToTopic("Prueba")
+                            /*Firebase.messaging.subscribeToTopic("Prueba")*/
                             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                             val uri: Uri = Uri.fromParts("package", "com.example.tinpet", null)
                             intent.data = uri

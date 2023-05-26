@@ -1,7 +1,9 @@
 package com.example.tinpet.screens
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
+import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,6 +15,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Image
+import androidx.compose.material.icons.outlined.PhotoLibrary
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -26,11 +30,14 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.FileProvider
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.tinpet.R
 import com.example.tinpet.ui.theme.abrilFatface
 import com.example.tinpet.viewModels.LoginViewModel
+import java.io.File
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -113,8 +120,6 @@ fun SignupScreen(
                                 )
                             }
                         } else {
-                            Log.d(addpetEnable.toString(),"MASCOTA VALIDA???")
-                            Log.d(signupEnable.toString(),"USUARIO VALIDO???")
                             Button(
                                 onClick = {},
                                 enabled = false,
@@ -131,6 +136,11 @@ fun SignupScreen(
                                     contentDescription = null,
                                     modifier = Modifier.size(ButtonDefaults.IconSize)
                                 )
+                                Spacer(modifier=Modifier.size(ButtonDefaults.IconSpacing))
+                                Text(
+                                    text = stringResource(R.string.signup_access_ES)
+                                )
+
                             }
                         }
                         Spacer(modifier = Modifier.padding(10.dp))
@@ -179,12 +189,7 @@ fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
 }
 
 @Composable
-fun Addpet(
-    modifier: Modifier,
-    viewModel: LoginViewModel,
-    selectedImageUri: Uri?,
-    onImageSelected: (Uri) -> Unit,
-) {
+fun Addpet(modifier: Modifier,viewModel: LoginViewModel,selectedImageUri: Uri?,onImageSelected: (Uri) -> Unit,) {
     val context = LocalContext.current
     val petname: String by viewModel.petname.observeAsState(initial = "")
     val validPetName: Boolean = petname.let { viewModel.isValidPetName(it) }
@@ -365,6 +370,19 @@ fun SPetImage(petimage: String, validPetImage: Boolean, viewModel: LoginViewMode
     // Agregar un estado composable para almacenar la imagen seleccionada
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val deletePhotoConfirm = remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    val photoFile = File.createTempFile(
+        "photo", /* prefix */
+        ".jpg", /* suffix */
+        context.externalCacheDir /* directory */
+    )
+
+    val photoUri = FileProvider.getUriForFile(
+        context,
+        "com.example.tinpet.fileprovider",
+        photoFile
+    )
     // Llamar a rememberLauncherForActivityResult para obtener el resultado de la selección de la imagen
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -373,6 +391,17 @@ fun SPetImage(petimage: String, validPetImage: Boolean, viewModel: LoginViewMode
             selectedImageUri = it
             onImageSelected(it)
             viewModel.setImage(it)
+        }
+    }
+    val takePictureLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success: Boolean ->
+        if(success){
+            selectedImageUri = photoUri
+            selectedImageUri?.let{
+                onImageSelected(it)
+                viewModel.setImage(it)
+            }
         }
     }
     Column(
@@ -397,7 +426,9 @@ fun SPetImage(petimage: String, validPetImage: Boolean, viewModel: LoginViewMode
                     modifier = Modifier, contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        painter = rememberAsyncImagePainter(selectedImageUri),
+                        painter = rememberAsyncImagePainter(
+                            selectedImageUri
+                        ),
                         contentDescription = null,
                         modifier = Modifier
                             .height(200.dp)
@@ -413,18 +444,59 @@ fun SPetImage(petimage: String, validPetImage: Boolean, viewModel: LoginViewMode
                 }
             }
         }else{
-            Button(
-                onClick = { launcher.launch("image/*") },
-                modifier = Modifier.padding(vertical = 16.dp),
-                shape = RoundedCornerShape(25),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.secondaryVariant,
-                    disabledBackgroundColor = MaterialTheme.colors.onSurface,
-                    contentColor = Color.Black,
-                    disabledContentColor = Color.White
-                )
-            ) {
-                Text("Abrir galería")
+            Row(modifier= Modifier
+                .fillMaxWidth()
+                .padding(8.dp),horizontalArrangement = Arrangement.Center) {
+                Button(
+                    onClick = { launcher.launch("image/*") },
+                    modifier = Modifier.padding(16.dp),
+                    shape = RoundedCornerShape(25),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.secondaryVariant,
+                        disabledBackgroundColor = MaterialTheme.colors.onSurface,
+                        contentColor = Color.Black,
+                        disabledContentColor = Color.White
+                    )
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.PhotoLibrary,
+                            contentDescription = null,
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text("Galería")
+                    }
+                }
+                Button(
+                    onClick = {
+                        takePictureLauncher.launch(photoUri)
+                    },
+                    modifier = Modifier.padding(16.dp),
+                    shape = RoundedCornerShape(25),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.secondaryVariant,
+                        disabledBackgroundColor = MaterialTheme.colors.onSurface,
+                        contentColor = Color.Black,
+                        disabledContentColor = Color.White
+                    )
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.AddAPhoto,
+                            contentDescription = null,
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text("Cámara")
+                    }
+                }
             }
         }
     }
@@ -479,6 +551,7 @@ fun SPetImage(petimage: String, validPetImage: Boolean, viewModel: LoginViewMode
             })
     }
 }
+
 @Composable
 fun SPetCategory(petcategory: String, validPetCategory: Boolean, onCategorySelected: (String) -> Unit) {
     val items = listOf(
@@ -535,7 +608,8 @@ fun SPetCategory(petcategory: String, validPetCategory: Boolean, onCategorySelec
                                 .clickable(
                                     enabled = selectedIndex.value == null || selectedIndex.value == itemIndex
                                 ) {
-                                    selectedIndex.value = if (selectedIndex.value == itemIndex) null else itemIndex
+                                    selectedIndex.value =
+                                        if (selectedIndex.value == itemIndex) null else itemIndex
                                     val category = if (selectedIndex.value == null) "" else item
                                     onCategorySelected(category)
                                 }

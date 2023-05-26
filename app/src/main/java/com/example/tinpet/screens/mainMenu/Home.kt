@@ -279,7 +279,7 @@ fun HomeScreen(
                         Image(modifier = Modifier
                             .clickable {
                                 viewModel.SendFriendRequests(userPets[currentIndex][Constants.EMAIL])
-                                Toast.makeText(context, "Has mandado una peticion de amistad", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Se ha enviado  una petición de amistad", Toast.LENGTH_SHORT).show()
                                 petLiked = true
                                 onButtonClick(true)
                                 //region NOTIFICACION

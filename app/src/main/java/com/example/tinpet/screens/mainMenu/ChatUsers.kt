@@ -49,21 +49,22 @@ fun ChatUsersScreen(
 Scaffold(
     content={
         //region CUERPO DE LA PANTALLA
+        if(users.isNullOrEmpty()){
+            EmptyChat()
+        }else{
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MaterialTheme.colors.background),
             contentAlignment = Alignment.Center
         ) {
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
                 item {
                     //region FUNCION PARA CREAR ENTRADAS AL CHAT DEPENDIENDO DEL NUMERO DE PERROS
                     users.forEach { user ->
-                        if(users.isEmpty()){
-                            EmptyChat()
-                        }else {
                             Card(
                                 modifier = Modifier
                                     .fillMaxWidth()

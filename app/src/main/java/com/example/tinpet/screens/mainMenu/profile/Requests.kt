@@ -19,7 +19,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
@@ -63,11 +68,14 @@ fun RequestScreen(
     //endregion
     // region CUERPO
     {
-        LazyColumn(
+        if (FriendsRequests.isNullOrEmpty()){
+            EndBox()
+        }else{
+            LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-                itemsIndexed(FriendsRequests) { index, fr ->
+               itemsIndexed(FriendsRequests) { index, fr ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -130,6 +138,54 @@ fun RequestScreen(
                         }
                     }
                 }
+                }
             }
         }
+
 }
+
+@Composable
+fun EndBox() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Image(
+            modifier = Modifier
+                .align(Alignment.Center),
+            painter = painterResource(id = R.drawable.icon_pawprint),
+            contentDescription = null
+        )
+        Column(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = Color.DarkGray,
+                        offset = Offset(2.0f, 5.0f),
+                        blurRadius = 2f
+                    )
+                ),
+                text = "¡Ups!",
+                fontWeight = FontWeight.Bold,
+                fontSize = 50.sp
+            )
+            Text(
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = Color.DarkGray,
+                        offset = Offset(2.0f, 5.0f),
+                        blurRadius = 2f
+                    )
+                ),
+                text = "No tienes peticiones de amistad, aun no se han dado cuenta de lo preciosa que es tu mascota.",
+                fontWeight = FontWeight.Bold
+            )
+        }
+        }
+    }

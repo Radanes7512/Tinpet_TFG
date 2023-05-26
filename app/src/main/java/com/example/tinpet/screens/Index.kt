@@ -18,14 +18,13 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tinpet.R
-import com.example.tinpet.ui.theme.TinPetTheme
 import com.example.tinpet.ui.theme.abrilFatface
+
 @Composable
-fun IndexScreen(onLoginClick:() -> Unit,onSignupClick:() -> Unit) {
+fun IndexScreen(onLoginClick: () -> Unit, onSignupClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -41,11 +40,7 @@ fun IndexScreen(onLoginClick:() -> Unit,onSignupClick:() -> Unit) {
         ) {
             // Logo TinPet
             Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-                //horizontalAlignment = Alignment.CenterHorizontally
-
+                modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
             ) {
                 Image(
                     modifier = Modifier
@@ -78,60 +73,48 @@ fun IndexScreen(onLoginClick:() -> Unit,onSignupClick:() -> Unit) {
                 modifier = Modifier
                     .size(100.dp)
                     .padding(16.dp),
-                painter = painterResource(R.drawable.icon_pawprint)
-                /*painter = if (isSystemInDarkTheme()) {
-                    painterResource(R.drawable.icon_pawprint_black)
-                } else {
-                    painterResource(R.drawable.icon_pawprint_white)
-                }*/,
+                painter = painterResource(R.drawable.icon_pawprint),
                 contentDescription = null,
             )
-            Row{
+            Row {
                 Text(
                     style = TextStyle(
                         shadow = Shadow(
-                            color = Color.DarkGray,
-                            offset = Offset(2.0f, 5.0f),
-                            blurRadius = 2f
+                            color = Color.DarkGray, offset = Offset(2.0f, 5.0f), blurRadius = 2f
                         )
                     ),
-                    text = "Bienvenid",
+                    text = "BIENVENID",
                     fontSize = 16.sp,
                     fontFamily = abrilFatface,
                     color = MaterialTheme.colors.onBackground
                 )
                 Image(
-                    modifier = Modifier
-                        .size(16.dp),
+                    modifier = Modifier.size(16.dp),
                     contentDescription = null,
-                    painter = if(isSystemInDarkTheme()){
+                    painter = if (isSystemInDarkTheme()) {
                         painterResource(R.drawable.icon_pawprint_white)
-                    }else{
+                    } else {
                         painterResource(R.drawable.icon_pawprint_black)
                     }
                 )
-                Text(
-                    style = TextStyle(
-                        shadow = Shadow(
-                            color = Color.DarkGray,
-                            offset = Offset(2.0f, 5.0f),
-                            blurRadius = 2f
-                        )
-                    ),
-                    text = " a",
-                    fontSize = 16.sp,
-                    fontFamily = abrilFatface,
-                    color = MaterialTheme.colors.onBackground
-                )
-            }
 
+            }
             Text(
-                modifier = Modifier.padding(0.dp,0.dp,0.dp,10.dp),
                 style = TextStyle(
                     shadow = Shadow(
-                        color = Color.DarkGray,
-                        offset = Offset(2.0f, 5.0f),
-                        blurRadius = 2f
+                        color = Color.DarkGray, offset = Offset(2.0f, 5.0f), blurRadius = 2f
+                    )
+                ),
+                text = "A",
+                fontSize = 16.sp,
+                fontFamily = abrilFatface,
+                color = MaterialTheme.colors.onBackground
+            )
+            Text(
+                modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 10.dp),
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = Color.DarkGray, offset = Offset(2.0f, 5.0f), blurRadius = 2f
                     )
                 ),
                 text = stringResource(R.string.app_name),
@@ -141,9 +124,8 @@ fun IndexScreen(onLoginClick:() -> Unit,onSignupClick:() -> Unit) {
             )
 
             Column(
-                horizontalAlignment =  Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Button(
                     onClick = { onLoginClick() },
@@ -190,8 +172,6 @@ fun IndexScreen(onLoginClick:() -> Unit,onSignupClick:() -> Unit) {
                     )
                 }
             }
-
         }
-
     }
 }

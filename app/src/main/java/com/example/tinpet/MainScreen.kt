@@ -1,6 +1,8 @@
 package com.example.tinpet
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,30 +13,23 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.tinpet.graphs.Graph
-import  com.example.tinpet.graphs.NavGraph
-import com.example.tinpet.screens.mainMenu.profile.ProfileScreen
-import com.example.tinpet.ui.theme.TinPetTheme
+import com.example.tinpet.graphs.NavGraph
 import com.example.tinpet.ui.theme.abrilFatface
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(navController: NavHostController = rememberNavController()) {
@@ -44,19 +39,20 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         AppScreens.ChatUsers,
         AppScreens.Settings,
         AppScreens.Requests,
-        AppScreens.AboutUs,
-        AppScreens.Pets
+        AppScreens.AboutUs
     )
     val profileScreens = listOf(AppScreens.Profile)
-    val profileTopBar = navController.currentBackStackEntryAsState().value?.destination?.route in profileScreens.map { it.route }
-    val showTopBar = navController.currentBackStackEntryAsState().value?.destination?.route in screens.map { it.route }
+    val profileTopBar =
+        navController.currentBackStackEntryAsState().value?.destination?.route in profileScreens.map { it.route }
+    val showTopBar =
+        navController.currentBackStackEntryAsState().value?.destination?.route in screens.map { it.route }
     Scaffold(
         topBar = {
             if (showTopBar) {
                 TopBar(onClick = {
                     navController.navigate(AppScreens.Home.route)
-                } )
-            }else if(profileTopBar){
+                })
+            } else if (profileTopBar) {
                 ProfileTopBar(
                     onClick = {
                         navController.navigate(AppScreens.Home.route)

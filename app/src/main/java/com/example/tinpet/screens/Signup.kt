@@ -1,10 +1,7 @@
 package com.example.tinpet.screens
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.net.Uri
-import android.provider.MediaStore
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
@@ -15,8 +12,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material.icons.outlined.PhotoLibrary
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -30,7 +25,6 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
@@ -136,7 +130,7 @@ fun SignupScreen(
                                     contentDescription = null,
                                     modifier = Modifier.size(ButtonDefaults.IconSize)
                                 )
-                                Spacer(modifier=Modifier.size(ButtonDefaults.IconSpacing))
+                                Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
                                 Text(
                                     text = stringResource(R.string.signup_access_ES)
                                 )
@@ -189,7 +183,12 @@ fun Signup(modifier: Modifier, viewModel: LoginViewModel) {
 }
 
 @Composable
-fun Addpet(modifier: Modifier,viewModel: LoginViewModel,selectedImageUri: Uri?,onImageSelected: (Uri) -> Unit,) {
+fun Addpet(
+    modifier: Modifier,
+    viewModel: LoginViewModel,
+    selectedImageUri: Uri?,
+    onImageSelected: (Uri) -> Unit,
+) {
     val context = LocalContext.current
     val petname: String by viewModel.petname.observeAsState(initial = "")
     val validPetName: Boolean = petname.let { viewModel.isValidPetName(it) }
@@ -200,7 +199,7 @@ fun Addpet(modifier: Modifier,viewModel: LoginViewModel,selectedImageUri: Uri?,o
     val petimage: String by viewModel.petImageUri.observeAsState(initial = "")
     val validPetImage: Boolean = petimage.let { viewModel.isValidPetImage(it) }
 
-    val petcategory:String by viewModel.petcategory.observeAsState(initial="")
+    val petcategory: String by viewModel.petcategory.observeAsState(initial = "")
     val validPetCategory: Boolean = petcategory.let { viewModel.isValidPetCategory(it) }
 
     Column(modifier = modifier) {
@@ -223,7 +222,7 @@ fun Addpet(modifier: Modifier,viewModel: LoginViewModel,selectedImageUri: Uri?,o
             validPetCategory
         ) {
             viewModel.onAddpetChanged(
-                petname,petage,it,petimage
+                petname, petage, it, petimage
             )
         }
         Spacer(modifier = Modifier.padding(5.dp))
@@ -231,9 +230,9 @@ fun Addpet(modifier: Modifier,viewModel: LoginViewModel,selectedImageUri: Uri?,o
             petimage,
             validPetImage,
             viewModel
-        ){
+        ) {
             viewModel.onAddpetChanged(
-                petname,petage,petcategory,it.toString()
+                petname, petage, petcategory, it.toString()
             )
         }
     }
@@ -273,41 +272,41 @@ fun SPetName(petname: String, validPetName: Boolean, onTextFieldChanged: (String
             !validPetName
         }, singleLine = true,
             onValueChange = {
-            onTextFieldChanged(it)
-        }, label = {
-            if (validPetName) {
-                Text(
-                    text = "Nombre válido", color = MaterialTheme.colors.secondary
-                )
-            } else {
-                if (petname.isEmpty()) {
+                onTextFieldChanged(it)
+            }, label = {
+                if (validPetName) {
                     Text(
-                        text = stringResource(R.string.petname_ES),
-                        color = MaterialTheme.colors.onBackground
+                        text = "Nombre válido", color = MaterialTheme.colors.secondary
                     )
                 } else {
-                    Text(
-                        text = "Debe tener 2 o más caracteres",
-                        color = MaterialTheme.colors.error
+                    if (petname.isEmpty()) {
+                        Text(
+                            text = stringResource(R.string.petname_ES),
+                            color = MaterialTheme.colors.onBackground
+                        )
+                    } else {
+                        Text(
+                            text = "Debe tener 2 o más caracteres",
+                            color = MaterialTheme.colors.error
+                        )
+                    }
+                }
+            }, placeholder = {
+                Text(
+                    text = stringResource(R.string.pname_ES),
+                    color = MaterialTheme.colors.onBackground
+                )
+            }, leadingIcon = {
+                IconButton(onClick = { }) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        tint = MaterialTheme.colors.onBackground,
+                        contentDescription = null
                     )
                 }
-            }
-        }, placeholder = {
-            Text(
-                text = stringResource(R.string.pname_ES),
-                color = MaterialTheme.colors.onBackground
-            )
-        }, leadingIcon = {
-            IconButton(onClick = { }) {
-                Icon(
-                    imageVector = Icons.Filled.Edit,
-                    tint = MaterialTheme.colors.onBackground,
-                    contentDescription = null
-                )
-            }
-        }, keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Next
-        ), colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
+            }, keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next
+            ), colors = TextFieldDefaults.outlinedTextFieldColors(MaterialTheme.colors.onBackground)
         )
     }
 }
@@ -366,7 +365,12 @@ fun SPetAge(petage: String, validPetAge: Boolean, onTextFieldChanged: (String) -
 }
 
 @Composable
-fun SPetImage(petimage: String, validPetImage: Boolean, viewModel: LoginViewModel, onImageSelected: (Uri) -> Unit) {
+fun SPetImage(
+    petimage: String,
+    validPetImage: Boolean,
+    viewModel: LoginViewModel,
+    onImageSelected: (Uri) -> Unit
+) {
     // Agregar un estado composable para almacenar la imagen seleccionada
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val deletePhotoConfirm = remember { mutableStateOf(false) }
@@ -396,9 +400,9 @@ fun SPetImage(petimage: String, validPetImage: Boolean, viewModel: LoginViewMode
     val takePictureLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
     ) { success: Boolean ->
-        if(success){
+        if (success) {
             selectedImageUri = photoUri
-            selectedImageUri?.let{
+            selectedImageUri?.let {
                 onImageSelected(it)
                 viewModel.setImage(it)
             }
@@ -443,10 +447,12 @@ fun SPetImage(petimage: String, validPetImage: Boolean, viewModel: LoginViewMode
                     }
                 }
             }
-        }else{
-            Row(modifier= Modifier
-                .fillMaxWidth()
-                .padding(8.dp),horizontalArrangement = Arrangement.Center) {
+        } else {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp), horizontalArrangement = Arrangement.Center
+            ) {
                 Button(
                     onClick = { launcher.launch("image/*") },
                     modifier = Modifier.padding(16.dp),
@@ -553,7 +559,11 @@ fun SPetImage(petimage: String, validPetImage: Boolean, viewModel: LoginViewMode
 }
 
 @Composable
-fun SPetCategory(petcategory: String, validPetCategory: Boolean, onCategorySelected: (String) -> Unit) {
+fun SPetCategory(
+    petcategory: String,
+    validPetCategory: Boolean,
+    onCategorySelected: (String) -> Unit
+) {
     val items = listOf(
         stringResource(R.string.peaceful_ES),
         stringResource(R.string.playful_ES),

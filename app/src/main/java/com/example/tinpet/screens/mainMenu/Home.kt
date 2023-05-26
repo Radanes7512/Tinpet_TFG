@@ -29,16 +29,15 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.NotificationCompat
 import coil.compose.AsyncImage
+import com.example.tinpet.Constants
 import com.example.tinpet.MainActivity
 import com.example.tinpet.R
-import com.example.tinpet.screens.Constants
 import com.example.tinpet.ui.theme.abrilFatface
 import com.example.tinpet.viewModels.HomeViewModel
 
@@ -52,33 +51,15 @@ fun HomeScreen(
     viewModel.getNonFriends()
     viewModel.getLoggedUser()
 
-
-
-
     val userPets: List<MutableMap<String, String>> by viewModel.UserPets.observeAsState(emptyList<MutableMap<String, String>>().toMutableList())
 
-    // LISTA DE FOTOS DE PERROS ( DE MOMENTO LAS ALMACENAMOS ASÍ)
+    // LISTA DE FOTOS DE PERROS (POR DEFECTO)
     val images = listOf(
         R.drawable.default_pet,
         R.drawable.default_pet_2,
         R.drawable.default_pet_3,
         R.drawable.default_pet_4,
         R.drawable.default_pet_5
-    )
-
-    val category = listOf(
-        stringResource(R.string.peaceful_ES),
-        stringResource(R.string.playful_ES),
-        stringResource(R.string.eater_ES),
-        stringResource(R.string.sleepyhead_ES),
-        stringResource(R.string.nervous_ES),
-        stringResource(R.string.aggressive_ES),
-        stringResource(R.string.protective_ES),
-        stringResource(R.string.loyal_ES),
-        stringResource(R.string.affectionate_ES),
-        stringResource(R.string.intelligent_ES),
-        stringResource(R.string.obedient_ES),
-        stringResource(R.string.curious_ES)
     )
 
     var currentIndex by remember { mutableStateOf(0) }
@@ -267,7 +248,7 @@ fun HomeScreen(
                             .clickable {
                                 petDisliked = true
                                 onButtonClick(false)
-                                Toast.makeText(context, "Has pasado de la mascota", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Has pasado de $petname...", Toast.LENGTH_SHORT).show()
                             }
                             .size(70.dp)
                             .padding(bottom = 16.dp),
@@ -297,7 +278,6 @@ fun HomeScreen(
                                     .setContentTitle("Solicitud enviada")
                                     .setContentText("¡Has enviado una solicitud de amistad a $petname!")
                                     .setSmallIcon(R.drawable.icon_pawprint)
-                                    /*.addAction(R.drawable.icon_pawprint,"Abrir aplicación",pendingIntent)*/
                                     .setAutoCancel(true)
                                     .build()
                                 notificationManager.notify(0,notification)

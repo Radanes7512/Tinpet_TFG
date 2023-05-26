@@ -10,15 +10,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.tinpet.screens.Constants
-import com.example.tinpet.screens.UiState
+import com.example.tinpet.Constants
+import com.example.tinpet.UiState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.ktx.storage
 
 class LoginViewModel(context: Context) : ViewModel() {
@@ -107,7 +106,6 @@ class LoginViewModel(context: Context) : ViewModel() {
                 petimage
             )
     }
-
 
 
     fun login(context: Context) {
@@ -206,10 +204,10 @@ class LoginViewModel(context: Context) : ViewModel() {
     private fun sendVerificationEmail() {
         val user = auth.currentUser
         user!!.sendEmailVerification().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "Email sent.")
-                }
+            if (task.isSuccessful) {
+                Log.d(TAG, "Email sent.")
             }
+        }
     }
 
     private fun checkIfEmailVerified() {
@@ -258,8 +256,6 @@ class LoginViewModel(context: Context) : ViewModel() {
                                     .update(
                                         Constants.PHOTO, uri.toString()
                                     )
-
-
                             }
                         }
                     }

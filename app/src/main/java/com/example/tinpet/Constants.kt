@@ -1,4 +1,4 @@
-package com.example.tinpet.screens
+package com.example.tinpet
 
 object Constants {
 

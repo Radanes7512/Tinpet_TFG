@@ -1,6 +1,6 @@
-package com.example.tinpet.screens
+package com.example.tinpet
 
-sealed class UiState  {
+sealed class UiState {
     object Default : UiState()
     object SignedOut : UiState()
     object InProgress : UiState()

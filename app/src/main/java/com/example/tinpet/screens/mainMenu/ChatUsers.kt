@@ -34,45 +34,33 @@ fun ChatUsersScreen(
     navController: NavHostController,
     viewModel: ChatViewModel,
 ) {
-    //region LISTA DE FOTOS DE PERROS ( DE MOMENTO LAS ALMACENAMOS ASÍ)
-    val images = listOf(
-        R.drawable.default_pet,
-        R.drawable.default_pet_2,
-        R.drawable.default_pet_3,
-        R.drawable.default_pet_4,
-        R.drawable.default_pet_5
-    )
-    val firstImage: Int = images.toIntArray()[0]
-    //endregion
     val users by viewModel.usernames.observeAsState(listOf())
 
-Scaffold(
-    content={
+    Scaffold(content = {
         //region CUERPO DE LA PANTALLA
-        if(users.isNullOrEmpty()){
+        if (users.isNullOrEmpty()) {
             EmptyChat()
-        }else{
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colors.background),
-            contentAlignment = Alignment.Center
-        ) {
-
-            LazyColumn(
-                modifier = Modifier.fillMaxSize()
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = MaterialTheme.colors.background),
+                contentAlignment = Alignment.Center
             ) {
-                item {
-                    //region FUNCION PARA CREAR ENTRADAS AL CHAT DEPENDIENDO DEL NUMERO DE PERROS
-                    users.forEach { user ->
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    item {
+                        //region FUNCION PARA CREAR ENTRADAS AL CHAT DEPENDIENDO DEL NUMERO DE PERROS
+                        users.forEach { user ->
                             Card(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(15.dp),
                                 elevation = 10.dp
                             ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
+                                Row(verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier
                                         .clickable {
                                             val chatUserId = user.get("id")
@@ -80,13 +68,12 @@ Scaffold(
                                         }
                                         .fillMaxWidth()
                                         .background(MaterialTheme.colors.primary)
-                                        .padding(10.dp)
-                                ) {
+                                        .padding(10.dp)) {
                                     Image(
                                         modifier = Modifier
                                             .clip(CircleShape)
                                             .size(50.dp),
-                                        painter = painterResource(firstImage),
+                                        painter = painterResource(R.drawable.profile_pawprint),
                                         contentDescription = "profilePhoto"
                                     )
                                     user.get("name")?.let {
@@ -107,8 +94,7 @@ Scaffold(
             }
         }
         //endregion
-    }
-)
+    })
 }
 
 @Composable
@@ -119,8 +105,7 @@ fun EmptyChat() {
             .padding(16.dp)
     ) {
         Image(
-            modifier = Modifier
-                .align(Alignment.Center),
+            modifier = Modifier.align(Alignment.Center),
             painter = painterResource(id = R.drawable.icon_pawprint),
             contentDescription = null
         )
@@ -133,25 +118,23 @@ fun EmptyChat() {
             Text(
                 style = TextStyle(
                     shadow = Shadow(
-                        color = Color.DarkGray,
-                        offset = Offset(2.0f, 5.0f),
-                        blurRadius = 2f
+                        color = Color.DarkGray, offset = Offset(2.0f, 5.0f), blurRadius = 2f
                     )
-                ),
-                text = "¡Ups!",
-                fontWeight = FontWeight.Bold,
-                fontSize = 50.sp
+                ), text = "¡Ups!", fontWeight = FontWeight.Bold, fontSize = 50.sp
             )
             Text(
                 style = TextStyle(
                     shadow = Shadow(
-                        color = Color.DarkGray,
-                        offset = Offset(2.0f, 5.0f),
-                        blurRadius = 2f
+                        color = Color.DarkGray, offset = Offset(2.0f, 5.0f), blurRadius = 2f
                     )
-                ),
-                text = "No has aceptado peticiones de amistad o han aceptado las tuyas",
-                fontWeight = FontWeight.Bold
+                ), text = "No hay chats todavía...", fontWeight = FontWeight.Bold
+            )
+            Text(
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = Color.DarkGray, offset = Offset(2.0f, 5.0f), blurRadius = 2f
+                    )
+                ), text = "¡Revisa las peticiones de amistad!", fontWeight = FontWeight.Bold
             )
         }
     }

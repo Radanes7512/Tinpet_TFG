@@ -42,28 +42,17 @@ fun NavGraph(
             ChatScreen(chatUserId = chatUserId, onBackClick = {
                 navController.popBackStack()
                 navController.navigate(AppScreens.ChatUsers.route)
-            }, onPetClick = {
-                navController.navigate(AppScreens.PetProfile.route)
-            }, viewModel = ChatViewModel()
+            },
+                viewModel = ChatViewModel()
             )
         }
         composable(route = AppScreens.Profile.route) {
-            ProfileScreen(onSetClick = {
-                navController.navigate(AppScreens.Settings.route)
-            }, onPetClick = {
-                navController.navigate(AppScreens.Pets.route)
+            ProfileScreen(
+                onPetClick = {
+                navController.navigate(AppScreens.PetProfile.route)
             }, onRqtClick = {
                 navController.navigate(AppScreens.Requests.route)
             }, viewModel = LoginViewModel(LocalContext.current)
-            )
-        }
-        composable(route = AppScreens.Pets.route) {
-            PetsScreen(onBackClick = {
-                navController.popBackStack()
-                navController.navigate(AppScreens.Profile.route)
-            }, onPetClick = {
-                navController.navigate(AppScreens.PetProfile.route)
-            }, homeViewModel = HomeViewModel()
             )
         }
         composable(AppScreens.PetProfile.route) {
@@ -74,7 +63,8 @@ fun NavGraph(
             )
         }
         composable(route = AppScreens.Requests.route) {
-            RequestScreen(onBackClick = {
+            RequestScreen(
+                onBackClick = {
                 navController.popBackStack()
                 navController.navigate(AppScreens.Profile.route)
             }, onPetClick = {
@@ -125,8 +115,6 @@ fun NavGraph(
             SettingsScreen(onBackClick = {
                 navController.navigate(AppScreens.Profile.route)
             }, onCloseClick = {
-                /*navController.popBackStack()
-                navController.navigate(Graph.AUTHENTICATION)*/
                 navController.navigate(route = "login", builder = {
                     popUpTo(route = "home") {
                         inclusive = true

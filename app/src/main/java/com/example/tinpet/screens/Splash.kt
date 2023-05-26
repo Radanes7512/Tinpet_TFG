@@ -27,20 +27,19 @@ import kotlinx.coroutines.delay
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun SplashScreen(navController: NavHostController) {
-        LaunchedEffect(key1 = true){
-            delay(3000)
-            navController.popBackStack()
-            navController.navigate(AppScreens.Index.route)
-        }
-        Splash()
+    LaunchedEffect(key1 = true) {
+        delay(3000)
+        navController.popBackStack()
+        navController.navigate(AppScreens.Index.route)
+    }
+    Splash()
 }
+
 @Composable
 fun Splash() {
     val infiniteTransition = rememberInfiniteTransition()
     val logoSize by infiniteTransition.animateFloat(
-        initialValue = 100.0f,
-        targetValue = 250.0f,
-        animationSpec = infiniteRepeatable(
+        initialValue = 100.0f, targetValue = 250.0f, animationSpec = infiniteRepeatable(
             animation = tween(3000, delayMillis = 100, easing = FastOutLinearInEasing),
             repeatMode = RepeatMode.Reverse
         )
@@ -52,24 +51,17 @@ fun Splash() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-       Image(
-           modifier = Modifier
-               .size(logoSize.dp)
-               .padding(8.dp),
-           painter = painterResource(R.drawable.icon_pawprint)
-           /*painter = if (isSystemInDarkTheme()) {
-               painterResource(R.drawable.icon_pawprint_black)
-           } else {
-               painterResource(R.drawable.icon_pawprint_white)
-           }*/,
-           contentDescription = null,
-           )
+        Image(
+            modifier = Modifier
+                .size(logoSize.dp)
+                .padding(8.dp),
+            painter = painterResource(R.drawable.icon_pawprint),
+            contentDescription = null,
+        )
         Text(
             style = TextStyle(
                 shadow = Shadow(
-                    color = Color.DarkGray,
-                    offset = Offset(2.0f, 5.0f),
-                    blurRadius = 2f
+                    color = Color.DarkGray, offset = Offset(2.0f, 5.0f), blurRadius = 2f
                 )
             ),
             text = stringResource(R.string.app_name),

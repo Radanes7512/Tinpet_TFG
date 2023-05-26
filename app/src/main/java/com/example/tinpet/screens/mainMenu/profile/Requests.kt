@@ -27,8 +27,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.tinpet.Constants
 import com.example.tinpet.R
-import com.example.tinpet.screens.Constants
 import com.example.tinpet.ui.theme.abrilFatface
 import com.example.tinpet.viewModels.RequestsViewModel
 
@@ -39,7 +39,7 @@ fun RequestScreen(
     onBackClick: () -> Unit,
     onPetClick: () -> Unit,
     viewModel: RequestsViewModel
-){
+) {
     viewModel.CheckFriendRequests()
 
     val FriendsRequests: List<Map<String, String>> by viewModel.FriendList.observeAsState(emptyList<Map<String, String>>().toMutableList())
@@ -68,14 +68,14 @@ fun RequestScreen(
     //endregion
     // region CUERPO
     {
-        if (FriendsRequests.isNullOrEmpty()){
+        if (FriendsRequests.isNullOrEmpty()) {
             EndBox()
-        }else{
+        } else {
             LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-               itemsIndexed(FriendsRequests) { index, fr ->
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                itemsIndexed(FriendsRequests) { index, fr ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -118,7 +118,12 @@ fun RequestScreen(
                                 modifier = Modifier
                                     .align(alignment = Alignment.CenterVertically)
                                     .size(ButtonDefaults.IconSize)
-                                    .clickable { viewModel.onFriendRequestUpdate(fr, Constants.DECLINED)}
+                                    .clickable {
+                                        viewModel.onFriendRequestUpdate(
+                                            fr,
+                                            Constants.DECLINED
+                                        )
+                                    }
                             )
                             Text(
                                 modifier = Modifier.align(alignment = Alignment.CenterVertically),
@@ -133,14 +138,19 @@ fun RequestScreen(
                                 modifier = Modifier
                                     .align(alignment = Alignment.CenterVertically)
                                     .size(ButtonDefaults.IconSize)
-                                    .clickable { viewModel.onFriendRequestUpdate(fr, Constants.ACCEPTED)}
+                                    .clickable {
+                                        viewModel.onFriendRequestUpdate(
+                                            fr,
+                                            Constants.ACCEPTED
+                                        )
+                                    }
                             )
                         }
                     }
                 }
-                }
             }
         }
+    }
 
 }
 
@@ -183,9 +193,31 @@ fun EndBox() {
                         blurRadius = 2f
                     )
                 ),
-                text = "No tienes peticiones de amistad, aun no se han dado cuenta de lo preciosa que es tu mascota.",
+                text = "No tienes peticiones de amistad...",
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = Color.DarkGray,
+                        offset = Offset(2.0f, 5.0f),
+                        blurRadius = 2f
+                    )
+                ),
+                text = "Aun no se han dado cuenta",
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                style = TextStyle(
+                    shadow = Shadow(
+                        color = Color.DarkGray,
+                        offset = Offset(2.0f, 5.0f),
+                        blurRadius = 2f
+                    )
+                ),
+                text = "de lo preciosa que es tu mascota.",
                 fontWeight = FontWeight.Bold
             )
         }
-        }
     }
+}

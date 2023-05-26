@@ -29,7 +29,6 @@ fun VerifyEmailScreen(
     viewModel: LoginViewModel,
     onClick: () -> Unit
 ) {
-    val emailVerified: Boolean by viewModel.emailVerified.observeAsState(initial = false)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,8 +47,6 @@ fun VerifyEmailScreen(
                 modifier = Modifier
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center
-                //horizontalAlignment = Alignment.CenterHorizontally
-
             ) {
                 Image(
                     modifier = Modifier
@@ -79,7 +76,6 @@ fun VerifyEmailScreen(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            //if (emailVerified) {
                 Button(
                     onClick = { onClick() },
                     enabled = true,
@@ -102,25 +98,6 @@ fun VerifyEmailScreen(
                         text = stringResource(R.string.vfdem_access_ES)
                     )
                 }
-           /* } else {
-                Button(
-                    onClick = {},
-                    enabled = false,
-                    shape = RoundedCornerShape(25),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colors.secondaryVariant,
-                        disabledBackgroundColor = MaterialTheme.colors.onSurface,
-                        contentColor = Color.Black,
-                        disabledContentColor = Color.White
-                    )
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Lock,
-                        contentDescription = null,
-                        modifier = Modifier.size(ButtonDefaults.IconSize)
-                    )
-                }
-            //}*/
         }
     }
 }

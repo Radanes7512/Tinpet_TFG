@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.example.tinpet.R
-import com.example.tinpet.viewModels.LoginViewModel
 import com.example.tinpet.ui.theme.abrilFatface
+import com.example.tinpet.viewModels.LoginViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -34,7 +34,7 @@ fun SettingsScreen(
     onAboutClick: () -> Unit,
 ) {
     val logoutConfirm = remember { mutableStateOf(false) }
-    val context= LocalContext.current
+    val context = LocalContext.current
     Scaffold(
         //region BARRA SUPERIOR CON NOMBRE Y FLECHA PARA IR ATRÁS
         topBar = {
@@ -55,10 +55,7 @@ fun SettingsScreen(
                 }
 
             )
-        }/*,
-        bottomBar = {
-            BottomSBar()
-        }*/
+        }
     )
     //endregion
     //region CUERPO
@@ -81,7 +78,10 @@ fun SettingsScreen(
                             .clickable {
                                 val intent = Intent()
                                 intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-                                intent.putExtra("android.provider.extra.APP_PACKAGE", "com.example.tinpet")
+                                intent.putExtra(
+                                    "android.provider.extra.APP_PACKAGE",
+                                    "com.example.tinpet"
+                                )
                                 if (intent.resolveActivity(context.packageManager) != null) {
                                     ContextCompat.startActivity(context, intent, Bundle())
                                 }
@@ -119,7 +119,6 @@ fun SettingsScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .clickable { onAboutClick() }
-                            //.border(1.dp, MaterialTheme.colors.onBackground)
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
                             .padding(10.dp)
@@ -154,8 +153,6 @@ fun SettingsScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         modifier = Modifier
                             .clickable { logoutConfirm.value = true }
-                            //.clickable { onCloseClick() }
-                            //.border(1.dp, MaterialTheme.colors.onBackground)
                             .fillMaxWidth()
                             .background(MaterialTheme.colors.primary)
                             .padding(10.dp)
@@ -234,25 +231,8 @@ fun SettingsScreen(
                             color = Color.White
                         )
                     }
-
                 }
             }
         )
-    }
-}
-
-@Composable
-fun BottomSBar() {
-    Row(
-        horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        Button(
-            onClick = { /*TODO*/ },
-            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.error)
-        ){
-            Text(text="Borrar cuenta")
-        }
     }
 }

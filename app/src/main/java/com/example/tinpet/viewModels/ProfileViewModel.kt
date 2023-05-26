@@ -1,15 +1,13 @@
 package com.example.tinpet.viewModels
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.tinpet.screens.Constants
+import com.example.tinpet.Constants
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 
 class ProfileViewModel : ViewModel() {
 
@@ -47,7 +45,6 @@ class ProfileViewModel : ViewModel() {
                     }
                 }
         }
-
     }
 
     fun getCategory() {
@@ -89,8 +86,6 @@ class ProfileViewModel : ViewModel() {
                 }
         }
     }
-
-
 
 
 }

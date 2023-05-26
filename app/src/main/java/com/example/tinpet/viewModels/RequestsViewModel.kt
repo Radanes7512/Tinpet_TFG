@@ -2,6 +2,7 @@ package com.example.tinpet.viewModels
 
 import android.content.Context
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,6 +22,7 @@ class RequestsViewModel(context: Context) : ViewModel() {
 
     val auth = Firebase.auth
     val currentUser = auth.currentUser
+
     fun CheckFriendRequests() {
         if (currentUser != null) {
             Firebase.firestore.collection(Constants.PENDING_REQUESTS)
@@ -56,6 +58,7 @@ class RequestsViewModel(context: Context) : ViewModel() {
             }
         }
     }
+
 }
 
 

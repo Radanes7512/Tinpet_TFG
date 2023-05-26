@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
@@ -50,6 +51,9 @@ fun HomeScreen(
     val context = LocalContext.current
     viewModel.getNonFriends()
     viewModel.getLoggedUser()
+
+
+
 
     val userPets: List<MutableMap<String, String>> by viewModel.UserPets.observeAsState(emptyList<MutableMap<String, String>>().toMutableList())
 
@@ -263,6 +267,7 @@ fun HomeScreen(
                             .clickable {
                                 petDisliked = true
                                 onButtonClick(false)
+                                Toast.makeText(context, "Has pasado de la mascota", Toast.LENGTH_SHORT).show()
                             }
                             .size(70.dp)
                             .padding(bottom = 16.dp),
@@ -274,6 +279,7 @@ fun HomeScreen(
                         Image(modifier = Modifier
                             .clickable {
                                 viewModel.SendFriendRequests(userPets[currentIndex][Constants.EMAIL])
+                                Toast.makeText(context, "Has mandado una peticion de amistad", Toast.LENGTH_SHORT).show()
                                 petLiked = true
                                 onButtonClick(true)
                                 //region NOTIFICACION

@@ -1,4 +1,4 @@
-<p align="center"><a href="[https://newpipe.net](https://tinpet.azurewebsites.net)"><img src="assets/tin_pet_icon.png" width="150"></a></p> 
+<p align="center"><a href="https://tinpet.azurewebsites.net"><img src="assets/tin_pet_icon.png" width="150"></a></p> 
 <h1 align="center"><b>TinPet</b></h1>
 <h4 align="center">Una interfaz de meeting ligera y libre para Android.</h4>
 
